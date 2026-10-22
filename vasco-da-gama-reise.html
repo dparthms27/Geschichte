@@ -41,6 +41,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,
 .btn.ghost{background:transparent;color:var(--teal)}
 .btn:disabled{opacity:.4;cursor:default}
 .btn:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.merke{margin:0 0 1rem;padding-left:1.1rem}.merke li{margin:.25rem 0}.golink{display:inline-block;text-decoration:none;margin-top:.2rem}
 .hint{color:var(--muted);font-size:.95rem;margin:.7rem 0 0}
 @media (max-width:860px){html,body{height:auto}.stage{grid-template-columns:1fr;height:auto}.mapbox{aspect-ratio:11/9}}
 @media (prefers-reduced-motion: reduce){.fade{transition:none}}
@@ -73,7 +74,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,
     </svg>
   </div>
   <div class="panel">
-    <p class="kicker">Geschichte, 3. Klasse – Der Seeweg nach Indien</p>
+    <p class="kicker">Geschichte, 3. Klasse – Lernkarte zum Seeweg nach Indien</p>
     <h1>Die Reise des Vasco da Gama</h1>
     <p class="date" id="date"></p>
     <p class="text" id="text"></p>
@@ -84,7 +85,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,
       <button class="btn ghost" id="back">Zurück</button>
       <button class="btn" id="next">Weiter</button>
     </div>
-    <p class="hint">Tipp: Mit der Leertaste oder der Pfeiltaste nach rechts geht es auch weiter.</p>
+    <p class="hint">Du kannst auch mit den Pfeiltasten vor- und zurückblättern.</p>
   </div>
 </div>
 <script>
@@ -96,12 +97,13 @@ const SEGS=[
  [[690,515],[850,440],[1000,392]]
 ];
 const STEPS=[
- {date:"Juli 1497",text:"Vasco da Gama bricht mit vier Schiffen in Lissabon auf. Der König von Portugal will endlich einen Seeweg nach Indien."},
+ {date:"Juli 1497",text:"Vasco da Gama bricht mit vier Schiffen in Lissabon auf. Der König von Portugal will endlich einen Seeweg nach Indien.",price:"<strong>So lernst du mit dieser Karte:</strong> Tippe auf „Weiter“ und verfolge die Reise. Merke dir die Namen auf der Karte. Du brauchst sie danach für die Übung „Karte beschriften“."},
  {date:"Sommer und Herbst 1497",text:"Die Flotte segelt weit hinaus auf den Atlantischen Ozean. Wochenlang ist kein Land in Sicht."},
  {date:"November 1497",text:"Die Schiffe umsegeln das Kap der Guten Hoffnung, die Südspitze Afrikas. Hier war 1488 schon Bartolomeu Dias."},
  {date:"Anfang 1498",text:"Die Flotte fährt die Ostküste Afrikas hinauf nach Norden."},
  {date:"Mai 1498",text:"Über den Indischen Ozean erreicht die Flotte Kalikut in Indien. Der Seeweg nach Indien ist gefunden!"},
- {date:"Der Preis",text:"Die Reise war ein großer Erfolg für Portugal. Aber sie hatte einen hohen Preis.",price:"Mehr als die Hälfte der Seeleute starb unterwegs, vor allem an Skorbut.<br><br><strong>Frage an die Klasse:</strong> Warum war dieser Seeweg für Portugal trotzdem so wichtig?"}
+ {date:"Der Preis",text:"Die Reise war ein großer Erfolg für Portugal. Aber sie hatte einen hohen Preis.",price:"Mehr als die Hälfte der Seeleute starb unterwegs, vor allem an Skorbut.<br><br><strong>Denkfrage:</strong> Warum war dieser Seeweg für Portugal trotzdem so wichtig?"},
+ {date:"Merke dir die Karte",text:"Diese sechs Namen brauchst du für die Übung:",price:"<ul class=\"merke\"><li><strong>Lissabon</strong> – hier beginnt die Reise</li><li><strong>Atlantischer Ozean</strong> – westlich von Afrika</li><li><strong>Kap der Guten Hoffnung</strong> – die Südspitze Afrikas</li><li><strong>Afrika</strong> – um diesen Kontinent segelt die Flotte herum</li><li><strong>Indischer Ozean</strong> – zwischen Afrika und Indien</li><li><strong>Kalikut</strong> – das Ziel in Indien</li></ul><a class=\"btn golink\" href=\"vasco-da-gama-uebungen.html#karte\">Zur Übung: Karte beschriften</a>"}
 ];
 const NS="http://www.w3.org/2000/svg";
 const routes=document.getElementById("routes"),ship=document.getElementById("ship");
