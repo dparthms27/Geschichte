@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Der Seeweg nach Indien – Übungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF5F4;--surface:#FFFFFF;--ink:#18302F;--muted:#4F6766;--teal:#1F6F78;--teal-soft:#D5E8E8;--orange:#C9661A;--orange-soft:#FBE3CC;--line:#C5D9D8;--on-teal:#FFFFFF;
+--sea:#CFE6E8;--land:#E9DCC0;--coast:#8A7A55;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:1.15rem;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+header h1{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.1;margin:.2rem 0 .3rem;color:var(--teal)}
+header p{margin:0;color:var(--muted)}
+.routeline{display:block;width:100%;height:34px;margin:.8rem 0 1.2rem}
+.routeline path{fill:none;stroke:var(--orange);stroke-width:2.5;stroke-dasharray:2 8;stroke-linecap:round}
+.routeline circle{fill:var(--teal)}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+nav button{font:inherit;font-size:1rem;padding:.55rem .9rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+nav button[aria-selected="true"]{background:var(--teal);color:var(--on-teal)}
+nav button .ok{margin-left:.35rem}
+button:focus-visible,.marker:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.2rem 1.5rem}
+section[hidden]{display:none}
+h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
+.task{margin:0 0 1rem;color:var(--muted)}
+.status{margin-top:1rem;min-height:1.5em;font-weight:700}
+.status.good{color:var(--teal)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{font:inherit;font-size:1rem;padding:.6rem 1.1rem;border-radius:10px;border:2px solid var(--teal);cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn:disabled{opacity:.4;cursor:default}
+.card{font:inherit;text-align:left;padding:.6rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.card.sel{border-color:var(--orange);background:var(--orange-soft)}
+.wrong{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.wrong{animation:none}}
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.1rem;min-height:2.8rem}
+/* Zeitleiste */
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;padding-top:2.2rem}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:1rem;height:4px;background:var(--teal);border-radius:2px}
+.slot{position:relative;font:inherit;text-align:left;border:2px dashed var(--teal);border-radius:12px;background:transparent;color:var(--ink);padding:.6rem;min-height:120px;cursor:pointer;display:flex;flex-direction:column;gap:.35rem}
+.slot::before{content:"";position:absolute;top:-1.55rem;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--orange);border:3px solid var(--surface)}
+.slot strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;color:var(--teal)}
+.slot .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.35rem .5rem}
+.slot.filled{border-style:solid;cursor:default}
+.slot.wrong{border-color:var(--orange)}
+/* Karte */
+.mapwrap{background:var(--sea);border-radius:12px;overflow:hidden}
+.mapwrap svg{display:block;width:100%;height:auto}
+.land{fill:var(--land);stroke:var(--coast);stroke-width:2}
+.route{fill:none;stroke:var(--orange);stroke-width:5;stroke-dasharray:12 9;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.marker{cursor:pointer}
+.marker circle{fill:var(--surface);stroke:var(--teal);stroke-width:4}
+.marker .n{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:26px;fill:var(--teal);text-anchor:middle;dominant-baseline:central}
+.marker.done circle{fill:var(--teal)}
+.marker.done .n{fill:var(--on-teal)}
+.marker.wrong circle{stroke:var(--orange);fill:var(--orange-soft)}
+.maplabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:28px;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:7px}
+/* Quiz */
+.quizgrid{display:grid;grid-template-columns:1fr 180px;gap:1.2rem}
+.qtext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;line-height:1.25;margin:.2rem 0 1rem}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.answers button{font:inherit;text-align:left;padding:.75rem .9rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.answers button .l{font-weight:700;color:var(--orange);margin-right:.4rem}
+.answers button.right{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.answers button.right .l{color:var(--on-teal)}
+.answers button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.answers button.gone{visibility:hidden}
+.answers button:disabled{cursor:default}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:.25rem;font-size:1rem}
+.ladder li{display:flex;justify-content:space-between;padding:.25rem .6rem;border-radius:8px;color:var(--muted)}
+.ladder li.cur{background:var(--orange-soft);color:var(--ink);font-weight:700}
+.ladder li.ok{color:var(--teal);font-weight:700}
+.ladder li.miss{text-decoration:line-through}
+.qfb{min-height:1.5em;margin:.8rem 0 0;font-weight:700}
+.qfb.good{color:var(--teal)}.qfb.bad{color:var(--orange)}
+@media (max-width:680px){.timeline{grid-template-columns:1fr 1fr;padding-top:0}.timeline::before,.slot::before{display:none}.quizgrid{grid-template-columns:1fr}.ladder{flex-direction:row-reverse;flex-wrap:wrap}.answers{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p>Geschichte, 3. Klasse – Frühe Neuzeit</p>
+  <h1>Der Seeweg nach Indien</h1>
+  <p>Drei Übungen zu Vasco da Gama. Du kannst sie in beliebiger Reihenfolge machen.</p>
+  <svg class="routeline" viewBox="0 0 800 34" preserveAspectRatio="none" aria-hidden="true"><path d="M10 24 C 150 4, 260 32, 400 16 S 650 6, 790 20"/><circle cx="10" cy="24" r="5"/><circle cx="790" cy="20" r="5"/></svg>
+</header>
+<nav role="tablist" aria-label="Übungen">
+  <button role="tab" data-tab="zeitleiste">Zeitleiste</button>
+  <button role="tab" data-tab="karte">Karte beschriften</button>
+  <button role="tab" data-tab="quiz">Wer wird Millionär?</button>
+</nav>
+
+<section id="zeitleiste" role="tabpanel">
+  <h2>Was geschah wann?</h2>
+  <p class="task">Tippe ein Ereignis an und dann das passende Jahr auf der Zeitleiste.</p>
+  <div class="pool" id="z-pool"></div>
+  <div class="timeline" id="z-line"></div>
+  <div class="status" id="z-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="zeitleiste">Nochmal von vorne</button></div>
+</section>
+
+<section id="karte" role="tabpanel" hidden>
+  <h2>Karte beschriften</h2>
+  <p class="task">Tippe einen Namen an und dann die passende Nummer auf der Karte.</p>
+  <div class="pool" id="k-pool"></div>
+  <div class="mapwrap">
+    <svg viewBox="0 0 1100 900" id="k-map" role="group" aria-label="Karte mit der Route von Vasco da Gama und sechs Nummern">
+      <polygon class="land" points="160,130 160,110 160,70 230,65 240,40 205,15 200,0 1100,0 1100,305 1050,340 1050,370 1020,420 1008,387 990,350 978,310 950,290 920,255 870,250 810,230 750,200 730,205 760,260 810,240 845,275 820,310 770,340 700,370 680,370 640,280 600,220 595,185 605,170 610,135 540,130 510,100 490,120 470,130 440,80 390,45 405,75 420,110 410,125 380,95 340,62 310,70 280,80 250,115 230,133 190,135"/>
+      <polygon class="land" points="190,140 350,130 450,190 500,180 570,190 580,200 600,260 630,320 680,380 760,380 760,400 730,450 670,510 650,550 650,600 650,650 600,700 600,740 570,790 520,830 450,850 430,840 420,790 390,730 370,670 380,620 370,560 340,510 340,460 300,440 250,450 210,450 170,460 120,420 80,360 80,290 120,230 150,200"/>
+      <polygon class="land" points="740,620 750,660 720,750 690,740 690,670"/>
+      <polyline class="route" points="159,113 110,180 40,380 90,600 300,800 420,880 480,885 560,830 600,770 625,720 665,640 668,540 690,515 850,440 1000,392"/>
+      <g id="k-labels"></g>
+      <g id="k-markers"></g>
+    </svg>
+  </div>
+  <div class="status" id="k-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="karte">Nochmal von vorne</button></div>
+</section>
+
+<section id="quiz" role="tabpanel" hidden>
+  <h2>Wer wird Millionär?</h2>
+  <p class="task">Neun Fragen zu Vasco da Gama. Einmal darfst du den 50:50-Joker verwenden.</p>
+  <div class="quizgrid">
+    <div>
+      <p class="qtext" id="q-text"></p>
+      <div class="answers" id="q-answers"></div>
+      <p class="qfb" id="q-fb" aria-live="polite"></p>
+      <div class="tools">
+        <button class="btn ghost" id="q-joker">50:50-Joker</button>
+        <button class="btn" id="q-next" hidden>Nächste Frage</button>
+        <button class="btn ghost" data-reset="quiz">Nochmal von vorne</button>
+      </div>
+    </div>
+    <ol class="ladder" id="q-ladder" aria-label="Gewinnstufen"></ol>
+  </div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function flash(e){e.classList.remove("wrong");void e.getBoundingClientRect();e.classList.add("wrong");setTimeout(()=>e.classList.remove("wrong"),450)}
+const done={zeitleiste:false,karte:false,quiz:false};
+function updateTabs(){document.querySelectorAll("nav button").forEach(b=>{let ok=b.querySelector(".ok");const d=done[b.dataset.tab];
+  if(d&&!ok){ok=el("span","ok","✓");ok.setAttribute("aria-label","geschafft");b.append(ok)}if(!d&&ok)ok.remove()})}
+function markDone(k,v=true){done[k]=v;updateTabs()}
+const TABS=["zeitleiste","karte","quiz"];
+function show(k){if(!TABS.includes(k))k="zeitleiste";TABS.forEach(t=>$("#"+t).hidden=t!==k);
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* Zeitleiste */
+const EVENTS=[[1453,"Die Osmanen erobern Konstantinopel."],[1488,"Bartolomeu Dias umsegelt die Südspitze Afrikas."],[1497,"Vasco da Gama bricht in Lissabon auf."],[1498,"Vasco da Gama erreicht Kalikut in Indien."]];
+let zSel=null,zLeft=0,zMiss=0;
+function initZ(){const P=$("#z-pool"),L=$("#z-line");P.innerHTML="";L.innerHTML="";zSel=null;zLeft=EVENTS.length;zMiss=0;$("#z-status").textContent="";$("#z-status").className="status";markDone("zeitleiste",false);
+  shuffle(EVENTS).forEach(ev=>{const b=el("button","card",ev[1]);b._y=ev[0];b.onclick=()=>{P.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");zSel=b};P.append(b)});
+  EVENTS.forEach(ev=>{const s=el("button","slot");s.append(el("strong",null,ev[0]));s.setAttribute("aria-label","Jahr "+ev[0]);
+    s.onclick=()=>{if(s.classList.contains("filled"))return;if(!zSel){$("#z-status").textContent="Tippe zuerst ein Ereignis an.";return}
+      if(zSel._y===ev[0]){s.append(el("span","placed",zSel.textContent));s.classList.add("filled");zSel.remove();zSel=null;zLeft--;
+        if(zLeft===0){$("#z-status").textContent=`Geschafft! Alle Ereignisse stehen beim richtigen Jahr (Fehlversuche: ${zMiss}).`;$("#z-status").className="status good";markDone("zeitleiste")}
+        else $("#z-status").textContent=`Richtig! Noch ${zLeft} übrig.`}
+      else{zMiss++;flash(s);$("#z-status").textContent="Das passt nicht zu diesem Jahr. Versuch es noch einmal."}};L.append(s)})}
+
+/* Karte */
+const NS="http://www.w3.org/2000/svg";
+const PLACES=[
+ {name:"Lissabon",x:159,y:113,lx:190,ly:100,a:"start"},
+ {name:"Kap der Guten Hoffnung",x:430,y:842,lx:150,ly:892,a:"start"},
+ {name:"Kalikut",x:1008,y:387,lx:1000,ly:445,a:"middle"},
+ {name:"Afrika",x:450,y:500,lx:450,ly:555,a:"middle"},
+ {name:"Atlantischer Ozean",x:230,y:600,lx:230,ly:655,a:"middle"},
+ {name:"Indischer Ozean",x:880,y:600,lx:880,ly:655,a:"middle"}
+];
+let kSel=null,kLeft=0,kMiss=0,kOrder=[];
+function svgEl(t,attrs){const e=document.createElementNS(NS,t);for(const k in attrs)e.setAttribute(k,attrs[k]);return e}
+function initK(){const P=$("#k-pool"),M=$("#k-markers"),LB=$("#k-labels");P.innerHTML="";M.innerHTML="";LB.innerHTML="";kSel=null;kLeft=PLACES.length;kMiss=0;$("#k-status").textContent="";$("#k-status").className="status";markDone("karte",false);
+  kOrder=shuffle(PLACES.map((p,i)=>i));
+  shuffle(PLACES.map((p,i)=>i)).forEach(i=>{const b=el("button","card",PLACES[i].name);b._i=i;b.onclick=()=>{P.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");kSel=b};P.append(b)});
+  kOrder.forEach((pi,n)=>{const p=PLACES[pi];const g=svgEl("g",{class:"marker",tabindex:"0",role:"button","aria-label":"Nummer "+(n+1)});
+    g.append(svgEl("circle",{cx:p.x,cy:p.y,r:22}));const t=svgEl("text",{x:p.x,y:p.y,class:"n"});t.textContent=n+1;g.append(t);
+    const act=()=>{if(g.classList.contains("done"))return;if(!kSel){$("#k-status").textContent="Tippe zuerst einen Namen an.";return}
+      if(kSel._i===pi){g.classList.add("done");g.setAttribute("aria-label",p.name);const l=svgEl("text",{x:p.lx,y:p.ly,class:"maplabel","text-anchor":p.a});l.textContent=p.name;LB.append(l);
+        kSel.remove();kSel=null;kLeft--;
+        if(kLeft===0){$("#k-status").textContent=`Geschafft! Die Karte ist vollständig beschriftet (Fehlversuche: ${kMiss}).`;$("#k-status").className="status good";markDone("karte")}
+        else $("#k-status").textContent=`Richtig! Noch ${kLeft} übrig.`}
+      else{kMiss++;g.classList.add("wrong");setTimeout(()=>g.classList.remove("wrong"),600);$("#k-status").textContent="Das ist die falsche Stelle. Versuch es noch einmal."}};
+    g.addEventListener("click",act);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}});M.append(g)})}
+
+/* Quiz */
+const QS=[
+ ["Aus welchem Land kam Vasco da Gama?","Portugal",["Spanien","Italien","England"]],
+ ["Was suchte Vasco da Gama?","den Seeweg nach Indien",["Amerika","Gold in Afrika","den Nordpol"]],
+ ["In welcher Stadt brach er auf?","Lissabon",["Madrid","Genua","Venedig"]],
+ ["Mit wie vielen Schiffen fuhr er los?","vier",["zwei","zehn","zwanzig"]],
+ ["Wer umsegelte schon 1488 die Südspitze Afrikas?","Bartolomeu Dias",["Christoph Kolumbus","Ferdinand Magellan","Marco Polo"]],
+ ["Wie heißt die Südspitze Afrikas?","Kap der Guten Hoffnung",["Kap Hoorn","Kap Verde","Kap Canaveral"]],
+ ["Welche Stadt in Indien erreichte er 1498?","Kalikut",["Delhi","Kalkutta","Bombay"]],
+ ["Woran starben viele Seeleute?","Skorbut",["Pest","Malaria","Grippe"]],
+ ["Wie viele Seeleute starben unterwegs?","mehr als die Hälfte",["fast keiner","etwa ein Zehntel","alle"]]
+];
+const PRIZES=["100 €","200 €","300 €","500 €","1.000 €","2.000 €","4.000 €","8.000 €","16.000 €"];
+let qi=0,qRight=0,jokerUsed=false,results=[];
+function initQ(){qi=0;qRight=0;jokerUsed=false;results=[];$("#q-joker").disabled=false;markDone("quiz",false);
+  const L=$("#q-ladder");L.innerHTML="";PRIZES.forEach((p,i)=>{const li=el("li");li.append(el("span",null,i+1),el("span",null,p));L.append(li)});renderQ()}
+function renderQ(){const L=$("#q-ladder").children;[...L].forEach((li,i)=>{li.className=results[i]===true?"ok":results[i]===false?"miss":i===qi?"cur":""});
+  $("#q-next").hidden=true;$("#q-fb").textContent="";$("#q-fb").className="qfb";
+  const A=$("#q-answers");A.innerHTML="";
+  if(qi>=QS.length){$("#q-text").textContent=`Fertig! Du hast ${qRight} von ${QS.length} Fragen richtig beantwortet.`;
+    $("#q-fb").textContent=qRight===QS.length?"Alle richtig – Millionär der Herzen!":qRight>=6?"Sehr gut! Schau dir die durchgestrichenen Fragen noch einmal im Steckbrief an.":"Lies den Steckbrief noch einmal und versuch es dann erneut.";
+    $("#q-fb").className="qfb good";$("#q-joker").disabled=true;markDone("quiz");return}
+  const q=QS[qi];$("#q-text").textContent=`${qi+1}. ${q[0]}`;
+  shuffle([q[1],...q[2]]).forEach((a,i)=>{const b=el("button");b.append(el("span","l","ABCD"[i]+":"),document.createTextNode(a));b._ok=a===q[1];
+    b.onclick=()=>{[...A.children].forEach(x=>{x.disabled=true;if(x._ok)x.classList.add("right")});
+      if(b._ok){qRight++;results[qi]=true;$("#q-fb").textContent="Richtig!";$("#q-fb").className="qfb good"}
+      else{b.classList.add("bad");results[qi]=false;$("#q-fb").textContent=`Leider falsch. Richtig ist: ${q[1]}.`;$("#q-fb").className="qfb bad"}
+      $("#q-joker").disabled=true;const n=$("#q-next");n.hidden=false;n.textContent=qi===QS.length-1?"Ergebnis anzeigen":"Nächste Frage";n.focus()};A.append(b)});
+  $("#q-joker").disabled=jokerUsed}
+$("#q-next").onclick=()=>{qi++;renderQ()};
+$("#q-joker").onclick=()=>{if(jokerUsed)return;jokerUsed=true;$("#q-joker").disabled=true;shuffle([...$("#q-answers").children].filter(b=>!b._ok)).slice(0,2).forEach(b=>{b.classList.add("gone");b.disabled=true})};
+
+document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({zeitleiste:initZ,karte:initK,quiz:initQ})[b.dataset.reset]()));
+initZ();initK();initQ();show(location.hash.slice(1));
+</script>
+</body>
+</html>
