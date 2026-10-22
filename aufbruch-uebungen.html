@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aufbruch über die Meere – Übungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF5F4; --surface:#FFFFFF; --ink:#18302F; --muted:#4F6766;
+  --teal:#1F6F78; --teal-soft:#D5E8E8; --orange:#C9661A; --orange-soft:#FBE3CC; --line:#C5D9D8;
+  --on-teal:#FFFFFF;
+  color-scheme: light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1C1D; --surface:#172A2B; --ink:#E6F0EF; --muted:#A3BAB8;
+    --teal:#5FB7BF; --teal-soft:#1E3F42; --orange:#F0A25A; --orange-soft:#3E2A17; --line:#2C4547;
+    --on-teal:#0F1C1D; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1C1D; --surface:#172A2B; --ink:#E6F0EF; --muted:#A3BAB8;
+  --teal:#5FB7BF; --teal-soft:#1E3F42; --orange:#F0A25A; --orange-soft:#3E2A17; --line:#2C4547;
+  --on-teal:#0F1C1D; color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:1.15rem;line-height:1.45}
+.wrap{max-width:860px;margin:0 auto;padding:1.5rem 1rem 3rem}
+header h1{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.1;margin:.2rem 0 .3rem;color:var(--teal)}
+header p{margin:0;color:var(--muted)}
+.route{display:block;width:100%;height:34px;margin:.8rem 0 1.2rem}
+.route path{fill:none;stroke:var(--orange);stroke-width:2.5;stroke-dasharray:2 8;stroke-linecap:round}
+.route circle{fill:var(--teal)}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+nav button{font:inherit;font-size:1rem;padding:.55rem .9rem;border-radius:999px;border:2px solid var(--teal);
+  background:var(--surface);color:var(--teal);cursor:pointer}
+nav button[aria-selected="true"]{background:var(--teal);color:var(--on-teal)}
+nav button .ok{margin-left:.35rem}
+button:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.2rem 1.5rem}
+section[hidden]{display:none}
+h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
+.task{margin:0 0 1rem;color:var(--muted)}
+.status{margin-top:1rem;min-height:1.5em;font-weight:700}
+.status.good{color:var(--teal)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{font:inherit;font-size:1rem;padding:.6rem 1.1rem;border-radius:10px;border:2px solid var(--teal);cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;color:var(--teal)}
+/* Karten */
+.card{font:inherit;text-align:left;width:100%;padding:.65rem .8rem;border-radius:10px;border:2px solid var(--line);
+  background:var(--bg);color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+.card.sel{border-color:var(--orange);background:var(--orange-soft)}
+.card.done{border-color:var(--teal);background:var(--teal-soft);cursor:default}
+.card.wrong{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.card.wrong{animation:none;border-color:var(--orange)}}
+/* Paare */
+.pairs{display:grid;grid-template-columns:1fr 1.4fr;gap:.6rem 1rem}
+.col{display:flex;flex-direction:column;gap:.5rem}
+.col h3{margin:0 0 .2rem;font-size:1rem;color:var(--muted);font-weight:400}
+/* Gruppen */
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.pool .card{width:auto}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}
+.zone{border:2px dashed var(--teal);border-radius:12px;padding:.6rem;min-height:140px;background:transparent;font:inherit;color:inherit;
+  text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:.4rem}
+.zone strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.25rem;color:var(--teal)}
+.zone .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.35rem .5rem}
+.zone.wrong{border-color:var(--orange);animation:shake .35s}
+/* Reihenfolge */
+ol.order{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem}
+ol.order li{display:flex;align-items:center;gap:.6rem;padding:.55rem .6rem;border:2px solid var(--line);border-radius:10px;background:var(--bg)}
+ol.order li .num{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;color:var(--teal);min-width:1.4rem;text-align:center}
+ol.order li .txt{flex:1}
+ol.order li.right{border-color:var(--teal);background:var(--teal-soft)}
+ol.order li.off{border-color:var(--orange);background:var(--orange-soft)}
+.mv{font:inherit;width:2.4rem;height:2.4rem;border-radius:8px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer;font-size:1.1rem}
+.mv:disabled{opacity:.35;cursor:default}
+.think{margin-top:1rem;padding:.8rem 1rem;border-left:4px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0}
+/* Quiz */
+.q{padding:.7rem 0;border-bottom:1px solid var(--line)}
+.q:last-of-type{border-bottom:0}
+.q p{margin:0 0 .45rem}
+.q .ans{display:flex;gap:.5rem}
+.q .ans button{font:inherit;font-size:1rem;padding:.45rem 1rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+.q .ans button:disabled{cursor:default;opacity:.6}
+.q .ans button.chosen{opacity:1;background:var(--teal);color:var(--on-teal)}
+.q .fb{margin:.4rem 0 0;font-size:1rem}
+.q .fb.good{color:var(--teal)} .q .fb.bad{color:var(--orange)}
+@media (max-width:640px){
+  .pairs{grid-template-columns:1fr}
+  .zones{grid-template-columns:1fr}
+  .zone{min-height:90px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p>Geschichte, 3. Klasse – Frühe Neuzeit</p>
+  <h1>Aufbruch über die Meere</h1>
+  <p>Vier Übungen zu Seite 1. Du kannst sie in beliebiger Reihenfolge machen.</p>
+  <svg class="route" viewBox="0 0 800 34" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M10 24 C 150 4, 260 32, 400 16 S 650 6, 790 20"/>
+    <circle cx="10" cy="24" r="5"/><circle cx="790" cy="20" r="5"/>
+  </svg>
+</header>
+
+<nav role="tablist" aria-label="Übungen">
+  <button role="tab" data-tab="paare">Begriffe</button>
+  <button role="tab" data-tab="gruppen">Gott, Gold und Ruhm</button>
+  <button role="tab" data-tab="reihenfolge">Weg der Gewürze</button>
+  <button role="tab" data-tab="quiz">Richtig oder falsch?</button>
+</nav>
+
+<section id="paare" role="tabpanel">
+  <h2>Warum fuhren die Europäer los?</h2>
+  <p class="task">Tippe zuerst links einen Begriff an, dann rechts die passende Erklärung.</p>
+  <div class="pairs">
+    <div class="col" id="p-left"><h3>Begriff</h3></div>
+    <div class="col" id="p-right"><h3>Erklärung</h3></div>
+  </div>
+  <div class="status" id="p-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="paare">Nochmal von vorne</button></div>
+</section>
+
+<section id="gruppen" role="tabpanel" hidden>
+  <h2>Gott, Gold und Ruhm</h2>
+  <p class="task">Tippe einen Grund an und dann das Feld, zu dem er passt.</p>
+  <div class="pool" id="g-pool"></div>
+  <div class="zones" id="g-zones"></div>
+  <div class="status" id="g-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="gruppen">Nochmal von vorne</button></div>
+</section>
+
+<section id="reihenfolge" role="tabpanel" hidden>
+  <h2>Der lange Weg der Gewürze</h2>
+  <p class="task">Bring die Stationen mit den Pfeilen in die richtige Reihenfolge. Dann tippe auf „Prüfen“.</p>
+  <ol class="order" id="r-list"></ol>
+  <div class="tools">
+    <button class="btn" id="r-check">Prüfen</button>
+    <button class="btn ghost" data-reset="reihenfolge">Nochmal von vorne</button>
+  </div>
+  <div class="status" id="r-status" aria-live="polite"></div>
+  <div class="think" id="r-think" hidden>Bei jeder Station wollte jemand mitverdienen. Was bedeutet das für den Preis der Gewürze in Europa?</div>
+</section>
+
+<section id="quiz" role="tabpanel" hidden>
+  <h2>Richtig oder falsch?</h2>
+  <p class="task">Lies jede Aussage genau und entscheide.</p>
+  <div id="q-list"></div>
+  <div class="status" id="q-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="quiz">Nochmal von vorne</button></div>
+</section>
+</div>
+
+<script>
+const PAIRS=[
+ ["Pfeffer, Zimt, Muskatnuss","begehrte Gewürze aus Asien"],
+ ["Gewürze","zum Würzen, zum Haltbarmachen und als Medizin"],
+ ["Zoll","Abgabe, die an Grenzen für Waren verlangt wurde"],
+ ["Zwischenhändler","kauft Waren und verkauft sie teurer weiter"],
+ ["Osmanen","eroberten 1453 Konstantinopel"],
+ ["Seeweg","direkter Weg über das Meer nach Asien"],
+ ["Karavelle","schnelles, wendiges Segelschiff"],
+ ["Kompass","zeigt nach Norden, so kennt man auf See die Richtung"],
+ ["Jakobsstab","bestimmt mit Sonne oder Sternen die Position"]
+];
+const GROUPS=["Gold","Gott","Ruhm und Macht"];
+const ITEMS=[
+ ["Gewürze direkt in Asien kaufen",0],["Zölle und Zwischenhändler umgehen",0],["reich werden",0],
+ ["das Christentum verbreiten",1],
+ ["Könige wollen neue Gebiete",2],["Seefahrer wollen berühmt werden",2]
+];
+const ORDER=[
+ "Gewürze werden in Asien geerntet und an einen Händler verkauft.",
+ "Ein Schiff bringt sie über das Meer.",
+ "Eine Karawane bringt sie durch die Wüste.",
+ "An vielen Grenzen müssen Zölle bezahlt werden.",
+ "Ein Schiff bringt sie über das Mittelmeer nach Europa.",
+ "Ein Händler verkauft sie in Europa – jetzt sind sie sehr teuer."
+];
+const QUIZ=[
+ ["Gewürze waren in Europa billig, weil es so viele davon gab.",false,"Gewürze waren sehr teuer, weil der Weg so lang war."],
+ ["Gewürze brauchte man auch, um Speisen haltbar zu machen.",true,""],
+ ["Jeder Zwischenhändler wollte am Gewürzhandel mitverdienen.",true,""],
+ ["1453 eroberten die Spanier Konstantinopel.",false,"Es waren die Osmanen."],
+ ["Die Europäer suchten einen direkten Seeweg nach Asien.",true,""],
+ ["Die Kirche wollte das Christentum verbreiten.",true,""],
+ ["Der Kompass bestimmt mit den Sternen die Position.",false,"Das macht der Jakobsstab. Der Kompass zeigt nach Norden."],
+ ["Die Karavelle war ein schnelles, wendiges Segelschiff.",true,""]
+];
+const done={paare:false,gruppen:false,reihenfolge:false,quiz:false};
+const $=s=>document.querySelector(s);
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function flash(e){e.classList.remove("wrong");void e.offsetWidth;e.classList.add("wrong");setTimeout(()=>e.classList.remove("wrong"),400)}
+function markDone(k){done[k]=true;updateTabs()}
+function updateTabs(){document.querySelectorAll("nav button").forEach(b=>{
+  const k=b.dataset.tab;let ok=b.querySelector(".ok");
+  if(done[k]&&!ok){ok=el("span","ok","✓");ok.setAttribute("aria-label","geschafft");b.append(ok)}
+  if(!done[k]&&ok)ok.remove();})}
+
+/* Tabs */
+const TABS=["paare","gruppen","reihenfolge","quiz"];
+function show(k){if(!TABS.includes(k))k="paare";
+  TABS.forEach(t=>{$("#"+t).hidden=t!==k});
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* Paare */
+let pSel=null,pCount=0,pMiss=0;
+function initPaare(){
+  const L=$("#p-left"),R=$("#p-right");
+  L.querySelectorAll(".card").forEach(c=>c.remove());R.querySelectorAll(".card").forEach(c=>c.remove());
+  pSel=null;pCount=0;pMiss=0;$("#p-status").textContent="";$("#p-status").className="status";done.paare=false;updateTabs();
+  PAIRS.forEach((p,i)=>{const b=el("button","card",p[0]);b.dataset.i=i;
+    b.onclick=()=>{if(b.classList.contains("done"))return;L.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");pSel=i};L.append(b)});
+  shuffle(PAIRS.map((p,i)=>i)).forEach(i=>{const b=el("button","card",PAIRS[i][1]);
+    b.onclick=()=>{if(b.classList.contains("done"))return;
+      if(pSel===null){$("#p-status").textContent="Tippe zuerst links einen Begriff an.";return}
+      if(pSel===i){b.classList.add("done");const lb=L.querySelector(`[data-i="${i}"]`);lb.classList.remove("sel");lb.classList.add("done");pSel=null;pCount++;
+        if(pCount===PAIRS.length){$("#p-status").textContent=`Geschafft! Alle ${PAIRS.length} Paare stimmen (Fehlversuche: ${pMiss}).`;$("#p-status").className="status good";markDone("paare")}
+        else $("#p-status").textContent=`Richtig! Noch ${PAIRS.length-pCount} Paare.`;}
+      else{pMiss++;flash(b);$("#p-status").textContent="Das passt nicht. Versuch es noch einmal."}};R.append(b)});
+}
+
+/* Gruppen */
+let gSel=null,gLeft=0,gMiss=0;
+function initGruppen(){
+  const P=$("#g-pool"),Z=$("#g-zones");P.innerHTML="";Z.innerHTML="";gSel=null;gMiss=0;gLeft=ITEMS.length;
+  $("#g-status").textContent="";$("#g-status").className="status";done.gruppen=false;updateTabs();
+  shuffle(ITEMS).forEach(it=>{const b=el("button","card",it[0]);b._g=it[1];
+    b.onclick=()=>{P.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");gSel=b};P.append(b)});
+  GROUPS.forEach((g,gi)=>{const z=el("button","zone");z.append(el("strong",null,g));
+    z.onclick=()=>{if(!gSel){$("#g-status").textContent="Tippe zuerst einen Grund an.";return}
+      if(gSel._g===gi){z.append(el("span","placed",gSel.textContent));gSel.remove();gSel=null;gLeft--;
+        if(gLeft===0){$("#g-status").textContent=`Geschafft! Alles richtig zugeordnet (Fehlversuche: ${gMiss}).`;$("#g-status").className="status good";markDone("gruppen")}
+        else $("#g-status").textContent=`Richtig! Noch ${gLeft} übrig.`}
+      else{gMiss++;flash(z);$("#g-status").textContent="Das gehört woanders hin. Versuch es noch einmal."}};Z.append(z)});
+}
+
+/* Reihenfolge */
+let rCur=[];
+function initReihenfolge(){
+  do{rCur=shuffle(ORDER.map((t,i)=>i))}while(rCur.every((v,i)=>v===i));
+  $("#r-status").textContent="";$("#r-status").className="status";$("#r-think").hidden=true;done.reihenfolge=false;updateTabs();renderR(false);
+}
+function renderR(checked){
+  const L=$("#r-list");L.innerHTML="";
+  rCur.forEach((idx,pos)=>{const li=el("li");if(checked)li.className=idx===pos?"right":"off";
+    li.append(el("span","num",pos+1),el("span","txt",ORDER[idx]));
+    const up=el("button","mv","↑");up.setAttribute("aria-label","nach oben");up.disabled=pos===0;
+    const dn=el("button","mv","↓");dn.setAttribute("aria-label","nach unten");dn.disabled=pos===rCur.length-1;
+    up.onclick=()=>{[rCur[pos-1],rCur[pos]]=[rCur[pos],rCur[pos-1]];renderR(false);L.children[pos-1].querySelector(".mv").focus()};
+    dn.onclick=()=>{[rCur[pos+1],rCur[pos]]=[rCur[pos],rCur[pos+1]];renderR(false);L.children[pos+1].querySelectorAll(".mv")[1].focus()};
+    li.append(up,dn);L.append(li)});
+}
+$("#r-check").onclick=()=>{renderR(true);const n=rCur.filter((v,i)=>v===i).length;
+  if(n===ORDER.length){$("#r-status").textContent="Geschafft! Die Reihenfolge stimmt.";$("#r-status").className="status good";$("#r-think").hidden=false;markDone("reihenfolge")}
+  else{$("#r-status").textContent=`${n} von ${ORDER.length} stehen schon richtig. Die orangen Stationen musst du noch verschieben.`;$("#r-status").className="status"}};
+
+/* Quiz */
+let qAns=0,qRight=0;
+function initQuiz(){
+  const L=$("#q-list");L.innerHTML="";qAns=0;qRight=0;$("#q-status").textContent="";$("#q-status").className="status";done.quiz=false;updateTabs();
+  QUIZ.forEach((q,i)=>{const d=el("div","q");d.append(el("p",null,`${i+1}. ${q[0]}`));
+    const a=el("div","ans"),fb=el("p","fb");
+    [["richtig",true],["falsch",false]].forEach(([lab,val])=>{const b=el("button",null,lab);
+      b.onclick=()=>{a.querySelectorAll("button").forEach(x=>x.disabled=true);b.classList.add("chosen");qAns++;
+        if(val===q[1]){qRight++;fb.textContent="Stimmt! "+q[2];fb.className="fb good"}
+        else{fb.textContent=`Leider nicht. Die Aussage ist ${q[1]?"richtig":"falsch"}. ${q[2]}`;fb.className="fb bad"}
+        if(qAns===QUIZ.length){$("#q-status").textContent=`Fertig! Du hast ${qRight} von ${QUIZ.length} richtig.`;$("#q-status").className="status good";markDone("quiz")}};a.append(b)});
+    d.append(a,fb);L.append(d)});
+}
+
+document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({paare:initPaare,gruppen:initGruppen,reihenfolge:initReihenfolge,quiz:initQuiz})[b.dataset.reset]()));
+initPaare();initGruppen();initReihenfolge();initQuiz();
+show(location.hash.slice(1));
+</script>
+</body>
+</html>
