@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Die Reise des Vasco da Gama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF5F4;--surface:#FFFFFF;--ink:#18302F;--muted:#4F6766;--teal:#1F6F78;--teal-soft:#D5E8E8;--orange:#C9661A;--orange-soft:#FBE3CC;--line:#C5D9D8;--on-teal:#FFFFFF;
+--sea:#CFE6E8;--land:#E9DCC0;--coast:#8A7A55;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif}
+.stage{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:1.2rem;height:100%;padding:1rem;max-width:1500px;margin:0 auto}
+.mapbox{background:var(--sea);border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:0}
+.mapbox svg{width:100%;height:100%;max-height:100%;display:block}
+.land{fill:var(--land);stroke:var(--coast);stroke-width:2}
+.route{fill:none;stroke:var(--orange);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14 10}
+.pin{fill:var(--teal);stroke:var(--surface);stroke-width:3}
+.pinlabel{font-family:Caladea,Cambria,Georgia,serif;font-size:30px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:6px}
+.oceanlabel{font-family:Caladea,Cambria,Georgia,serif;font-style:italic;font-size:30px;fill:var(--teal);opacity:.85}
+.hidden{opacity:0}
+.fade{transition:opacity .6s}
+.panel{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.4rem 1.4rem 1.2rem;min-height:0}
+.panel .kicker{color:var(--muted);font-size:1.05rem;margin:0}
+.panel h1{font-family:Caladea,Cambria,Georgia,serif;color:var(--teal);font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.1;margin:.2rem 0 1rem}
+.date{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.4rem,2.4vw,2rem);color:var(--orange);font-weight:700;margin:0 0 .4rem;min-height:1.2em}
+.text{font-size:clamp(1.25rem,2vw,1.7rem);line-height:1.4;margin:0}
+.price{margin-top:1rem;padding:.9rem 1rem;border-left:5px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0;font-size:clamp(1.15rem,1.8vw,1.5rem)}
+.price[hidden]{display:none}
+.spacer{flex:1}
+.dots{display:flex;gap:.45rem;margin:1rem 0}
+.dots span{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dots span.on{background:var(--teal)}
+.ctrl{display:flex;gap:.6rem}
+.btn{font:inherit;font-size:1.2rem;padding:.7rem 1.3rem;border-radius:10px;border:2px solid var(--teal);background:var(--teal);color:var(--on-teal);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.hint{color:var(--muted);font-size:.95rem;margin:.7rem 0 0}
+@media (max-width:860px){html,body{height:auto}.stage{grid-template-columns:1fr;height:auto}.mapbox{aspect-ratio:11/9}}
+@media (prefers-reduced-motion: reduce){.fade{transition:none}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="mapbox">
+    <svg viewBox="0 0 1100 900" role="img" aria-label="Vereinfachte Karte: Europa, Afrika und Indien mit der Route von Vasco da Gama">
+      <polygon class="land" points="160,130 160,110 160,70 230,65 240,40 205,15 200,0 1100,0 1100,305 1050,340 1050,370 1020,420 1008,387 990,350 978,310 950,290 920,255 870,250 810,230 750,200 730,205 760,260 810,240 845,275 820,310 770,340 700,370 680,370 640,280 600,220 595,185 605,170 610,135 540,130 510,100 490,120 470,130 440,80 390,45 405,75 420,110 410,125 380,95 340,62 310,70 280,80 250,115 230,133 190,135"/>
+      <polygon class="land" points="190,140 350,130 450,190 500,180 570,190 580,200 600,260 630,320 680,380 760,380 760,400 730,450 670,510 650,550 650,600 650,650 600,700 600,740 570,790 520,830 450,850 430,840 420,790 390,730 370,670 380,620 370,560 340,510 340,460 300,440 250,450 210,450 170,460 120,420 80,360 80,290 120,230 150,200"/>
+      <polygon class="land" points="740,620 750,660 720,750 690,740 690,670"/>
+      <text class="oceanlabel" x="40" y="700">Atlantischer</text><text class="oceanlabel" x="70" y="735">Ozean</text>
+      <text class="oceanlabel" x="800" y="640">Indischer</text><text class="oceanlabel" x="830" y="675">Ozean</text>
+      <text class="pinlabel" x="430" y="520" style="font-style:italic;font-weight:400">Afrika</text>
+      <text class="pinlabel" x="320" y="40" style="font-style:italic;font-weight:400">Europa</text>
+      <text class="pinlabel" x="1010" y="300" style="font-style:italic;font-weight:400">Indien</text>
+      <g id="routes"></g>
+      <g id="pins">
+        <g class="fade" data-pin="0"><circle class="pin" cx="159" cy="113" r="11"/><text class="pinlabel" x="178" y="100">Lissabon</text></g>
+        <g class="fade hidden" data-pin="2"><circle class="pin" cx="430" cy="842" r="11"/><text class="pinlabel" x="150" y="895">Kap der Guten Hoffnung</text></g>
+        <g class="fade hidden" data-pin="4"><circle class="pin" cx="1008" cy="387" r="11"/><text class="pinlabel" x="1000" y="440" text-anchor="middle">Kalikut</text></g>
+      </g>
+      <g id="ship" transform="translate(159,113)">
+        <path d="M-22 4 L22 4 L14 16 L-14 16 Z" fill="var(--teal)"/>
+        <path d="M0 2 L0 -30" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M2 -28 L20 0 L2 0 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M-2 -24 L-16 0 L-2 0 Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="2"/>
+      </g>
+    </svg>
+  </div>
+  <div class="panel">
+    <p class="kicker">Geschichte, 3. Klasse – Der Seeweg nach Indien</p>
+    <h1>Die Reise des Vasco da Gama</h1>
+    <p class="date" id="date"></p>
+    <p class="text" id="text"></p>
+    <div class="price" id="price" hidden></div>
+    <div class="spacer"></div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="back">Zurück</button>
+      <button class="btn" id="next">Weiter</button>
+    </div>
+    <p class="hint">Tipp: Mit der Leertaste oder der Pfeiltaste nach rechts geht es auch weiter.</p>
+  </div>
+</div>
+<script>
+const SEGS=[
+ null,
+ [[159,113],[110,180],[40,380],[90,600],[300,800]],
+ [[300,800],[420,880],[480,885],[560,830]],
+ [[560,830],[600,770],[625,720],[665,640],[668,540],[690,515]],
+ [[690,515],[850,440],[1000,392]]
+];
+const STEPS=[
+ {date:"Juli 1497",text:"Vasco da Gama bricht mit vier Schiffen in Lissabon auf. Der König von Portugal will endlich einen Seeweg nach Indien."},
+ {date:"Sommer und Herbst 1497",text:"Die Flotte segelt weit hinaus auf den Atlantischen Ozean. Wochenlang ist kein Land in Sicht."},
+ {date:"November 1497",text:"Die Schiffe umsegeln das Kap der Guten Hoffnung, die Südspitze Afrikas. Hier war 1488 schon Bartolomeu Dias."},
+ {date:"Anfang 1498",text:"Die Flotte fährt die Ostküste Afrikas hinauf nach Norden."},
+ {date:"Mai 1498",text:"Über den Indischen Ozean erreicht die Flotte Kalikut in Indien. Der Seeweg nach Indien ist gefunden!"},
+ {date:"Der Preis",text:"Die Reise war ein großer Erfolg für Portugal. Aber sie hatte einen hohen Preis.",price:"Mehr als die Hälfte der Seeleute starb unterwegs, vor allem an Skorbut.<br><br><strong>Frage an die Klasse:</strong> Warum war dieser Seeweg für Portugal trotzdem so wichtig?"}
+];
+const NS="http://www.w3.org/2000/svg";
+const routes=document.getElementById("routes"),ship=document.getElementById("ship");
+const paths=SEGS.map((s,i)=>{if(!s)return null;const p=document.createElementNS(NS,"path");
+  p.setAttribute("d","M"+s.map(q=>q.join(" ")).join(" L"));p.setAttribute("class","route");p.style.visibility="hidden";routes.append(p);return p});
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let step=0,anim=null;
+const dots=document.getElementById("dots");STEPS.forEach(()=>dots.append(document.createElement("span")));
+function placeShip(x,y,dx){ship.setAttribute("transform",`translate(${x},${y}) scale(${dx<0?-1:1},1)`)}
+function showPath(i,full){const p=paths[i];if(!p)return;p.style.visibility="visible";const L=p.getTotalLength();
+  p.style.strokeDasharray=full?"14 10":`${L} ${L}`;p.style.strokeDashoffset=full?0:L}
+function hidePath(i){if(paths[i])paths[i].style.visibility="hidden"}
+function endOf(i){const s=SEGS[i];return s[s.length-1]}
+function render(animate){
+  const s=STEPS[step];
+  document.getElementById("date").textContent=s.date;
+  document.getElementById("text").textContent=s.text;
+  const pr=document.getElementById("price");if(s.price){pr.innerHTML=s.price;pr.hidden=false}else pr.hidden=true;
+  [...dots.children].forEach((d,i)=>d.classList.toggle("on",i<=step));
+  document.querySelectorAll("[data-pin]").forEach(g=>g.classList.toggle("hidden",+g.dataset.pin>step));
+  document.getElementById("back").disabled=step===0;
+  const nb=document.getElementById("next");nb.textContent=step===STEPS.length-1?"Von vorne":"Weiter";
+  if(anim){cancelAnimationFrame(anim);anim=null}
+  for(let i=1;i<SEGS.length;i++){if(i<step||(i===step&&!animate))showPath(i,true);else if(i>step)hidePath(i)}
+  const last=Math.min(step,SEGS.length-1);
+  if(step===0){placeShip(159,113,1);return}
+  if(animate&&SEGS[step]&&!reduce){const p=paths[step];showPath(step,false);const L=p.getTotalLength(),t0=performance.now(),D=2600;
+    const tick=t=>{const k=Math.min(1,(t-t0)/D),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,len=e*L,pt=p.getPointAtLength(len),pt2=p.getPointAtLength(Math.min(L,len+2));
+      p.style.strokeDashoffset=L-len;placeShip(pt.x,pt.y,pt2.x-pt.x);
+      if(k<1)anim=requestAnimationFrame(tick);else{showPath(step,true);anim=null}};anim=requestAnimationFrame(tick)}
+  else{const e=endOf(last);placeShip(e[0],e[1],1)}
+}
+function next(){if(step===STEPS.length-1){step=0;render(false);return}step++;render(true)}
+function back(){if(step>0){step--;render(false)}}
+document.getElementById("next").onclick=next;document.getElementById("back").onclick=back;
+document.addEventListener("keydown",e=>{if(e.target.tagName==="BUTTON"&&(e.key===" "||e.key==="Enter"))return;
+  if(e.key===" "||e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();next()}if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();back()}});
+render(false);
+</script>
+</body>
+</html>
