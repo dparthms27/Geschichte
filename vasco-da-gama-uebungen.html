@@ -64,6 +64,23 @@ h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
 .marker.done .n{fill:var(--on-teal)}
 .marker.wrong circle{stroke:var(--orange);fill:var(--orange-soft)}
 .maplabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:28px;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:7px}
+.oldroute{fill:none;stroke:var(--teal);stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round;stroke-linejoin:round}
+.legbox{fill:var(--surface);opacity:.92}
+.legtext{font-family:Carlito,Calibri,Arial,sans-serif;fill:var(--ink)}
+.kmap{margin-bottom:1.2rem}
+.kmap .dot{fill:var(--teal);stroke:var(--surface);stroke-width:3}
+.oceanlabel{font-family:Caladea,Cambria,Georgia,serif;font-style:italic;font-size:28px;fill:var(--teal)}
+.kq{border-top:1px solid var(--line);padding:1rem 0 .4rem}
+.kq h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;font-weight:700;margin:0 0 .6rem}
+.kq .opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.card.right{border-color:var(--teal);background:var(--teal);color:var(--on-teal);cursor:default}
+.kq .fb{min-height:1.4em;margin:.5rem 0 0;font-weight:700}
+.kq .fb.good{color:var(--teal)}.kq .fb.bad{color:var(--orange)}
+.ltext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;line-height:2.2;margin:0}
+.gap{font:inherit;font-size:1.2rem;display:inline-block;min-width:7em;padding:0 .5rem;margin:0 .15rem;border:none;border-bottom:3px dashed var(--teal);border-radius:6px 6px 0 0;background:var(--teal-soft);color:var(--muted);cursor:pointer;line-height:1.6}
+.gap.filled{border-bottom-style:solid;background:transparent;color:var(--teal);font-weight:700;cursor:default;min-width:0}
+.gap:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.paper{margin-top:1rem;padding:.8rem 1rem;border-left:5px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0}
 /* Quiz */
 .quizgrid{display:grid;grid-template-columns:1fr 180px;gap:1.2rem}
 .qtext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;line-height:1.25;margin:.2rem 0 1rem}
@@ -90,12 +107,14 @@ h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
 <header>
   <p>Geschichte, 3. Klasse – Frühe Neuzeit</p>
   <h1>Der Seeweg nach Indien</h1>
-  <p>Drei Übungen zu Vasco da Gama. Du kannst sie in beliebiger Reihenfolge machen.</p>
+  <p>Übungen zu Vasco da Gama und zum Arbeitsblatt 01.3. Tipp: Mach zuerst „Karte beschriften“, dann kannst du Aufgabe 2 und 3 ganz leicht lösen.</p>
   <svg class="routeline" viewBox="0 0 800 34" preserveAspectRatio="none" aria-hidden="true"><path d="M10 24 C 150 4, 260 32, 400 16 S 650 6, 790 20"/><circle cx="10" cy="24" r="5"/><circle cx="790" cy="20" r="5"/></svg>
 </header>
 <nav role="tablist" aria-label="Übungen">
   <button role="tab" data-tab="zeitleiste">Zeitleiste</button>
   <button role="tab" data-tab="karte">Karte beschriften</button>
+  <button role="tab" data-tab="kfragen">Aufgabe 2: Kartenarbeit</button>
+  <button role="tab" data-tab="luecken">Aufgabe 3: Lückentext</button>
   <button role="tab" data-tab="quiz">Wer wird Millionär?</button>
 </nav>
 
@@ -110,20 +129,50 @@ h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
 
 <section id="karte" role="tabpanel" hidden>
   <h2>Karte beschriften</h2>
-  <p class="task">Tippe einen Namen an und dann die passende Nummer auf der Karte. Du weißt nicht weiter? Schau dir die <a class="lern" href="vasco-da-gama-reise.html" target="_blank" rel="noopener">Lernkarte zur Reise</a> an.</p>
+  <p class="task">Tippe einen Namen an und dann die passende Nummer auf der Karte. Die gepunkteten Linien sind die alten Handelswege für Gewürze. Du weißt nicht weiter? Schau dir die <a class="lern" href="vasco-da-gama-reise.html" target="_blank" rel="noopener">Lernkarte zur Reise</a> an.</p>
   <div class="pool" id="k-pool"></div>
   <div class="mapwrap">
-    <svg viewBox="0 0 1100 900" id="k-map" role="group" aria-label="Karte mit der Route von Vasco da Gama und sechs Nummern">
+    <svg viewBox="0 0 1100 900" id="k-map" role="group" aria-label="Karte mit den alten Handelswegen, der Route von Vasco da Gama und neun Nummern">
       <polygon class="land" points="160,130 160,110 160,70 230,65 240,40 205,15 200,0 1100,0 1100,305 1050,340 1050,370 1020,420 1008,387 990,350 978,310 950,290 920,255 870,250 810,230 750,200 730,205 760,260 810,240 845,275 820,310 770,340 700,370 680,370 640,280 600,220 595,185 605,170 610,135 540,130 510,100 490,120 470,130 440,80 390,45 405,75 420,110 410,125 380,95 340,62 310,70 280,80 250,115 230,133 190,135"/>
       <polygon class="land" points="190,140 350,130 450,190 500,180 570,190 580,200 600,260 630,320 680,380 760,380 760,400 730,450 670,510 650,550 650,600 650,650 600,700 600,740 570,790 520,830 450,850 430,840 420,790 390,730 370,670 380,620 370,560 340,510 340,460 300,440 250,450 210,450 170,460 120,420 80,360 80,290 120,230 150,200"/>
       <polygon class="land" points="740,620 750,660 720,750 690,740 690,670"/>
+      <g><polyline class="oldroute" points="1008,387 850,400 760,375 690,375 650,330 619,270 593,220 560,188 500,165 452,135 425,105 402,62"/><polyline class="oldroute" points="1008,387 900,300 855,262 800,235 755,210 680,170 600,140 515,105 485,138 452,135"/></g>
       <polyline class="route" points="159,113 110,180 40,380 90,600 300,800 420,880 480,885 560,830 600,770 625,720 665,640 668,540 690,515 850,440 1000,392"/>
+      <g aria-hidden="true"><rect x="740" y="790" width="350" height="95" rx="12" class="legbox"/><line x1="760" y1="822" x2="815" y2="822" class="oldroute"/><text x="827" y="830" class="legtext" style="font-size:22px">alte Handelswege</text><line x1="760" y1="862" x2="815" y2="862" class="route"/><text x="827" y="870" class="legtext" style="font-size:22px">Seeweg Vasco da Gama</text></g>
       <g id="k-labels"></g>
       <g id="k-markers"></g>
     </svg>
   </div>
   <div class="status" id="k-status" aria-live="polite"></div>
   <div class="tools"><button class="btn ghost" data-reset="karte">Nochmal von vorne</button></div>
+</section>
+
+<section id="kfragen" role="tabpanel" hidden>
+  <h2>Aufgabe 2: Kartenarbeit</h2>
+  <p class="task">So sieht die Karte M2 auf deinem Arbeitsblatt ungefähr aus. Schau genau hin und beantworte die drei Fragen.</p>
+  <div class="mapwrap kmap">
+    <svg viewBox="0 0 1100 900" role="img" aria-label="Beschriftete Karte: alte Handelswege über Alexandria, Konstantinopel und Venedig und der Seeweg von Vasco da Gama von Lissabon um Afrika nach Kalikut">
+      <polygon class="land" points="160,130 160,110 160,70 230,65 240,40 205,15 200,0 1100,0 1100,305 1050,340 1050,370 1020,420 1008,387 990,350 978,310 950,290 920,255 870,250 810,230 750,200 730,205 760,260 810,240 845,275 820,310 770,340 700,370 680,370 640,280 600,220 595,185 605,170 610,135 540,130 510,100 490,120 470,130 440,80 390,45 405,75 420,110 410,125 380,95 340,62 310,70 280,80 250,115 230,133 190,135"/>
+      <polygon class="land" points="190,140 350,130 450,190 500,180 570,190 580,200 600,260 630,320 680,380 760,380 760,400 730,450 670,510 650,550 650,600 650,650 600,700 600,740 570,790 520,830 450,850 430,840 420,790 390,730 370,670 380,620 370,560 340,510 340,460 300,440 250,450 210,450 170,460 120,420 80,360 80,290 120,230 150,200"/>
+      <polygon class="land" points="740,620 750,660 720,750 690,740 690,670"/>
+      <polyline class="oldroute" points="1008,387 850,400 760,375 690,375 650,330 619,270 593,220 560,188 500,165 452,135 425,105 402,62"/><polyline class="oldroute" points="1008,387 900,300 855,262 800,235 755,210 680,170 600,140 515,105 485,138 452,135"/>
+      <polyline class="route" points="159,113 110,180 40,380 90,600 300,800 420,880 480,885 560,830 600,770 625,720 665,640 668,540 690,515 850,440 1000,392"/>
+      <g aria-hidden="true"><rect x="740" y="790" width="350" height="95" rx="12" class="legbox"/><line x1="760" y1="822" x2="815" y2="822" class="oldroute"/><text x="827" y="830" class="legtext" style="font-size:22px">alte Handelswege</text><line x1="760" y1="862" x2="815" y2="862" class="route"/><text x="827" y="870" class="legtext" style="font-size:22px">Seeweg Vasco da Gama</text></g>
+      <circle class="dot" cx="159" cy="113" r="10"/><text class="maplabel" x="190" y="100" text-anchor="start">Lissabon</text><circle class="dot" cx="402" cy="62" r="10"/><text class="maplabel" x="378" y="38" text-anchor="end">Venedig</text><circle class="dot" cx="510" cy="106" r="10"/><text class="maplabel" x="528" y="78" text-anchor="start">Konstantinopel</text><circle class="dot" cx="560" cy="187" r="10"/><text class="maplabel" x="560" y="238" text-anchor="middle">Alexandria</text><circle class="dot" cx="430" cy="842" r="10"/><text class="maplabel" x="150" y="892" text-anchor="start">Kap der Guten Hoffnung</text><circle class="dot" cx="1008" cy="387" r="10"/><text class="maplabel" x="1000" y="440" text-anchor="middle">Kalikut</text><text class="maplabel" x="450" y="520" text-anchor="middle">Afrika</text><text class="oceanlabel" x="40" y="700">Atlantischer</text><text class="oceanlabel" x="70" y="734">Ozean</text><text class="oceanlabel" x="790" y="600">Indischer</text><text class="oceanlabel" x="820" y="634">Ozean</text>
+    </svg>
+  </div>
+  <div id="kf-list"></div>
+  <div class="status" id="kf-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="kfragen">Nochmal von vorne</button></div>
+</section>
+
+<section id="luecken" role="tabpanel" hidden>
+  <h2>Aufgabe 3: Ergänze die Lücken</h2>
+  <p class="task">Tippe ein Wort an und dann die passende Lücke. Achtung: Drei Wörter passen nirgends hinein.</p>
+  <div class="pool" id="l-pool"></div>
+  <p class="ltext" id="l-text"></p>
+  <div class="status" id="l-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="luecken">Nochmal von vorne</button></div>
 </section>
 
 <section id="quiz" role="tabpanel" hidden>
@@ -149,11 +198,11 @@ const $=s=>document.querySelector(s);
 function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function flash(e){e.classList.remove("wrong");void e.getBoundingClientRect();e.classList.add("wrong");setTimeout(()=>e.classList.remove("wrong"),450)}
-const done={zeitleiste:false,karte:false,quiz:false};
+const done={zeitleiste:false,karte:false,kfragen:false,luecken:false,quiz:false};
 function updateTabs(){document.querySelectorAll("nav button").forEach(b=>{let ok=b.querySelector(".ok");const d=done[b.dataset.tab];
   if(d&&!ok){ok=el("span","ok","✓");ok.setAttribute("aria-label","geschafft");b.append(ok)}if(!d&&ok)ok.remove()})}
 function markDone(k,v=true){done[k]=v;updateTabs()}
-const TABS=["zeitleiste","karte","quiz"];
+const TABS=["zeitleiste","karte","kfragen","luecken","quiz"];
 function show(k){if(!TABS.includes(k))k="zeitleiste";TABS.forEach(t=>$("#"+t).hidden=t!==k);
   document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
@@ -175,6 +224,9 @@ function initZ(){const P=$("#z-pool"),L=$("#z-line");P.innerHTML="";L.innerHTML=
 const NS="http://www.w3.org/2000/svg";
 const PLACES=[
  {name:"Lissabon",x:159,y:113,lx:190,ly:100,a:"start"},
+ {name:"Venedig",x:402,y:62,lx:372,ly:38,a:"end"},
+ {name:"Konstantinopel",x:510,y:106,lx:536,ly:76,a:"start"},
+ {name:"Alexandria",x:560,y:187,lx:560,ly:245,a:"middle"},
  {name:"Kap der Guten Hoffnung",x:430,y:842,lx:150,ly:892,a:"start"},
  {name:"Kalikut",x:1008,y:387,lx:1000,ly:445,a:"middle"},
  {name:"Afrika",x:450,y:500,lx:450,ly:555,a:"middle"},
@@ -195,6 +247,44 @@ function initK(){const P=$("#k-pool"),M=$("#k-markers"),LB=$("#k-labels");P.inne
         else $("#k-status").textContent=`Richtig! Noch ${kLeft} übrig.`}
       else{kMiss++;g.classList.add("wrong");setTimeout(()=>g.classList.remove("wrong"),600);$("#k-status").textContent="Das ist die falsche Stelle. Versuch es noch einmal."}};
     g.addEventListener("click",act);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act()}});M.append(g)})}
+
+/* Aufgabe 2 */
+const KQ=[
+ {q:"a) Über welche Städte kamen die Gewürze früher nach Europa? Wähle zwei.",ok:["Venedig","Alexandria","Konstantinopel"],other:["Lissabon","Kalikut","Madrid"],n:2,
+  hint:"Folge den gepunkteten Linien, den alten Handelswegen."},
+ {q:"b) Welche Ozeane überquerte Vasco da Gama? Wähle zwei.",ok:["Atlantischer Ozean","Indischer Ozean"],other:["Pazifischer Ozean","Mittelmeer"],n:2,
+  hint:"Folge der orangen Linie von Lissabon bis Kalikut."},
+ {q:"c) Um welchen Kontinent segelte er herum?",ok:["Afrika"],other:["Amerika","Asien","Australien"],n:1,
+  hint:"Wo liegt das Kap der Guten Hoffnung?"}
+];
+let kfLeft=0;
+function initKF(){const L=$("#kf-list");L.innerHTML="";kfLeft=KQ.length;$("#kf-status").textContent="";$("#kf-status").className="status";markDone("kfragen",false);
+  KQ.forEach(k=>{const box=el("div","kq");box.append(el("h3",null,k.q));const o=el("div","opts"),fb=el("p","fb");fb.setAttribute("aria-live","polite");
+    const picked=new Set();let solved=false;
+    shuffle([...k.ok,...k.other]).forEach(w=>{const b=el("button","card",w);b.setAttribute("aria-pressed","false");
+      b.onclick=()=>{if(solved)return;
+        if(!k.ok.includes(w)){flash(b);fb.textContent="Das stimmt nicht. "+k.hint;fb.className="fb bad";return}
+        if(picked.has(w))return;picked.add(w);b.classList.add("right");b.setAttribute("aria-pressed","true");
+        if(picked.size>=k.n){solved=true;kfLeft--;fb.textContent=k.n>1?"Richtig! Schreib die beiden Antworten in die Tabelle.":"Richtig! Schreib die Antwort in die Tabelle.";fb.className="fb good";
+          if(kfLeft===0){$("#kf-status").textContent="Geschafft! Jetzt kannst du Aufgabe 2 auf deinem Arbeitsblatt ausfüllen.";$("#kf-status").className="status good";markDone("kfragen")}}
+        else{fb.textContent=`Richtig! Noch ${k.n-picked.size} weitere.`;fb.className="fb good"}};o.append(b)});
+    box.append(o,fb);L.append(box)})}
+
+/* Aufgabe 3 */
+const LT=["1453 eroberten die ",["Osmanen"]," die Stadt Konstantinopel. Die Europäer suchten deshalb einen ",["Seeweg"]," nach Asien. 1488 umsegelte ",["Bartolomeu Dias"]," die Südspitze Afrikas. 1497 brach ",["Vasco da Gama"]," von ",["Lissabon"]," auf und erreichte ",["1498"]," die Stadt Kalikut in ",["Indien"],". Die Richtung auf hoher See zeigte den Seefahrern der ",["Kompass"],"."];
+const LDIST=["Spanier","Kolumbus","1492"];
+let lSel=null,lLeft=0,lMiss=0;
+function initL(){const P=$("#l-pool"),T=$("#l-text");P.innerHTML="";T.innerHTML="";lSel=null;lMiss=0;$("#l-status").textContent="";$("#l-status").className="status";markDone("luecken",false);
+  const words=LT.filter(x=>Array.isArray(x)).map(x=>x[0]);lLeft=words.length;
+  shuffle([...words,...LDIST]).forEach(w=>{const b=el("button","card",w);b._w=w;b.onclick=()=>{P.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");lSel=b};P.append(b)});
+  let n=0;LT.forEach(x=>{if(!Array.isArray(x)){T.append(document.createTextNode(x));return}
+    n++;const g=el("button","gap","Lücke "+n);g.setAttribute("aria-label","Lücke "+n);
+    g.onclick=()=>{if(g.classList.contains("filled"))return;if(!lSel){$("#l-status").textContent="Tippe zuerst ein Wort an.";$("#l-status").className="status";return}
+      if(lSel._w===x[0]){g.textContent=x[0];g.classList.add("filled");g.setAttribute("aria-label",x[0]);lSel.remove();lSel=null;lLeft--;
+        if(lLeft===0){$("#l-status").textContent=`Geschafft! Alle Lücken sind richtig (Fehlversuche: ${lMiss}). Schreib den Text jetzt auf dein Arbeitsblatt.`;$("#l-status").className="status good";markDone("luecken")}
+        else{$("#l-status").textContent=`Richtig! Noch ${lLeft} Lücken.`;$("#l-status").className="status"}}
+      else{lMiss++;flash(g);$("#l-status").textContent="Das Wort passt hier nicht. Lies den ganzen Satz noch einmal.";$("#l-status").className="status"}};
+    T.append(g)})}
 
 /* Quiz */
 const QS=[
@@ -228,8 +318,8 @@ function renderQ(){const L=$("#q-ladder").children;[...L].forEach((li,i)=>{li.cl
 $("#q-next").onclick=()=>{qi++;renderQ()};
 $("#q-joker").onclick=()=>{if(jokerUsed)return;jokerUsed=true;$("#q-joker").disabled=true;shuffle([...$("#q-answers").children].filter(b=>!b._ok)).slice(0,2).forEach(b=>{b.classList.add("gone");b.disabled=true})};
 
-document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({zeitleiste:initZ,karte:initK,quiz:initQ})[b.dataset.reset]()));
-initZ();initK();initQ();show(location.hash.slice(1));
+document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({zeitleiste:initZ,karte:initK,kfragen:initKF,luecken:initL,quiz:initQ})[b.dataset.reset]()));
+initZ();initK();initKF();initL();initQ();show(location.hash.slice(1));
 </script>
 </body>
 </html>
