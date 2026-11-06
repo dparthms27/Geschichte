@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Berühmte Erfinder der Frühen Neuzeit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF5F4;--surface:#FFFFFF;--ink:#18302F;--muted:#4F6766;--teal:#1F6F78;--teal-soft:#D5E8E8;--orange:#C9661A;--orange-soft:#FBE3CC;--line:#C5D9D8;--on-teal:#FFFFFF;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:1.15rem;line-height:1.45}
+.wrap{max-width:980px;margin:0 auto;padding:1.5rem 1rem 3rem}
+header h1{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.1;margin:.2rem 0 .4rem;color:var(--teal)}
+header p{margin:0;color:var(--muted);max-width:62ch}
+.progress{display:flex;align-items:center;gap:.7rem;margin:1rem 0 1.1rem;font-size:1rem;color:var(--muted)}
+.bar{flex:1;max-width:320px;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--orange);transition:width .4s}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+nav button{font:inherit;font-size:1rem;padding:.55rem .9rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+nav button[aria-selected="true"]{background:var(--teal);color:var(--on-teal)}
+nav button .ok{margin-left:.35rem}
+button:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.2rem 1.5rem}
+section[hidden]{display:none}
+h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
+.task{margin:0 0 1rem;color:var(--muted)}
+.status{margin-top:1rem;min-height:1.5em;font-weight:700}
+.status.good{color:var(--teal)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{font:inherit;font-size:1rem;padding:.6rem 1.1rem;border-radius:10px;border:2px solid var(--teal);cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;color:var(--teal)}
+.card{font:inherit;text-align:left;padding:.6rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.card.sel{border-color:var(--orange);background:var(--orange-soft)}
+.wrong{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.wrong{animation:none}.bar span{transition:none}}
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.1rem;min-height:2.8rem}
+
+/* Galerie */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
+.inv{border:1px solid var(--line);border-radius:12px;padding:1rem;background:var(--bg);display:flex;flex-direction:column;gap:.5rem}
+.inv .top{display:flex;gap:.8rem;align-items:center}
+.icon{flex:0 0 64px;width:64px;height:64px;border-radius:12px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center}
+.icon svg{width:46px;height:46px;fill:none;stroke:var(--teal);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.inv h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;line-height:1.15;margin:0}
+.inv .life{font-size:.95rem;color:var(--muted)}
+.inv .what{font-weight:700;color:var(--teal);margin:0}
+.inv .what b{color:var(--orange)}
+.inv p{margin:0}
+.inv .note{font-size:1rem;color:var(--muted);border-left:4px solid var(--orange);padding-left:.6rem}
+
+/* Zuordnen */
+.targets{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.6rem}
+.target{font:inherit;text-align:left;border:2px dashed var(--teal);border-radius:12px;background:transparent;color:var(--ink);padding:.6rem .7rem;min-height:92px;cursor:pointer;display:flex;flex-direction:column;gap:.35rem}
+.target strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.15rem;color:var(--teal)}
+.target .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.3rem .5rem}
+.target.filled{border-style:solid;cursor:default}
+.target.wrong{border-color:var(--orange)}
+
+/* Zeitleiste */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}
+.slot{font:inherit;text-align:left;border:2px dashed var(--teal);border-radius:12px;background:transparent;color:var(--ink);padding:.6rem;min-height:110px;cursor:pointer;display:flex;flex-direction:column;gap:.35rem}
+.slot strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;color:var(--orange)}
+.slot .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.3rem .5rem}
+.slot.filled{border-style:solid;cursor:default}
+.slot.wrong{border-color:var(--orange)}
+
+/* Wer bin ich */
+.who{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;line-height:1.35;margin:.2rem 0 1rem;padding:1rem 1.1rem;background:var(--teal-soft);border-radius:12px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.answers button{font:inherit;text-align:left;padding:.75rem .9rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.answers button.right{background:var(--teal);color:var(--on-teal)}
+.answers button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.answers button:disabled{cursor:default}
+.qfb{min-height:1.5em;margin:.8rem 0 0;font-weight:700}
+.qfb.good{color:var(--teal)}.qfb.bad{color:var(--orange)}
+.count{color:var(--muted);font-size:1rem;margin:0}
+
+/* Merktext */
+.mlist{margin:0;padding-left:1.4rem;font-family:Caladea,Cambria,Georgia,serif;font-size:1.25rem;line-height:2.1}
+.gap{font:inherit;font-size:1.1rem;display:inline-block;min-width:6.5em;padding:0 .45rem;margin:0 .12rem;border:none;border-bottom:3px dashed var(--teal);border-radius:6px 6px 0 0;background:var(--teal-soft);color:var(--muted);cursor:pointer;line-height:1.55}
+.gap.filled{border-bottom-style:solid;background:transparent;color:var(--teal);font-weight:700;cursor:default;min-width:0}
+.heft{margin-top:1.4rem;padding:1.1rem 1.2rem;border:2px solid var(--orange);border-radius:12px;background:var(--orange-soft)}
+.heft[hidden]{display:none}
+.heft h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.4rem;margin:0 0 .4rem;color:var(--ink)}
+.heft .final{background:var(--surface);border-radius:10px;padding:1rem 1.1rem;margin-top:.8rem}
+.heft .final h4{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;margin:0 0 .5rem;color:var(--teal)}
+.heft .final ul{margin:0;padding-left:1.2rem}
+.heft .final li{margin:.35rem 0}
+@media (max-width:680px){.timeline{grid-template-columns:1fr 1fr}.answers{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p>Geschichte, 3. Klasse – Frühe Neuzeit</p>
+  <h1>Berühmte Erfinder der Frühen Neuzeit</h1>
+  <p>Lies zuerst die Steckbriefe. Dann löst du die Übungen. Am Ende schreibst du den Merktext in dein Heft.</p>
+</header>
+<div class="progress"><span id="prog-text">0 von 4 Übungen geschafft</span><div class="bar" aria-hidden="true"><span id="prog-bar"></span></div></div>
+<nav role="tablist" aria-label="Übungen">
+  <button role="tab" data-tab="steckbriefe">1 Steckbriefe lesen</button>
+  <button role="tab" data-tab="zuordnen">2 Wer erfand was?</button>
+  <button role="tab" data-tab="zeitleiste">3 Zeitleiste</button>
+  <button role="tab" data-tab="werbinich">4 Wer bin ich?</button>
+  <button role="tab" data-tab="merktext">5 Merktext fürs Heft</button>
+</nav>
+
+<section id="steckbriefe" role="tabpanel">
+  <h2>Acht Erfinder, acht Erfindungen</h2>
+  <p class="task">Lies jeden Steckbrief genau. Du kannst hier jederzeit nachschauen, wenn du bei einer Übung nicht weiterweißt.</p>
+  <div class="gallery" id="gallery"></div>
+  <div class="tools"><button class="btn" data-go="zuordnen">Weiter zu Übung 2</button></div>
+</section>
+
+<section id="zuordnen" role="tabpanel" hidden>
+  <h2>Wer erfand was?</h2>
+  <p class="task">Tippe eine Erfindung an und dann den passenden Erfinder.</p>
+  <div class="pool" id="a-pool"></div>
+  <div class="targets" id="a-targets"></div>
+  <div class="status" id="a-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="zuordnen">Nochmal von vorne</button></div>
+</section>
+
+<section id="zeitleiste" role="tabpanel" hidden>
+  <h2>Was wurde wann erfunden?</h2>
+  <p class="task">Tippe eine Erfindung an und dann das passende Jahr. Die Jahre stehen schon in der richtigen Reihenfolge.</p>
+  <div class="pool" id="t-pool"></div>
+  <div class="timeline" id="t-line"></div>
+  <div class="status" id="t-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="zeitleiste">Nochmal von vorne</button></div>
+</section>
+
+<section id="werbinich" role="tabpanel" hidden>
+  <h2>Wer bin ich?</h2>
+  <p class="task">Ein Erfinder erzählt von sich. Wer ist es?</p>
+  <p class="count" id="w-count"></p>
+  <p class="who" id="w-text"></p>
+  <div class="answers" id="w-answers"></div>
+  <p class="qfb" id="w-fb" aria-live="polite"></p>
+  <div class="tools">
+    <button class="btn" id="w-next" hidden>Nächster Erfinder</button>
+    <button class="btn ghost" data-reset="werbinich">Nochmal von vorne</button>
+  </div>
+</section>
+
+<section id="merktext" role="tabpanel" hidden>
+  <h2>Merktext: Berühmte Erfinder der Frühen Neuzeit</h2>
+  <p class="task">Ergänze zuerst die Lücken: Tippe ein Wort an und dann die passende Lücke. Danach erscheint der fertige Merktext zum Abschreiben.</p>
+  <div class="pool" id="m-pool"></div>
+  <ol class="mlist" id="m-list"></ol>
+  <div class="status" id="m-status" aria-live="polite"></div>
+  <div class="heft" id="m-heft" hidden>
+    <h3>Jetzt ins Heft!</h3>
+    <p>Schreib die Überschrift und alle acht Sätze sauber in dein Heft. Unterstreiche die Namen der Erfinder mit einer Farbe und die Erfindungen mit einer anderen.</p>
+    <div class="final" id="m-final"></div>
+  </div>
+  <div class="tools"><button class="btn ghost" data-reset="merktext">Nochmal von vorne</button></div>
+</section>
+</div>
+
+<script>
+const ICONS={
+ presse:'<path d="M10 42h28M14 42V8h20v34M14 14h20M24 14v8M18 22h12v6H18zM20 34h8"/><path d="M8 42h32"/>',
+ globus:'<circle cx="24" cy="20" r="13"/><ellipse cx="24" cy="20" rx="6" ry="13"/><path d="M11 20h26M24 33v6M16 42h16M36 8a17 17 0 0 1 0 24"/>',
+ fallschirm:'<path d="M24 5L6 24h36z"/><path d="M6 24l15 15M42 24L27 39M24 24v15"/><circle cx="24" cy="41" r="3"/>',
+ taschenuhr:'<circle cx="24" cy="27" r="15"/><path d="M24 27V18M24 27l6 4M24 12V8M20 6h8"/>',
+ fernrohr:'<path d="M6 30l30-14 3 7-30 14zM36 16l4-2 3 7-4 2M18 33l-6 11M22 31l6 12"/>',
+ jupiter:'<circle cx="22" cy="24" r="10"/><path d="M13 21h18M13 27h18"/><circle cx="38" cy="24" r="2"/><circle cx="6" cy="24" r="2"/><circle cx="44" cy="24" r="1.5"/><circle cx="34" cy="14" r="1.5"/>',
+ pendeluhr:'<path d="M14 4h20v40H14z"/><circle cx="24" cy="14" r="6"/><path d="M24 14v2M24 20v14"/><circle cx="24" cy="36" r="3"/>',
+ mikroskop:'<path d="M20 6h8v6h-8zM22 12l-2 16h8l-2-16M16 34h18M12 42h26M30 28c6 2 8 8 4 14"/><circle cx="24" cy="31" r="1.5"/>'
+};
+const INV=[
+ {id:"gut",name:"Johannes Gutenberg",life:"um 1400–1468 · Mainz (Deutschland)",what:"Buchdruck mit beweglichen Buchstaben",when:"um 1450",icon:"presse",
+  text:"Gutenberg goss einzelne Buchstaben aus Metall. Man konnte sie immer wieder neu zusammensetzen. Mit seiner Druckerpresse entstanden Bücher viel schneller und billiger als mit der Hand.",
+  note:"Sein berühmtestes Werk ist die Gutenberg-Bibel (um 1454).",
+  who:"Ich lebte in Mainz. Früher schrieben Mönche Bücher monatelang mit der Hand ab. Mit meinen Metallbuchstaben ging das plötzlich ganz schnell."},
+ {id:"beh",name:"Martin Behaim",life:"1459–1507 · Nürnberg (Deutschland)",what:"ältester erhaltener Globus",when:"1492",icon:"globus",
+  text:"Behaim war Kaufmann und Seefahrer. In Nürnberg ließ er eine Erdkugel bauen, den „Erdapfel“. Sie zeigt, dass die Erde eine Kugel ist.",
+  note:"Amerika fehlt auf dem Globus – Kolumbus kam im selben Jahr erst dort an.",
+  who:"Ich war Kaufmann und Seefahrer. Meine Erdkugel nannte man „Erdapfel“. Auf ihr fehlt ein ganzer Kontinent."},
+ {id:"leo",name:"Leonardo da Vinci",life:"1452–1519 · Florenz und Mailand (Italien)",what:"Entwürfe für Fallschirm und Flugmaschine",when:"um 1490",icon:"fallschirm",
+  text:"Leonardo war Maler, Forscher und Erfinder. In seinen Notizbüchern zeichnete er einen Fallschirm, Flugmaschinen und einen Panzerwagen. Gebaut wurden sie zu seinen Lebzeiten nicht.",
+  note:"Er malte auch die Mona Lisa und schrieb seine Notizen in Spiegelschrift.",
+  who:"Ich habe die Mona Lisa gemalt. Ich träumte vom Fliegen und zeichnete einen Fallschirm – gebaut wurde er aber erst 500 Jahre später."},
+ {id:"hen",name:"Peter Henlein",life:"um 1485–1542 · Nürnberg (Deutschland)",what:"eine der ersten Taschenuhren",when:"um 1510",icon:"taschenuhr",
+  text:"Henlein war Schlosser. Er baute kleine Uhren mit einer Feder als Antrieb. Zum ersten Mal konnte man eine Uhr mitnehmen.",
+  note:"Seine Uhren hatten nur einen Stundenzeiger und gingen noch ziemlich ungenau.",
+  who:"Ich war Schlosser in Nürnberg. Meine Uhren waren so klein, dass man sie bei sich tragen konnte."},
+ {id:"lip",name:"Hans Lipperhey",life:"um 1570–1619 · Middelburg (Niederlande)",what:"Fernrohr",when:"1608",icon:"fernrohr",
+  text:"Lipperhey war Brillenmacher. Er setzte zwei Linsen in ein Rohr. So konnte man weit entfernte Dinge nah sehen. 1608 wollte er dafür ein Patent.",
+  note:"Ein Patent ist ein Schutz: Nur der Erfinder darf die Erfindung bauen und verkaufen.",
+  who:"Ich war Brillenmacher in den Niederlanden. Mit zwei Linsen in einem Rohr holte ich Fernes ganz nah heran."},
+ {id:"gal",name:"Galileo Galilei",life:"1564–1642 · Pisa und Florenz (Italien)",what:"verbessertes Fernrohr – entdeckt die Jupitermonde",when:"1609",icon:"jupiter",
+  text:"Galilei baute ein besseres Fernrohr und richtete es als einer der Ersten auf den Himmel. Er sah Krater auf dem Mond und vier Monde des Jupiter.",
+  note:"Er unterstützte das heliozentrische Weltbild des Kopernikus. Die Kirche zwang ihn 1633, das zu widerrufen.",
+  who:"Ich schaute mit meinem Fernrohr zum Himmel. Ich entdeckte Monde, die um den Jupiter kreisen. Die Kirche war mit meinen Ideen gar nicht einverstanden."},
+ {id:"huy",name:"Christiaan Huygens",life:"1629–1695 · Den Haag (Niederlande)",what:"Pendeluhr",when:"1656",icon:"pendeluhr",
+  text:"Huygens nutzte ein Pendel, das immer gleich schnell hin- und herschwingt. Dadurch gingen Uhren plötzlich viel genauer – sie wichen nur noch wenige Sekunden pro Tag ab.",
+  note:"Er entdeckte auch den Ring des Saturn.",
+  who:"Bei meiner Uhr schwingt ein Pendel hin und her. Vorher gingen Uhren oft eine Viertelstunde am Tag falsch – meine nur noch wenige Sekunden."},
+ {id:"lee",name:"Antoni van Leeuwenhoek",life:"1632–1723 · Delft (Niederlande)",what:"starke Mikroskope – entdeckt Bakterien",when:"um 1675",icon:"mikroskop",
+  text:"Leeuwenhoek war eigentlich Tuchhändler. Er schliff winzige Linsen und baute Mikroskope, die fast 300-fach vergrößerten. Damit sah er als Erster Bakterien und Einzeller.",
+  note:"Er nannte die winzigen Lebewesen „Tierchen“.",
+  who:"Ich war Tuchhändler. In einem Wassertropfen entdeckte ich mit meinem Mikroskop winzige Lebewesen, die vorher noch niemand gesehen hatte."}
+];
+const $=s=>document.querySelector(s);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function flash(e){e.classList.remove("wrong");void e.getBoundingClientRect();e.classList.add("wrong");setTimeout(()=>e.classList.remove("wrong"),450)}
+function status(id,t,good){const s=$(id);s.textContent=t;s.className="status"+(good?" good":"")}
+
+const TABS=["steckbriefe","zuordnen","zeitleiste","werbinich","merktext"];
+const done={zuordnen:false,zeitleiste:false,werbinich:false,merktext:false};
+function updateTabs(){document.querySelectorAll("nav button").forEach(b=>{let ok=b.querySelector(".ok");const d=done[b.dataset.tab];
+  if(d&&!ok){ok=el("span","ok","✓");ok.setAttribute("aria-label","geschafft");b.append(ok)}if(!d&&ok)ok.remove()});
+  const n=Object.values(done).filter(Boolean).length;$("#prog-text").textContent=`${n} von 4 Übungen geschafft`;$("#prog-bar").style.width=(n*25)+"%"}
+function markDone(k,v=true){done[k]=v;updateTabs()}
+function show(k){if(!TABS.includes(k))k="steckbriefe";TABS.forEach(t=>$("#"+t).hidden=t!==k);
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
+function go(k){show(k);try{history.replaceState(null,"","#"+k)}catch(e){}window.scrollTo({top:0})}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.tab)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* Steckbriefe */
+const G=$("#gallery");
+INV.forEach(v=>{const c=el("article","inv");const top=el("div","top");const ic=el("div","icon");
+  ic.innerHTML=`<svg viewBox="0 0 48 48" aria-hidden="true">${ICONS[v.icon]}</svg>`;
+  const t=el("div");t.append(el("h3",null,v.name),el("div","life",v.life));top.append(ic,t);
+  const w=el("p","what");w.innerHTML=`<b>${v.when}:</b> `;w.append(document.createTextNode(v.what));
+  c.append(top,w,el("p",null,v.text),el("p","note","Übrigens: "+v.note));G.append(c)});
+
+/* Tap-to-place helper */
+function placeGame({pool,area,items,label,slotClass,head,statusId,doneKey,msgDone}){
+  const P=$(pool),A=$(area);P.innerHTML="";A.innerHTML="";let sel=null,left=items.length,miss=0;status(statusId,"");markDone(doneKey,false);
+  shuffle(items).forEach(it=>{const b=el("button","card",label(it));b._id=it.id;b.onclick=()=>{P.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");sel=b};P.append(b)});
+  items.forEach(it=>{const s=el("button",slotClass);s.append(el("strong",null,head(it)));s.setAttribute("aria-label",head(it));
+    s.onclick=()=>{if(s.classList.contains("filled"))return;if(!sel){status(statusId,"Tippe zuerst eine Erfindung an.");return}
+      if(sel._id===it.id){s.append(el("span","placed",sel.textContent));s.classList.add("filled");sel.remove();sel=null;left--;
+        if(left===0){status(statusId,msgDone(miss),true);markDone(doneKey)}else status(statusId,`Richtig! Noch ${left} übrig.`)}
+      else{miss++;flash(s);status(statusId,"Das passt nicht. Schau im Steckbrief nach und versuch es noch einmal.")}};A.append(s)})}
+const initA=()=>placeGame({pool:"#a-pool",area:"#a-targets",items:INV,label:v=>v.what,slotClass:"target",head:v=>v.name,statusId:"#a-status",doneKey:"zuordnen",
+  msgDone:m=>`Geschafft! Alle Erfindungen sind beim richtigen Erfinder (Fehlversuche: ${m}).`});
+const initT=()=>placeGame({pool:"#t-pool",area:"#t-line",items:INV,label:v=>`${v.what} (${v.name.split(" ").slice(-1)[0]})`,slotClass:"slot",head:v=>v.when,statusId:"#t-status",doneKey:"zeitleiste",
+  msgDone:m=>`Geschafft! Die Zeitleiste ist richtig (Fehlversuche: ${m}).`});
+
+/* Wer bin ich */
+let wOrder=[],wi=0,wRight=0;
+function initW(){wOrder=shuffle(INV);wi=0;wRight=0;markDone("werbinich",false);renderW()}
+function renderW(){const A=$("#w-answers");A.innerHTML="";$("#w-fb").textContent="";$("#w-fb").className="qfb";$("#w-next").hidden=true;
+  if(wi>=wOrder.length){$("#w-count").textContent="";$("#w-text").textContent=`Fertig! Du hast ${wRight} von ${wOrder.length} Erfindern beim ersten Versuch erkannt.`;
+    $("#w-fb").textContent=wRight>=6?"Super, du kennst die Erfinder schon gut!":"Lies die Steckbriefe noch einmal und probier es dann erneut.";$("#w-fb").className="qfb good";markDone("werbinich");return}
+  const v=wOrder[wi];$("#w-count").textContent=`Erfinder ${wi+1} von ${wOrder.length}`;$("#w-text").textContent="„"+v.who+"“";
+  const opts=shuffle([v,...shuffle(INV.filter(x=>x!==v)).slice(0,3)]);let first=true;
+  opts.forEach(o=>{const b=el("button",null,o.name);b.onclick=()=>{
+    if(o===v){if(first)wRight++;b.classList.add("right");[...A.children].forEach(x=>x.disabled=true);
+      $("#w-fb").textContent=`Richtig! ${v.name}: ${v.what} (${v.when}).`;$("#w-fb").className="qfb good";const n=$("#w-next");n.hidden=false;n.textContent=wi===wOrder.length-1?"Ergebnis anzeigen":"Nächster Erfinder";n.focus()}
+    else{first=false;b.classList.add("bad");b.disabled=true;$("#w-fb").textContent="Nicht ganz. Versuch es noch einmal.";$("#w-fb").className="qfb bad"}};A.append(b)})}
+$("#w-next").onclick=()=>{wi++;renderW()};
+
+/* Merktext */
+const MT=[
+ ["Johannes Gutenberg erfand um 1450 in ",["Mainz"]," den ",["Buchdruck"]," mit beweglichen Buchstaben."],
+ ["Martin Behaim baute 1492 in Nürnberg den ältesten erhaltenen ",["Globus"],". ",["Amerika"]," fehlt darauf noch."],
+ [["Leonardo da Vinci"]," zeichnete Entwürfe für einen Fallschirm und eine ",["Flugmaschine"],". Gebaut wurden sie damals nicht."],
+ ["Peter Henlein baute um 1510 in Nürnberg eine der ersten ",["Taschenuhren"],"."],
+ ["Der Brillenmacher Hans Lipperhey erfand 1608 das ",["Fernrohr"],"."],
+ ["Galileo Galilei verbesserte 1609 das Fernrohr und entdeckte die Monde des ",["Jupiter"],". Er unterstützte das ",["heliozentrische"]," Weltbild."],
+ ["Christiaan Huygens erfand 1656 die ",["Pendeluhr"],". Uhren gingen nun viel ",["genauer"],"."],
+ ["Antoni van Leeuwenhoek entdeckte um 1675 mit seinen ",["Mikroskopen"]," als Erster ",["Bakterien"],"."]
+];
+const NAMES=INV.map(v=>v.name);
+let mSel=null,mLeft=0,mMiss=0;
+function initM(){const P=$("#m-pool"),L=$("#m-list");P.innerHTML="";L.innerHTML="";mSel=null;mMiss=0;status("#m-status","");$("#m-heft").hidden=true;markDone("merktext",false);
+  const words=MT.flat().filter(Array.isArray).map(x=>x[0]);mLeft=words.length;
+  shuffle(words).forEach(w=>{const b=el("button","card",w);b._w=w;b.onclick=()=>{P.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");mSel=b};P.append(b)});
+  let n=0;MT.forEach(line=>{const li=el("li");line.forEach(x=>{if(!Array.isArray(x)){li.append(document.createTextNode(x));return}
+    n++;const g=el("button","gap","Lücke "+n);
+    g.onclick=()=>{if(g.classList.contains("filled"))return;if(!mSel){status("#m-status","Tippe zuerst ein Wort an.");return}
+      if(mSel._w===x[0]){g.textContent=x[0];g.classList.add("filled");g.setAttribute("aria-label",x[0]);mSel.remove();mSel=null;mLeft--;
+        if(mLeft===0){status("#m-status",`Geschafft! Alle Lücken sind richtig (Fehlversuche: ${mMiss}).`,true);showHeft();markDone("merktext")}
+        else status("#m-status",`Richtig! Noch ${mLeft} Lücken.`)}
+      else{mMiss++;flash(g);status("#m-status","Das Wort passt hier nicht. Lies den ganzen Satz noch einmal.")}};li.append(g)});L.append(li)})}
+function showHeft(){const F=$("#m-final");F.innerHTML="";F.append(el("h4",null,"Berühmte Erfinder der Frühen Neuzeit"));const ul=el("ul");
+  MT.forEach(line=>{const li=el("li");const txt=line.map(x=>Array.isArray(x)?x[0]:x).join("");
+    const nm=NAMES.find(n=>txt.includes(n));if(nm){const i=txt.indexOf(nm);li.append(document.createTextNode(txt.slice(0,i)),el("strong",null,nm),document.createTextNode(txt.slice(i+nm.length)))}else li.textContent=txt;ul.append(li)});
+  F.append(ul);$("#m-heft").hidden=false;$("#m-heft").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})}
+
+document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({zuordnen:initA,zeitleiste:initT,werbinich:initW,merktext:initM})[b.dataset.reset]()));
+initA();initT();initW();initM();updateTabs();show(location.hash.slice(1));
+</script>
+</body>
+</html>
