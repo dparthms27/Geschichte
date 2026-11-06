@@ -23,6 +23,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,
 .pin{fill:var(--teal);stroke:var(--surface);stroke-width:3}
 .pinlabel{font-family:Caladea,Cambria,Georgia,serif;font-size:30px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:6px}
 .oceanlabel{font-family:Caladea,Cambria,Georgia,serif;font-style:italic;font-size:30px;fill:var(--teal);opacity:.85}
+.oldroute{fill:none;stroke:var(--teal);stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round;stroke-linejoin:round}
+.legbox{fill:var(--surface);opacity:.92}
+.legtext{font-family:Carlito,Calibri,Arial,sans-serif;fill:var(--ink)}
+#old{transition:opacity .6s}#old.dim{opacity:.3}
+#ship{transition:opacity .4s}
 .hidden{opacity:0}
 .fade{transition:opacity .6s}
 .panel{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.4rem 1.4rem 1.2rem;min-height:0}
@@ -50,20 +55,25 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,
 <body>
 <div class="stage">
   <div class="mapbox">
-    <svg viewBox="0 0 1100 900" role="img" aria-label="Vereinfachte Karte: Europa, Afrika und Indien mit der Route von Vasco da Gama">
+    <svg viewBox="0 0 1100 900" role="img" aria-label="Vereinfachte Karte: alte Handelswege für Gewürze und die Route von Vasco da Gama">
       <polygon class="land" points="160,130 160,110 160,70 230,65 240,40 205,15 200,0 1100,0 1100,305 1050,340 1050,370 1020,420 1008,387 990,350 978,310 950,290 920,255 870,250 810,230 750,200 730,205 760,260 810,240 845,275 820,310 770,340 700,370 680,370 640,280 600,220 595,185 605,170 610,135 540,130 510,100 490,120 470,130 440,80 390,45 405,75 420,110 410,125 380,95 340,62 310,70 280,80 250,115 230,133 190,135"/>
       <polygon class="land" points="190,140 350,130 450,190 500,180 570,190 580,200 600,260 630,320 680,380 760,380 760,400 730,450 670,510 650,550 650,600 650,650 600,700 600,740 570,790 520,830 450,850 430,840 420,790 390,730 370,670 380,620 370,560 340,510 340,460 300,440 250,450 210,450 170,460 120,420 80,360 80,290 120,230 150,200"/>
       <polygon class="land" points="740,620 750,660 720,750 690,740 690,670"/>
       <text class="oceanlabel" x="40" y="700">Atlantischer</text><text class="oceanlabel" x="70" y="735">Ozean</text>
       <text class="oceanlabel" x="800" y="640">Indischer</text><text class="oceanlabel" x="830" y="675">Ozean</text>
       <text class="pinlabel" x="430" y="520" style="font-style:italic;font-weight:400">Afrika</text>
-      <text class="pinlabel" x="320" y="40" style="font-style:italic;font-weight:400">Europa</text>
+      <text class="pinlabel" x="225" y="40" style="font-style:italic;font-weight:400">Europa</text>
       <text class="pinlabel" x="1010" y="300" style="font-style:italic;font-weight:400">Indien</text>
+      <g id="old"><polyline class="oldroute" points="1008,387 850,400 760,375 690,375 650,330 619,270 593,220 560,188 500,165 452,135 425,105 402,62"/><polyline class="oldroute" points="1008,387 900,300 855,262 800,235 755,210 680,170 600,140 515,105 485,138 452,135"/></g>
       <g id="routes"></g>
+      <g aria-hidden="true"><rect x="740" y="790" width="350" height="95" rx="12" class="legbox"/><line x1="760" y1="822" x2="815" y2="822" class="oldroute"/><text x="827" y="830" class="legtext" style="font-size:24px">alte Handelswege</text><line x1="760" y1="862" x2="815" y2="862" class="route"/><text x="827" y="870" class="legtext" style="font-size:24px">Seeweg Vasco da Gama</text></g>
       <g id="pins">
+        <g class="fade" data-pin="0"><circle class="pin" cx="402" cy="62" r="11"/><text class="pinlabel" x="424" y="40">Venedig</text></g>
+        <g class="fade" data-pin="0"><circle class="pin" cx="510" cy="106" r="11"/><text class="pinlabel" x="528" y="78">Konstantinopel</text></g>
+        <g class="fade" data-pin="0"><circle class="pin" cx="560" cy="187" r="11"/><text class="pinlabel" x="560" y="240" text-anchor="middle">Alexandria</text></g>
         <g class="fade" data-pin="0"><circle class="pin" cx="159" cy="113" r="11"/><text class="pinlabel" x="178" y="100">Lissabon</text></g>
-        <g class="fade hidden" data-pin="2"><circle class="pin" cx="430" cy="842" r="11"/><text class="pinlabel" x="150" y="895">Kap der Guten Hoffnung</text></g>
-        <g class="fade hidden" data-pin="4"><circle class="pin" cx="1008" cy="387" r="11"/><text class="pinlabel" x="1000" y="440" text-anchor="middle">Kalikut</text></g>
+        <g class="fade hidden" data-pin="3"><circle class="pin" cx="430" cy="842" r="11"/><text class="pinlabel" x="150" y="895">Kap der Guten Hoffnung</text></g>
+        <g class="fade hidden" data-pin="8"><circle class="pin" cx="1008" cy="387" r="11"/><text class="pinlabel" x="1000" y="440" text-anchor="middle">Kalikut</text></g>
       </g>
       <g id="ship" transform="translate(159,113)">
         <path d="M-22 4 L22 4 L14 16 L-14 16 Z" fill="var(--teal)"/>
@@ -96,17 +106,22 @@ const SEGS=[
  [[560,830],[600,770],[625,720],[665,640],[668,540],[690,515]],
  [[690,515],[850,440],[1000,392]]
 ];
+const SEGSTEP=[null,5,6,7,8],SHIPSTART=4;
 const STEPS=[
- {date:"Juli 1497",text:"Vasco da Gama bricht mit vier Schiffen in Lissabon auf. Der König von Portugal will endlich einen Seeweg nach Indien.",price:"<strong>So lernst du mit dieser Karte:</strong> Tippe auf „Weiter“ und verfolge die Reise. Merke dir die Namen auf der Karte. Du brauchst sie danach für die Übung „Karte beschriften“."},
+ {date:"Bis um 1500",text:"Pfeffer, Zimt und Muskatnuss kommen aus Asien. Auf den alten Handelswegen reisen sie über Meere und durch Wüsten nach Alexandria oder Konstantinopel und von dort über das Mittelmeer nach Venedig.",price:"<strong>So lernst du mit dieser Karte:</strong> Tippe auf „Weiter“ und folge der Geschichte. Merke dir die Namen auf der Karte. Du brauchst sie für die Übungen und für dein Arbeitsblatt."},
+ {date:"Teure Gewürze",text:"Jeder Zwischenhändler will mitverdienen, an vielen Grenzen muss man Zoll bezahlen. Darum sind Gewürze in Europa sehr teuer."},
+ {date:"1453",text:"Die Osmanen erobern die Stadt Konstantinopel. Der Handel wird noch schwieriger und teurer.",price:"Die Europäer suchen deshalb einen direkten <strong>Seeweg</strong> nach Asien."},
+ {date:"1488",text:"Bartolomeu Dias umsegelt als erster Europäer die Südspitze Afrikas, das Kap der Guten Hoffnung."},
+ {date:"Juli 1497",text:"Vasco da Gama bricht mit vier Schiffen in Lissabon in Portugal auf. Er soll den Seeweg nach Indien finden.",price:"Auf hoher See ist kein Land zu sehen. Die Richtung zeigt den Seefahrern der <strong>Kompass</strong>: Seine Magnetnadel zeigt immer nach Norden."},
  {date:"Sommer und Herbst 1497",text:"Die Flotte segelt weit hinaus auf den Atlantischen Ozean. Wochenlang ist kein Land in Sicht."},
- {date:"November 1497",text:"Die Schiffe umsegeln das Kap der Guten Hoffnung, die Südspitze Afrikas. Hier war 1488 schon Bartolomeu Dias."},
+ {date:"November 1497",text:"Die Schiffe umsegeln das Kap der Guten Hoffnung. Vasco da Gama fährt also um den Kontinent Afrika herum."},
  {date:"Anfang 1498",text:"Die Flotte fährt die Ostküste Afrikas hinauf nach Norden."},
- {date:"Mai 1498",text:"Über den Indischen Ozean erreicht die Flotte Kalikut in Indien. Der Seeweg nach Indien ist gefunden!"},
+ {date:"Mai 1498",text:"Über den Indischen Ozean erreicht die Flotte die Stadt Kalikut in Indien. Der Seeweg nach Indien ist gefunden!"},
  {date:"Der Preis",text:"Die Reise war ein großer Erfolg für Portugal. Aber sie hatte einen hohen Preis.",price:"Mehr als die Hälfte der Seeleute starb unterwegs, vor allem an Skorbut.<br><br><strong>Denkfrage:</strong> Warum war dieser Seeweg für Portugal trotzdem so wichtig?"},
- {date:"Merke dir die Karte",text:"Diese sechs Namen brauchst du für die Übung:",price:"<ul class=\"merke\"><li><strong>Lissabon</strong> – hier beginnt die Reise</li><li><strong>Atlantischer Ozean</strong> – westlich von Afrika</li><li><strong>Kap der Guten Hoffnung</strong> – die Südspitze Afrikas</li><li><strong>Afrika</strong> – um diesen Kontinent segelt die Flotte herum</li><li><strong>Indischer Ozean</strong> – zwischen Afrika und Indien</li><li><strong>Kalikut</strong> – das Ziel in Indien</li></ul><a class=\"btn golink\" href=\"vasco-da-gama-uebungen.html#karte\">Zur Übung: Karte beschriften</a>"}
+ {date:"Merke dir die Karte",text:"Diese Namen brauchst du für die Übungen:",price:"<ul class=\"merke\"><li><strong>Venedig, Konstantinopel, Alexandria</strong> – über diese Städte kamen die Gewürze früher nach Europa</li><li><strong>Lissabon</strong> – hier beginnt die Reise</li><li><strong>Atlantischer Ozean</strong> und <strong>Indischer Ozean</strong> – diese Ozeane überquert Vasco da Gama</li><li><strong>Afrika</strong> – um diesen Kontinent segelt er herum</li><li><strong>Kap der Guten Hoffnung</strong> – die Südspitze Afrikas</li><li><strong>Kalikut</strong> – das Ziel in Indien</li></ul><a class=\"btn golink\" href=\"vasco-da-gama-uebungen.html#karte\">Zu den Übungen</a>"}
 ];
 const NS="http://www.w3.org/2000/svg";
-const routes=document.getElementById("routes"),ship=document.getElementById("ship");
+const routes=document.getElementById("routes"),ship=document.getElementById("ship"),old=document.getElementById("old");
 const paths=SEGS.map((s,i)=>{if(!s)return null;const p=document.createElementNS(NS,"path");
   p.setAttribute("d","M"+s.map(q=>q.join(" ")).join(" L"));p.setAttribute("class","route");p.style.visibility="hidden";routes.append(p);return p});
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -124,17 +139,19 @@ function render(animate){
   const pr=document.getElementById("price");if(s.price){pr.innerHTML=s.price;pr.hidden=false}else pr.hidden=true;
   [...dots.children].forEach((d,i)=>d.classList.toggle("on",i<=step));
   document.querySelectorAll("[data-pin]").forEach(g=>g.classList.toggle("hidden",+g.dataset.pin>step));
+  old.classList.toggle("dim",step>=SHIPSTART);
+  ship.style.opacity=step>=SHIPSTART?1:0;
   document.getElementById("back").disabled=step===0;
   const nb=document.getElementById("next");nb.textContent=step===STEPS.length-1?"Von vorne":"Weiter";
   if(anim){cancelAnimationFrame(anim);anim=null}
-  for(let i=1;i<SEGS.length;i++){if(i<step||(i===step&&!animate))showPath(i,true);else if(i>step)hidePath(i)}
-  const last=Math.min(step,SEGS.length-1);
-  if(step===0){placeShip(159,113,1);return}
-  if(animate&&SEGS[step]&&!reduce){const p=paths[step];showPath(step,false);const L=p.getTotalLength(),t0=performance.now(),D=2600;
+  const cur=SEGSTEP.indexOf(step),moving=animate&&cur>0&&!reduce;
+  for(let i=1;i<SEGS.length;i++){const t=SEGSTEP[i];if(t<step||(t===step&&!moving))showPath(i,true);else if(t>step)hidePath(i)}
+  if(moving){const p=paths[cur];showPath(cur,false);const L=p.getTotalLength(),t0=performance.now(),D=2600;
     const tick=t=>{const k=Math.min(1,(t-t0)/D),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2,len=e*L,pt=p.getPointAtLength(len),pt2=p.getPointAtLength(Math.min(L,len+2));
       p.style.strokeDashoffset=L-len;placeShip(pt.x,pt.y,pt2.x-pt.x);
-      if(k<1)anim=requestAnimationFrame(tick);else{showPath(step,true);anim=null}};anim=requestAnimationFrame(tick)}
-  else{const e=endOf(last);placeShip(e[0],e[1],1)}
+      if(k<1)anim=requestAnimationFrame(tick);else{showPath(cur,true);anim=null}};anim=requestAnimationFrame(tick);return}
+  let last=0;for(let i=1;i<SEGS.length;i++)if(SEGSTEP[i]<=step)last=i;
+  if(last===0)placeShip(159,113,1);else{const e=endOf(last);placeShip(e[0],e[1],1)}
 }
 function next(){if(step===STEPS.length-1){step=0;render(false);return}step++;render(true)}
 function back(){if(step>0){step--;render(false)}}
