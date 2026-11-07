@@ -237,6 +237,9 @@ h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
 .rfb button{font:inherit;font-size:.95rem;padding:.35rem .7rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
 .rfb button.on{background:var(--teal);color:var(--on-teal)}
 .corr{grid-column:1/-1;font-size:.95rem;color:var(--orange);margin:0}
+.ordn{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:1.5rem;color:var(--orange);min-width:2em;text-align:center}
+.mrow .card.on{border-color:var(--orange);background:var(--orange-soft)}
+.mrow.ok .card{border-color:var(--teal);background:var(--teal-soft)}.mrow.bad .card{border-color:var(--orange)}
 .picks{display:flex;flex-wrap:wrap;gap:.5rem}
 .picks .card.on{border-color:var(--teal);background:var(--teal);color:var(--on-teal)}
 .picks .card.ok{border-color:var(--teal);background:var(--teal-soft);color:var(--ink)}
@@ -288,9 +291,15 @@ function addTask(n,title,max,build,grade,fact,tip){const sec=el("section","task5
   const api=build(sec);T.push({n,title,max,api,grade,pt,sec,fact,tip});$("#tasks").append(sec)}
 
 /* A1 */
-const A1=[["Kolumbus landet in der Karibik.","1492"],["Die Osmanen erobern Konstantinopel.","1453"],["Die Victoria kehrt von der ersten Weltumsegelung zurück.","1522"],["Vasco da Gama erreicht Indien.","1498"],["Tenochtitlan wird von den Spaniern erobert.","1521"]];
-addTask(1,"Ordne die Jahreszahlen zu",5,sec=>{sec.append(el("p","hint","Wähle bei jedem Ereignis das passende Jahr. Jede Jahreszahl passt genau einmal."));const rows=A1.map(a=>{const r=el("div","mrow");r.append(el("span",null,a[0]));const s=sel(A1.map(x=>x[1]).sort());r.append(s);sec.append(r);return {r,s,a}});return {rows,done:()=>rows.filter(x=>x.s.value).length/rows.length}},
- api=>{let p=0;api.rows.forEach(({r,s,a})=>{s.disabled=true;if(s.value===a[1]){p++;r.classList.add("ok")}else{r.classList.add("bad");r.append(el("p","corr","Lösung: "+a[1]))}});return p},
+const A1=[["Die Osmanen erobern Konstantinopel.","1453"],["Kolumbus landet in der Karibik.","1492"],["Vasco da Gama erreicht Indien.","1498"],["Tenochtitlan wird von den Spaniern erobert.","1521"],["Die Victoria kehrt von der ersten Weltumsegelung zurück.","1522"]];
+addTask(1,"Was geschah zuerst?",5,sec=>{sec.append(el("p","hint","Tippe die Ereignisse in der richtigen Reihenfolge an – das früheste zuerst. Du musst keine Jahreszahlen wissen, nur überlegen, was vorher und was nachher war. Nochmal tippen nimmt eine Nummer wieder weg."));
+  const order=[];const rows=[];
+  shuffle(A1.map((x,i)=>i)).forEach(i=>{const r=el("div","mrow");const b=el("button","card",A1[i][0]);b.style.width="100%";const badge=el("span","ordn","");r.append(b,badge);sec.append(r);
+    b.onclick=()=>{if(submitted)return;const k=order.indexOf(i);if(k>=0)order.splice(k,1);else order.push(i);rows.forEach(x=>{const n=order.indexOf(x.i);x.badge.textContent=n>=0?(n+1)+".":"";x.b.classList.toggle("on",n>=0)});progress()};
+    rows.push({r,b,badge,i})});
+  return {rows,order,done:()=>order.length/A1.length}},
+ api=>{let p=0;api.rows.forEach(x=>{const pos=api.order.indexOf(x.i);x.b.classList.remove("on");if(pos===x.i){p++;x.r.classList.add("ok")}else{x.r.classList.add("bad")}x.r.append(el("p","corr",(pos===x.i?"":"Richtig wäre Platz "+(x.i+1)+" – ")+"Jahr: "+A1[x.i][1]))});
+   api.rows.filter(x=>api.order.indexOf(x.i)===x.i).forEach(x=>x.r.querySelector(".corr").style.color="var(--teal)");return p},
  "1453, 1492, 1498, 1521, 1522 – zwischen der Eroberung Konstantinopels und der ersten Weltumsegelung liegen nur 69 Jahre. In dieser kurzen Zeit veränderte sich das Weltbild der Europäer völlig.",null);
 
 /* Mehrfachauswahl-Helfer */
