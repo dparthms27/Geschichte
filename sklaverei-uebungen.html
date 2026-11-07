@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plantagen, Dreieckshandel und Sklaverei – Übungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#EEF5F4;--surface:#FFFFFF;--ink:#18302F;--muted:#4F6766;--teal:#1F6F78;--teal-soft:#D5E8E8;--orange:#C9661A;--orange-soft:#FBE3CC;--line:#C5D9D8;--on-teal:#FFFFFF;
+--sea:#CFE6E8;--land:#E9DCC0;--coast:#8A7A55;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:1.15rem;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+header h1{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.1;margin:.2rem 0 .3rem;color:var(--teal)}
+header p{margin:0;color:var(--muted)}
+.routeline{display:block;width:100%;height:34px;margin:.8rem 0 1.2rem}
+.routeline path{fill:none;stroke:var(--orange);stroke-width:2.5;stroke-dasharray:2 8;stroke-linecap:round}
+.routeline circle{fill:var(--teal)}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+nav button{font:inherit;font-size:1rem;padding:.55rem .9rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+nav button[aria-selected="true"]{background:var(--teal);color:var(--on-teal)}
+nav button .ok{margin-left:.35rem}
+button:focus-visible,.marker:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.2rem 1.5rem}
+section[hidden]{display:none}
+h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
+.task{margin:0 0 1rem;color:var(--muted)}
+.lern{color:var(--teal);font-weight:700}
+.status{margin-top:1rem;min-height:1.5em;font-weight:700}
+.status.good{color:var(--teal)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{font:inherit;font-size:1rem;padding:.6rem 1.1rem;border-radius:10px;border:2px solid var(--teal);cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn:disabled{opacity:.4;cursor:default}
+.card{font:inherit;text-align:left;padding:.6rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.card.sel{border-color:var(--orange);background:var(--orange-soft)}
+.wrong{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.wrong{animation:none}}
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.1rem;min-height:2.8rem}
+/* Zeitleiste */
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;padding-top:2.2rem}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:1rem;height:4px;background:var(--teal);border-radius:2px}
+.slot{position:relative;font:inherit;text-align:left;border:2px dashed var(--teal);border-radius:12px;background:transparent;color:var(--ink);padding:.6rem;min-height:120px;cursor:pointer;display:flex;flex-direction:column;gap:.35rem}
+.slot::before{content:"";position:absolute;top:-1.55rem;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--orange);border:3px solid var(--surface)}
+.slot strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;color:var(--teal)}
+.slot .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.35rem .5rem}
+.slot.filled{border-style:solid;cursor:default}
+.slot.wrong{border-color:var(--orange)}
+/* Karte */
+.mapwrap{background:var(--sea);border-radius:12px;overflow:hidden}
+.mapwrap svg{display:block;width:100%;height:auto}
+.land{fill:var(--land);stroke:var(--coast);stroke-width:2}
+.route{fill:none;stroke:var(--orange);stroke-width:5;stroke-dasharray:12 9;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.marker{cursor:pointer}
+.marker circle{fill:var(--surface);stroke:var(--teal);stroke-width:4}
+.marker .n{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:26px;fill:var(--teal);text-anchor:middle;dominant-baseline:central}
+.marker.done circle{fill:var(--teal)}
+.marker.done .n{fill:var(--on-teal)}
+.marker.wrong circle{stroke:var(--orange);fill:var(--orange-soft)}
+.maplabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:28px;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:7px}
+.oldroute{fill:none;stroke:var(--teal);stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round;stroke-linejoin:round}
+.legbox{fill:var(--surface);opacity:.92}
+.legtext{font-family:Carlito,Calibri,Arial,sans-serif;fill:var(--ink)}
+.kmap{margin-bottom:1.2rem}
+.kmap .dot{fill:var(--teal);stroke:var(--surface);stroke-width:3}
+.oceanlabel{font-family:Caladea,Cambria,Georgia,serif;font-style:italic;font-size:28px;fill:var(--teal)}
+.kq{border-top:1px solid var(--line);padding:1rem 0 .4rem}
+.kq h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;font-weight:700;margin:0 0 .6rem}
+.kq .opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.card.right{border-color:var(--teal);background:var(--teal);color:var(--on-teal);cursor:default}
+.kq .fb{min-height:1.4em;margin:.5rem 0 0;font-weight:700}
+.kq .fb.good{color:var(--teal)}.kq .fb.bad{color:var(--orange)}
+.ltext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;line-height:2.2;margin:0}
+.gap{font:inherit;font-size:1.2rem;display:inline-block;min-width:7em;padding:0 .5rem;margin:0 .15rem;border:none;border-bottom:3px dashed var(--teal);border-radius:6px 6px 0 0;background:var(--teal-soft);color:var(--muted);cursor:pointer;line-height:1.6}
+.gap.filled{border-bottom-style:solid;background:transparent;color:var(--teal);font-weight:700;cursor:default;min-width:0}
+.gap:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.paper{margin-top:1rem;padding:.8rem 1rem;border-left:5px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0}
+/* Quiz */
+.quizgrid{display:grid;grid-template-columns:1fr 180px;gap:1.2rem}
+.qtext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;line-height:1.25;margin:.2rem 0 1rem}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.answers button{font:inherit;text-align:left;padding:.75rem .9rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.answers button .l{font-weight:700;color:var(--orange);margin-right:.4rem}
+.answers button.right{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.answers button.right .l{color:var(--on-teal)}
+.answers button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.answers button.gone{visibility:hidden}
+.answers button:disabled{cursor:default}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:.25rem;font-size:1rem}
+.ladder li{display:flex;justify-content:space-between;padding:.25rem .6rem;border-radius:8px;color:var(--muted)}
+.ladder li.cur{background:var(--orange-soft);color:var(--ink);font-weight:700}
+.ladder li.ok{color:var(--teal);font-weight:700}
+.ladder li.miss{text-decoration:line-through}
+.qfb{min-height:1.5em;margin:.8rem 0 0;font-weight:700}
+.qfb.good{color:var(--teal)}.qfb.bad{color:var(--orange)}
+@media (max-width:680px){.timeline{grid-template-columns:1fr 1fr;padding-top:0}.timeline::before,.slot::before{display:none}.quizgrid{grid-template-columns:1fr}.ladder{flex-direction:row-reverse;flex-wrap:wrap}.answers{grid-template-columns:1fr}}
+/* Weltkarte */
+.wmap{background:var(--sea);border-radius:12px;overflow:hidden}
+.wmap svg{display:block;width:100%;height:auto}
+.wland{fill:var(--land);stroke:var(--coast);stroke-width:1.2;stroke-linejoin:round}
+.wroute{fill:none;stroke:var(--orange);stroke-width:3.5;stroke-dasharray:8 6;stroke-linecap:round;stroke-linejoin:round}
+.wmap .marker circle{stroke-width:3}
+.wmap .marker .n{font-size:17px}
+.wmap .maplabel{font-size:17px;stroke-width:5px}
+.wmap .oceanlabel{font-size:17px}
+/* Richtig oder falsch */
+.rf{border-top:1px solid var(--line);padding:.9rem 0 .5rem}
+.rf p.s{font-family:Caladea,Cambria,Georgia,serif;font-size:1.25rem;margin:0 0 .5rem}
+.rf .opts{display:flex;gap:.5rem}
+.rf .fb{margin:.5rem 0 0;font-size:1.02rem}
+.rf .fb b.good{color:var(--teal)}.rf .fb b.bad{color:var(--orange)}
+.quote{margin:.4rem 0 1rem;padding:.8rem 1rem;border-left:5px solid var(--teal);background:var(--teal-soft);border-radius:0 10px 10px 0;font-family:Caladea,Cambria,Georgia,serif;font-style:italic}
+/* Spiel */
+.gtop{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.2rem 0 .8rem}
+.hearts{font-size:1.6rem;letter-spacing:.15rem}
+.hearts .lost{opacity:.22}
+.chip{display:inline-block;padding:.25rem .7rem;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:1rem}
+.gmap{margin-bottom:1rem}
+.gmap .cur{fill:var(--orange);stroke:var(--surface);stroke-width:3}
+.gmap .past{fill:var(--teal);stroke:var(--surface);stroke-width:2}
+.ring{fill:none;stroke:var(--orange);stroke-width:3;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{r:9;opacity:1}100%{r:24;opacity:0}}
+@media (prefers-reduced-motion: reduce){.ring{animation:none;opacity:.6}}
+.scene h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.45rem;margin:0 0 .2rem;color:var(--teal)}
+.scene .when{color:var(--muted);margin:0 0 .6rem;font-weight:700}
+.scene .story{margin:0 0 1rem}
+.choices{display:grid;gap:.6rem}
+.choices button{font:inherit;text-align:left;padding:.8rem 1rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.choices button:hover{background:var(--teal-soft)}
+.choices button:disabled{cursor:default;opacity:.55}
+.choices button.picked{opacity:1;background:var(--orange-soft);border-color:var(--orange)}
+.outcome{margin-top:1rem;padding:.9rem 1rem;border-radius:12px;background:var(--bg);border:2px solid var(--line)}
+.outcome .t{font-weight:700;margin:0 0 .3rem}
+.outcome .t.good{color:var(--teal)}.outcome .t.bad{color:var(--orange)}
+.outcome .wissen{margin:.6rem 0 0;padding-top:.6rem;border-top:1px dashed var(--line)}
+.outcome .wissen b{color:var(--teal)}
+.endbox{text-align:center;padding:1rem .5rem}
+.endbox .big{font-family:Caladea,Cambria,Georgia,serif;font-size:2rem;color:var(--teal);margin:.2rem 0 .6rem;line-height:1.15}
+.endbox.bad .big{color:var(--orange)}
+.endbox p{max-width:640px;margin:.4rem auto}
+.fates{text-align:left;max-width:640px;margin:1rem auto 0;padding:0;list-style:none}
+.fates li{padding:.45rem .2rem;border-top:1px solid var(--line)}
+.fates li b{color:var(--teal)}
+.rmap{background:var(--sea);border-radius:12px;overflow:hidden}
+.rmap svg{display:block;width:100%;height:auto}
+.rland{fill:var(--land);stroke:var(--coast);stroke-width:1.5;stroke-linejoin:round}
+.reich{stroke-width:2;stroke-dasharray:6 5;opacity:.85}
+.reich.az{fill:rgba(201,102,26,.22);stroke:var(--orange)}
+.reich.in{fill:rgba(31,111,120,.22);stroke:var(--teal)}
+.croute{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 7}
+.croute.c{stroke:var(--orange)}.croute.p{stroke:var(--teal)}
+.reichlabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:22px;paint-order:stroke;stroke:var(--sea);stroke-width:5px}
+.reichlabel.az{fill:var(--orange)}.reichlabel.in{fill:var(--teal)}
+.rmap .maplabel{font-size:21px}
+/* Vergleich */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.col{border:2px dashed var(--teal);border-radius:12px;padding:.7rem;min-height:180px;cursor:pointer;background:transparent;font:inherit;color:var(--ink);text-align:left;display:flex;flex-direction:column;gap:.4rem}
+.col h3{font-family:Caladea,Cambria,Georgia,serif;margin:0 0 .3rem;font-size:1.35rem;color:var(--teal)}
+.col.az h3{color:var(--orange)}.col.az{border-color:var(--orange)}
+.col .placed{background:var(--teal-soft);border-radius:8px;padding:.35rem .55rem;font-size:1.02rem}
+.col.az .placed{background:var(--orange-soft)}
+/* Detektiv */
+.case{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;line-height:1.35;background:var(--bg);border-left:5px solid var(--orange);border-radius:0 12px 12px 0;padding:1rem 1.1rem;margin:.4rem 0 1rem}
+.factors{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.factors button{font:inherit;padding:.7rem .5rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.factors button .ico{display:block;font-size:1.6rem}
+.factors button.right{background:var(--teal);color:var(--on-teal)}
+.factors button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.progress{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin:.3rem 0 .8rem}
+.progress span{display:block;height:100%;background:var(--teal);transition:width .3s}
+.dfb{min-height:3em;margin:.8rem 0 0}
+.dfb b.good{color:var(--teal)}.dfb b.bad{color:var(--orange)}
+/* Folgen */
+.people{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;margin:.8rem 0;max-width:620px}
+.people span{aspect-ratio:1/1.6;border-radius:50% 50% 25% 25%/30% 30% 20% 20%;background:var(--teal);transition:opacity 1.2s,background 1.2s}
+.people span.gone{opacity:.12;background:var(--muted)}
+@media (prefers-reduced-motion: reduce){.people span{transition:none}}
+.yr{display:flex;gap:.5rem;margin-top:.4rem}
+.yr .btn[aria-pressed="true"]{background:var(--orange);border-color:var(--orange);color:#fff}
+.fbox{border-top:1px solid var(--line);margin-top:1.2rem;padding-top:1rem}
+.fbox h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;margin:0 0 .5rem}
+.mc{display:grid;gap:.5rem}
+.mc .card.right{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;align-items:start}
+.pairs .left .card{width:100%;margin-bottom:.5rem}
+.pairs .left .card.matched{border-color:var(--teal);background:var(--teal-soft);cursor:default}
+@media (max-width:680px){.cols,.pairs{grid-template-columns:1fr}.factors{grid-template-columns:1fr 1fr}.people{grid-template-columns:repeat(10,1fr)}}
+.tline{stroke:#B3261E;stroke-width:3.5;stroke-dasharray:10 6}
+.tlabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:19px;fill:#B3261E;paint-order:stroke;stroke:var(--sea);stroke-width:5px}
+.side{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:24px;paint-order:stroke;stroke:var(--sea);stroke-width:6px}
+.side.es{fill:var(--orange)}.side.pt{fill:var(--teal)}
+.cmark circle{fill:var(--surface);stroke:var(--ink);stroke-width:3}
+.cmark text{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:16px;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.cmark.es circle{fill:var(--orange);stroke:var(--orange)}.cmark.pt circle{fill:var(--teal);stroke:var(--teal)}
+.cmark.es text,.cmark.pt text{fill:#fff}
+.clist{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1rem}
+.citem{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;border:2px solid var(--line);border-radius:12px;padding:.5rem .7rem}
+.citem .nm{flex:1;min-width:9em}.citem .nm b{display:inline-block;width:1.6em;color:var(--muted)}
+.citem button{font:inherit;font-size:.95rem;padding:.35rem .7rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+.citem.done{border-color:var(--teal);background:var(--teal-soft)}
+.citem.done.es{border-color:var(--orange);background:var(--orange-soft)}
+.citem .res{font-weight:700}
+.cfb{grid-column:1/-1}
+.sumtab{width:100%;border-collapse:collapse;margin-top:.8rem}
+.sumtab th,.sumtab td{border:1px solid var(--line);padding:.45rem .6rem;text-align:left}
+.sumtab th{background:var(--teal-soft)}
+.dish{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.6rem}
+.dish .d{border:2px solid var(--line);border-radius:14px;padding:.7rem;text-align:center;background:var(--bg)}
+.dish .d .e{font-size:2.2rem;display:block}
+.dish .d .n{font-weight:700;display:block;margin:.2rem 0 .4rem}
+.dish .d .bt{display:flex;gap:.3rem;justify-content:center}
+.dish .d .bt button{font:inherit;font-size:.9rem;padding:.3rem .55rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+.dish .d .x{font-size:.95rem;margin:.4rem 0 0}
+.dish .d.ok{border-color:var(--teal);background:var(--teal-soft)}
+.dish .d.no{border-color:var(--orange);background:var(--orange-soft)}
+@media (max-width:680px){.clist{grid-template-columns:1fr}}
+.leg{fill:none;stroke-width:5;stroke-linecap:round}
+.leg.l1{stroke:#7A5230}.leg.l2{stroke:#B3261E}.leg.l3{stroke:var(--teal)}
+.leg.on{stroke-width:8}
+.legn circle{stroke:var(--surface);stroke-width:3}.legn text{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:22px;fill:#fff;text-anchor:middle;dominant-baseline:central}
+.legn.l1 circle{fill:#7A5230}.legn.l2 circle{fill:#B3261E}.legn.l3 circle{fill:var(--teal)}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1rem}
+.cols3 .col h3{font-size:1.1rem}
+.cols3 .col.l1{border-color:#7A5230}.cols3 .col.l1 h3{color:#7A5230}
+.cols3 .col.l2{border-color:#B3261E}.cols3 .col.l2 h3{color:#B3261E}
+.cols3 .col.l3{border-color:var(--teal)}
+.chain{list-style:none;padding:0;margin:0 0 1rem;counter-reset:c}
+.chain li{position:relative;padding:.6rem .8rem .6rem 3rem;margin-bottom:.9rem;background:var(--teal-soft);border-radius:10px;counter-increment:c}
+.chain li::before{content:counter(c);position:absolute;left:.7rem;top:50%;transform:translateY(-50%);width:1.7rem;height:1.7rem;border-radius:50%;background:var(--teal);color:var(--on-teal);display:grid;place-items:center;font-weight:700}
+.chain li:not(:last-child)::after{content:"↓";position:absolute;left:1.15rem;bottom:-1.05rem;color:var(--teal);font-weight:700}
+.est{border-top:1px solid var(--line);padding:1rem 0}
+.est h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;margin:0 0 .6rem}
+.est .row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.est input[type=range]{flex:1;min-width:200px;accent-color:var(--orange);height:2rem}
+.est .val{font-weight:700;font-size:1.25rem;min-width:7.5em;color:var(--orange)}
+.bars{margin:.8rem 0 .4rem;display:grid;gap:.35rem}
+.bars div{display:grid;grid-template-columns:8.8em 1fr;align-items:center;gap:.5rem;font-size:.98rem}
+.bars i{display:block;height:18px;border-radius:9px;transition:width .8s}
+.bars .g i{background:var(--orange)}.bars .r i{background:var(--teal)}
+.stars{color:var(--orange);font-size:1.2rem;letter-spacing:.1rem}
+.est .exp{margin:.4rem 0 0}
+.un{margin-top:1rem;padding:1rem 1.1rem;border:2px solid var(--teal);border-radius:12px;background:var(--teal-soft)}
+.un b{color:var(--teal)}
+.intro{margin:0 0 1rem;padding:.8rem 1rem;border-left:5px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0}
+@media (max-width:680px){.cols3{grid-template-columns:1fr}}
+.timeline.six{padding-top:0}.timeline.six::before,.timeline.six .slot::before{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p>Geschichte, 3. Klasse – Frühe Neuzeit</p>
+  <h1>Plantagen, Dreieckshandel und Sklaverei</h1>
+  <p>Übungen zum Arbeitsblatt 01.9, Seite 2. Ein schweres Thema – aber eines, das man kennen muss, um die Welt von heute zu verstehen.</p>
+  <svg class="routeline" viewBox="0 0 800 34" preserveAspectRatio="none" aria-hidden="true"><path d="M10 24 C 150 4, 260 32, 400 16 S 650 6, 790 20"/><circle cx="10" cy="24" r="5"/><circle cx="790" cy="20" r="5"/></svg>
+</header>
+<nav role="tablist" aria-label="Übungen">
+  <button role="tab" data-tab="kette">Wie kam es dazu?</button>
+  <button role="tab" data-tab="dreieck">Aufgabe 3: Dreieckshandel</button>
+  <button role="tab" data-tab="zahlen">Schätz mal!</button>
+  <button role="tab" data-tab="rechte">Aufgabe 4: Menschenrechte</button>
+  <button role="tab" data-tab="freiheit">Der Weg zur Freiheit</button>
+</nav>
+
+<section id="kette" role="tabpanel">
+  <h2>Wie kam es dazu?</h2>
+  <p class="task">Eins führte zum anderen. Tippe die Karten in der richtigen Reihenfolge an, so entsteht eine Kette von Ursachen und Folgen (M2).</p>
+  <ol class="chain" id="ch-list"></ol>
+  <div class="pool" id="ch-pool"></div>
+  <div class="status" id="ch-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="kette">Nochmal von vorne</button></div>
+</section>
+
+<section id="dreieck" role="tabpanel" hidden>
+  <h2>Aufgabe 3: Der Dreieckshandel</h2>
+  <p class="task">Die Schiffe fuhren im Dreieck über den Atlantik – und auf keiner Strecke leer. Tippe eine Ladung an und dann die richtige Strecke. Die Strecke leuchtet auf der Karte auf, sobald sie vollständig ist.</p>
+  <div class="rmap"><svg viewBox="0 0 1000 720" id="dr-map" role="img" aria-label="Karte des Atlantiks mit den drei Strecken des Dreieckshandels: 1 Europa nach Afrika, 2 Afrika nach Amerika, 3 Amerika nach Europa"><g class="landlayer"></g><g class="extra"></g></svg></div>
+  <div class="pool" id="dr-pool" style="margin-top:1rem"></div>
+  <div class="cols3"><button class="col l1" id="dr-1"><h3>① von Europa nach Afrika</h3></button><button class="col l2" id="dr-2"><h3>② von Afrika nach Amerika</h3></button><button class="col l3" id="dr-3"><h3>③ von Amerika nach Europa</h3></button></div>
+  <div class="status" id="dr-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="dreieck">Nochmal von vorne</button></div>
+</section>
+
+<section id="zahlen" role="tabpanel" hidden>
+  <h2>Schätz mal!</h2>
+  <p class="task">Große Zahlen sind schwer vorstellbar. Schieb den Regler auf deine Schätzung und tippe auf „Auflösen“. Für jede gute Schätzung gibt es Sterne – aber noch wichtiger ist der Vergleich darunter.</p>
+  <div id="e-list"></div>
+  <div class="status" id="e-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="zahlen">Nochmal von vorne</button></div>
+</section>
+
+<section id="rechte" role="tabpanel" hidden>
+  <h2>Aufgabe 4: Ein Leben ohne Rechte</h2>
+  <p class="task">Menschenrechte stehen allen Menschen zu. Lies jede Situation aus dem Leben versklavter Menschen (M3) und entscheide: Welches Menschenrecht wurde ihnen hier genommen?</p>
+  <div class="progress" aria-hidden="true"><span id="r-bar" style="width:0"></span></div>
+  <div id="r-box"></div>
+  <div class="tools"><button class="btn ghost" data-reset="rechte">Nochmal von vorne</button></div>
+</section>
+
+<section id="freiheit" role="tabpanel" hidden>
+  <h2>Der Weg zur Freiheit</h2>
+  <div class="intro">Versklavte Menschen waren nicht nur Opfer. Sie flohen, versteckten sich in Wäldern und Bergen, arbeiteten absichtlich langsam, kämpften – und erzählten der Welt, was ihnen angetan wurde. Gemeinsam mit Menschen in Europa und Amerika, die die Sklaverei ablehnten, erreichten sie nach und nach ihr Ende.</div>
+  <p class="task">Tippe ein Ereignis an und dann das passende Jahr.</p>
+  <div class="pool" id="z-pool"></div>
+  <div class="timeline six" id="z-line" style="grid-template-columns:repeat(3,1fr)"></div>
+  <div class="status" id="z-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="freiheit">Nochmal von vorne</button></div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function flash(e){e.classList.remove("wrong");void e.getBoundingClientRect();e.classList.add("wrong");setTimeout(()=>e.classList.remove("wrong"),450)}
+const TABS=["kette","dreieck","zahlen","rechte","freiheit"];
+const done={};TABS.forEach(t=>done[t]=false);
+function updateTabs(){document.querySelectorAll("nav button").forEach(b=>{let ok=b.querySelector(".ok");const d=done[b.dataset.tab];
+  if(d&&!ok){ok=el("span","ok","✓");ok.setAttribute("aria-label","geschafft");b.append(ok)}if(!d&&ok)ok.remove()})}
+function markDone(k,v=true){done[k]=v;updateTabs()}
+function show(k){if(!TABS.includes(k))k="kette";TABS.forEach(t=>$("#"+t).hidden=t!==k);
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+const NS="http://www.w3.org/2000/svg";
+function svgEl(t,attrs){const e=document.createElementNS(NS,t);for(const k in attrs)e.setAttribute(k,attrs[k]);return e}
+const LANDS=[
+ [[-168,66],[-156,71],[-130,70],[-110,73],[-90,72],[-80,64],[-64,60],[-56,52],[-66,45],[-70,42],[-76,37],[-80,32],[-80,26],[-82,29],[-90,30],[-97,27],[-97,20],[-92,18],[-87,21],[-88,15],[-83,10],[-78,8],[-80,8],[-86,12],[-92,15],[-105,20],[-110,24],[-114,30],[-118,34],[-124,40],[-124,48],[-130,55],[-140,60],[-152,60],[-160,58],[-165,62]],
+ [[-55,60],[-45,60],[-20,70],[-20,80],[-60,80],[-72,77],[-55,68]],
+ [[-78,8],[-72,12],[-62,11],[-52,5],[-50,0],[-35,-5],[-37,-12],[-40,-22],[-48,-26],[-53,-34],[-58,-38],[-62,-40],[-65,-46],[-68,-51],[-70,-55],[-74,-52],[-74,-45],[-72,-36],[-71,-28],[-70,-18],[-76,-14],[-81,-5],[-80,0],[-77,4]],
+ [[-10,36],[-9,43],[-2,44],[-5,48],[2,51],[8,54],[10,57],[5,62],[15,69],[28,71],[40,67],[60,70],[80,73],[100,77],[140,72],[170,70],[180,66],[180,62],[160,60],[156,51],[142,52],[140,46],[132,43],[129,35],[122,40],[122,30],[120,23],[110,20],[108,12],[106,9],[100,13],[103,1],[98,8],[98,16],[92,21],[88,22],[80,15],[77,8],[72,20],[67,25],[57,25],[56,27],[50,30],[48,29],[52,24],[56,26],[58,22],[52,16],[44,12],[43,15],[39,22],[35,28],[32,30],[35,36],[28,37],[24,38],[20,40],[13,45],[8,44],[3,43],[-5,36]],
+ [[-17,21],[-17,14],[-12,7],[-8,4],[5,5],[9,4],[10,-2],[13,-12],[12,-18],[15,-27],[18,-34],[26,-34],[33,-26],[35,-20],[40,-15],[40,-5],[44,1],[51,11],[43,12],[37,18],[34,27],[32,31],[20,32],[10,37],[0,36],[-6,35],[-10,30],[-16,25]],
+ [[44,-25],[47,-25],[50,-15],[49,-12],[44,-17]],
+ [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-25],[151,-34],[146,-39],[138,-35],[131,-31],[117,-35],[115,-30]],
+ [[95,5],[106,-6],[102,-4],[98,2]],[[109,1],[117,7],[119,1],[116,-4],[110,-3]],[[120,18],[122,18],[124,12],[126,7],[122,7],[121,12]],
+ [[131,-1],[141,-3],[150,-10],[142,-9],[135,-4]],[[130,31],[141,36],[142,43],[140,41],[133,34]],[[-5,50],[1,51],[-2,56],[-4,58],[-6,56],[-3,53]]
+];
+/* ---------- Ursachenkette ---------- */
+const CHAIN=[
+ "In Europa ist Zucker sehr begehrt und teuer.",
+ "Die Europäer legen in Amerika riesige Zuckerrohr-Plantagen an.",
+ "Die einheimische Bevölkerung muss dort Zwangsarbeit leisten.",
+ "Viele Einheimische sterben an Krankheiten und an der harten Arbeit.",
+ "Sogar der Priester Las Casas schlägt vor, Menschen aus Afrika zu holen – später bereut er es.",
+ "Händler verschleppen Millionen Menschen aus Afrika nach Amerika.",
+ "Versklavte Menschen arbeiten ohne Lohn – Zucker wird in Europa billig."
+];
+let chNext=0,chMiss=0;
+function initCh(){const P0=$("#ch-pool"),L=$("#ch-list");P0.innerHTML="";L.innerHTML="";chNext=0;chMiss=0;$("#ch-status").textContent="Womit fängt alles an?";$("#ch-status").className="status";markDone("kette",false);
+  shuffle(CHAIN.map((c,i)=>i)).forEach(i=>{const b=el("button","card",CHAIN[i]);b.onclick=()=>{
+    if(i===chNext){L.append(el("li",null,CHAIN[i]));b.remove();chNext++;
+      if(chNext===CHAIN.length){$("#ch-status").textContent=`Geschafft (Fehlversuche: ${chMiss})! Hinter dem süßen Zucker steckte unvorstellbares Leid. Zucker nannte man damals auch „weißes Gold“.`;$("#ch-status").className="status good";markDone("kette")}
+      else $("#ch-status").textContent="Richtig! Und was folgte daraus?"}
+    else{chMiss++;flash(b);$("#ch-status").textContent="Das kommt noch nicht. Was war die direkte Folge des letzten Schritts?"}};P0.append(b)})}
+
+/* ---------- Dreieckshandel ---------- */
+const L0=-100,T0=62,SCL=1000/130;
+function P(lon,lat){return [(lon-L0)*SCL,(T0-lat)*SCL]}
+const EU=[-6,47],AF=[2,5],AM=[-72,17];
+const LEGS={1:{d:[[-10,43],[-16,26],[4,5.5]]},2:{d:[[-1,4.5],[-35,6],[-70,15.5]]},3:{d:[[-71,19.5],[-45,44],[-7,50.5]]}};
+function curve(a,c,b){const A=P(...a),C=P(...c),B=P(...b);return `M${A[0]} ${A[1]} Q${C[0]} ${C[1]} ${B[0]} ${B[1]}`}
+function drawDr(){const svg=$("#dr-map");const LL=svg.querySelector(".landlayer"),EX=svg.querySelector(".extra");LL.innerHTML="";EX.innerHTML="";
+  LANDS.forEach(l=>LL.append(svgEl("polygon",{class:"rland",points:l.map(p=>P(...p).map(v=>v.toFixed(1)).join(",")).join(" ")})));
+  const defs=svgEl("defs",{});[["l1","#7A5230"],["l2","#B3261E"],["l3","#1F6F78"]].forEach(([k,c])=>{const m=svgEl("marker",{id:"ar"+k,viewBox:"0 0 10 10",refX:"6",refY:"5",markerWidth:"5",markerHeight:"5",orient:"auto-start-reverse"});m.append(svgEl("path",{d:"M0 0 L10 5 L0 10 z",fill:c}));defs.append(m)});EX.append(defs);
+  [1,2,3].forEach(n=>{const d=LEGS[n].d;EX.append(svgEl("path",{id:"leg"+n,class:"leg l"+n,d:curve(...d),"marker-end":`url(#arl${n})`}));
+    const [x,y]=P(...d[1]);const g=svgEl("g",{class:"legn l"+n});g.append(svgEl("circle",{cx:x,cy:y,r:20}));const t=svgEl("text",{x:x,y:y});t.textContent=n;g.append(t);EX.append(g)});
+  const lab=(t,lon,lat,cl)=>{const [x,y]=P(lon,lat);const e=svgEl("text",{class:cl||"maplabel",x:x,y:y,"text-anchor":"middle"});e.textContent=t;EX.append(e)};
+  lab("EUROPA",12,52);lab("AFRIKA",20,10);lab("NORDAMERIKA",-88,42);lab("Karibik",-78,24);lab("SÜDAMERIKA",-60,-12);lab("Atlantischer Ozean",-38,26,"oceanlabel")}
+const GOODS=[["Waffen und Schießpulver",1],["Stoffe",1],["Glasperlen und Schmuck",1],["Alkohol",1],["Werkzeuge aus Eisen",1],
+ ["Versklavte Menschen – gefesselt und zusammengepfercht",2],
+ ["Zucker",3],["Baumwolle",3],["Tabak",3],["Kaffee",3]];
+const LEGINFO={1:"Mit diesen Waren bezahlten europäische Händler afrikanische Sklavenjäger. Die Waffen machten neue Überfälle möglich.",2:"Diese Strecke nannte man die „Mittelpassage“. Wochenlang lagen die Menschen eng aneinandergekettet unter Deck – fast jeder Sechste überlebte die Fahrt nicht.",3:"Die Waren der Plantagen wurden in Europa mit großem Gewinn verkauft. Mit dem Geld kauften die Händler neue Waren – und das Dreieck begann von vorn."};
+let drSel=null,drLeft=0,drMiss=0,drCount={};
+function initDr(){drawDr();const P0=$("#dr-pool");P0.innerHTML="";[1,2,3].forEach(n=>$("#dr-"+n).querySelectorAll(".placed,.x").forEach(x=>x.remove()));drSel=null;drLeft=GOODS.length;drMiss=0;drCount={1:0,2:0,3:0};
+  $("#dr-status").textContent="";$("#dr-status").className="status";markDone("dreieck",false);
+  shuffle(GOODS).forEach(g=>{const b=el("button","card",g[0]);b._l=g[1];b.onclick=()=>{P0.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");drSel=b};P0.append(b)})}
+[1,2,3].forEach(n=>$("#dr-"+n).addEventListener("click",()=>{const c=$("#dr-"+n);if(!drSel){$("#dr-status").textContent="Tippe zuerst eine Ladung an.";return}
+  if(drSel._l===n){c.append(el("span","placed",drSel.textContent));drSel.remove();drSel=null;drLeft--;drCount[n]++;
+    const total=GOODS.filter(g=>g[1]===n).length;
+    if(drCount[n]===total){$("#leg"+n).classList.add("on");const x=el("p","x",LEGINFO[n]);x.style.fontSize=".98rem";x.style.margin=".4rem 0 0";c.append(x)}
+    if(drLeft===0){$("#dr-status").textContent=`Geschafft (Fehlversuche: ${drMiss})! Übertrage die Ladungen jetzt in die Tabelle von Aufgabe 3. Für die Händler war jede Strecke ein Geschäft – bezahlt haben die Menschen aus Afrika.`;$("#dr-status").className="status good";markDone("dreieck")}
+    else $("#dr-status").textContent=drCount[n]===total?"Diese Strecke ist vollständig!":"Richtig!"}
+  else{drMiss++;flash(c);$("#dr-status").textContent="Das passt nicht zu dieser Strecke. Überlege: Was gab es wo – und was wurde wo gebraucht?"}}));
+
+/* ---------- Schätz mal ---------- */
+const EST=[
+ {q:"Wie viele Menschen wurden zwischen 1500 und 1866 aus Afrika über den Atlantik verschleppt?",min:0,max:30,step:.5,start:5,ans:12.5,unit:" Millionen",fmt:v=>v.toLocaleString("de-AT")+" Millionen",tol:[2,5],
+  exp:"Rund 12,5 Millionen Menschen. Das sind mehr Menschen, als heute in ganz Österreich leben (gut 9 Millionen)."},
+ {q:"Wie viele von ihnen starben schon auf der Überfahrt?",min:0,max:6,step:.1,start:.5,ans:1.8,fmt:v=>v.toLocaleString("de-AT")+" Millionen",tol:[.4,1],
+  exp:"Fast 2 Millionen Menschen – ungefähr jeder Sechste. Das sind fast neunmal so viele Menschen, wie heute in Linz leben."},
+ {q:"Wie lange dauerte die Überfahrt von Afrika nach Amerika ungefähr?",min:1,max:20,step:1,start:3,ans:8,fmt:v=>v+" Wochen",tol:[2,4],
+  exp:"Meist etwa 5 bis 12 Wochen, also rund zwei Monate – angekettet, im Dunkeln, mit wenig Essen und Wasser."},
+ {q:"In welchem Jahr schaffte Brasilien – als letztes Land Amerikas – die Sklaverei ab?",min:1700,max:1950,step:1,start:1750,ans:1888,fmt:v=>"im Jahr "+v,tol:[15,40],
+  exp:"Erst 1888! Das ist nicht einmal 140 Jahre her – die Ur-Ur-Urgroßeltern von heutigen Jugendlichen haben das noch erlebt."},
+ {q:"Sklaverei ist heute überall verboten. Was schätzt du: Wie viele Menschen leben trotzdem heute in „moderner Sklaverei“, zum Beispiel in Zwangsarbeit?",min:0,max:100,step:1,start:2,ans:50,fmt:v=>v+" Millionen",tol:[10,25],
+  exp:"Laut Schätzungen der Internationalen Arbeitsorganisation (2022) rund 50 Millionen Menschen weltweit. Sklaverei ist verboten – aber leider noch nicht vorbei."}
+];
+let eLeft=0,eStars=0;
+function initE(){const L=$("#e-list");L.innerHTML="";eLeft=EST.length;eStars=0;$("#e-status").textContent="";$("#e-status").className="status";markDone("zahlen",false);
+  EST.forEach((e,i)=>{const box=el("div","est");box.append(el("h3",null,(i+1)+". "+e.q));const row=el("div","row");
+    const r=el("input");r.type="range";r.min=e.min;r.max=e.max;r.step=e.step;r.value=e.start;r.setAttribute("aria-label","Deine Schätzung");const v=el("span","val",e.fmt(+r.value));r.oninput=()=>v.textContent=e.fmt(+r.value);
+    const b=el("button","btn","Auflösen");row.append(r,v,b);box.append(row);const res=el("div");box.append(res);
+    b.onclick=()=>{const g=+r.value;r.disabled=true;b.remove();const diff=Math.abs(g-e.ans);const st=diff<=e.tol[0]?3:diff<=e.tol[1]?2:1;eStars+=st;
+      const span=e.max-e.min,w=x=>Math.max(2,(x-e.min)/span*100)+"%";
+      const bars=el("div","bars");const d1=el("div","g"),d2=el("div","r");const i1=el("i"),i2=el("i");i1.style.width="0";i2.style.width="0";
+      d1.append(el("span",null,"Deine Schätzung"),i1);d2.append(el("span",null,"Tatsächlich"),i2);bars.append(d1,d2);res.append(bars);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{i1.style.width=w(g);i2.style.width=w(e.ans)}));
+      const s=el("p",null);s.append(el("span","stars","★".repeat(st)+"☆".repeat(3-st)),document.createTextNode(st===3?"  Sehr gut geschätzt!":st===2?"  Nicht schlecht!":"  Da lagst du daneben – kein Wunder, das ist kaum vorstellbar."));res.append(s,el("p","exp",e.exp));
+      eLeft--;if(eLeft===0){$("#e-status").textContent=`Du hast ${eStars} von ${EST.length*3} Sternen gesammelt. Merk dir vor allem die erste Zahl: 12,5 Millionen verschleppte Menschen.`;$("#e-status").className="status good";markDone("zahlen")}};
+    L.append(box)})}
+
+/* ---------- Menschenrechte ---------- */
+const RIGHTS=[["frei","Recht auf Freiheit"],["fam","Recht auf Familie"],["gewalt","Schutz vor Folter und Gewalt"],["lohn","Recht auf gerechten Lohn"],["bild","Recht auf Bildung"],["gleich","Gleichheit vor dem Gesetz"]];
+const RC=[
+ ["Auf Märkten wurden Menschen wie Waren begutachtet, versteigert und verkauft.","frei","Kein Mensch darf einem anderen gehören. Heute steht in der Erklärung der Menschenrechte: Niemand darf in Sklaverei gehalten werden."],
+ ["Eine Mutter muss zusehen, wie ihre Kinder an einen anderen Plantagenbesitzer verkauft werden.","fam","Familien wurden oft für immer auseinandergerissen. Heute schützt das Recht auf Familie davor."],
+ ["Wer zu langsam arbeitete oder zu fliehen versuchte, wurde ausgepeitscht.","gewalt","Strafen mit der Peitsche waren auf Plantagen alltäglich. Heute hat jeder Mensch das Recht, nicht gefoltert oder misshandelt zu werden."],
+ ["Von Sonnenaufgang bis Sonnenuntergang arbeiten sie auf den Zuckerrohrfeldern – und bekommen dafür nichts.","lohn","Die Gewinne bekamen die Plantagenbesitzer. Heute hat jeder Mensch ein Recht auf gerechten Lohn für seine Arbeit."],
+ ["In manchen Gebieten war es verboten, versklavten Menschen Lesen und Schreiben beizubringen.","bild","Wer lesen kann, kann sich informieren und wehren – genau das wollten die Sklavenhalter verhindern."],
+ ["Versklavte Menschen durften nicht vor Gericht klagen, auch wenn ihnen Unrecht geschah.","gleich","Vor dem Gesetz zählten sie nicht als Menschen, sondern als Besitz. Heute sind alle Menschen vor dem Gesetz gleich."]
+];
+let rOrder=[],rI=0,rRight=0;
+function initR(){rOrder=shuffle(RC);rI=0;rRight=0;markDone("rechte",false);renderR()}
+function renderR(){const box=$("#r-box");box.innerHTML="";$("#r-bar").style.width=(rI/rOrder.length*100)+"%";
+  if(rI>=rOrder.length){box.append(el("p","qtext",`Du hast ${rRight} von ${rOrder.length} Situationen beim ersten Versuch richtig zugeordnet.`));
+    const u=el("div","un");u.append(el("b",null,"Gut zu wissen: "),document.createTextNode("1948 beschlossen die Vereinten Nationen die Allgemeine Erklärung der Menschenrechte. In Artikel 4 steht sinngemäß: Niemand darf in Sklaverei gehalten werden, Sklavenhandel ist verboten. Für Aufgabe 4 kannst du zwei der Rechte von dieser Seite verwenden."));box.append(u);markDone("rechte");return}
+  const c=rOrder[rI];box.append(el("p","task",`Situation ${rI+1} von ${rOrder.length}`),el("p","case",c[0]));
+  const F=el("div","factors"),fb=el("p","dfb");fb.setAttribute("aria-live","polite");let first=true,solved=false;
+  RIGHTS.forEach(f=>{const b=el("button",null,f[1]);b.onclick=()=>{if(solved)return;
+      if(f[0]===c[1]){solved=true;if(first)rRight++;b.classList.add("right");fb.innerHTML="";fb.append(el("b","good","Richtig. "),document.createTextNode(c[2]));
+        const n=el("button","btn",rI===rOrder.length-1?"Ergebnis anzeigen":"Nächste Situation");n.onclick=()=>{rI++;renderR()};const t=el("div","tools");t.append(n);fb.after(t);n.focus()}
+      else{first=false;b.classList.add("bad");flash(b);fb.innerHTML="";fb.append(el("b","bad","Nicht ganz. "),document.createTextNode("Welches Recht passt am genauesten zu dieser Situation?"))}};F.append(b)});
+  box.append(F,fb)}
+
+/* ---------- Weg zur Freiheit ---------- */
+const EVENTS=[
+ [1789,"Olaudah Equiano veröffentlicht seine Lebensgeschichte.","Equiano berichtete, dass er als Kind in Afrika entführt und versklavt wurde. Später kaufte er sich frei. Sein Buch wurde ein Bestseller und überzeugte viele Menschen in England, gegen die Sklaverei zu kämpfen."],
+ [1804,"Nach einem Aufstand der Versklavten wird Haiti unabhängig.","Auf Haiti erhoben sich ab 1791 die Versklavten. Sie besiegten sogar die Armee Frankreichs. Haiti wurde der erste Staat, den befreite Sklaven gründeten."],
+ [1807,"Großbritannien verbietet den Sklavenhandel.","Viele Menschen in England hatten dafür gekämpft, zum Beispiel mit Unterschriften und indem sie keinen Zucker von Sklavenplantagen mehr kauften."],
+ [1865,"In den USA wird die Sklaverei nach einem Bürgerkrieg abgeschafft.","Rund vier Millionen Menschen wurden frei. Bis zur echten Gleichberechtigung dauerte es aber noch rund 100 Jahre."],
+ [1888,"Brasilien schafft als letztes Land Amerikas die Sklaverei ab.","In kein anderes Land wurden so viele Menschen aus Afrika verschleppt wie nach Brasilien."],
+ [1948,"Die Vereinten Nationen beschließen die Menschenrechte: Sklaverei ist verboten.","Seitdem gilt weltweit: Niemand darf in Sklaverei gehalten werden."]
+];
+let zSel=null,zLeft=0,zMiss=0;
+function initZ(){const Pl=$("#z-pool"),L=$("#z-line");Pl.innerHTML="";L.innerHTML="";zSel=null;zLeft=EVENTS.length;zMiss=0;$("#z-status").textContent="";$("#z-status").className="status";markDone("freiheit",false);
+  shuffle(EVENTS).forEach(ev=>{const b=el("button","card",ev[1]);b._y=ev[0];b._i=ev[2];b.onclick=()=>{Pl.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");zSel=b};Pl.append(b)});
+  EVENTS.forEach(ev=>{const s=el("button","slot");s.append(el("strong",null,ev[0]));s.setAttribute("aria-label","Jahr "+ev[0]);
+    s.onclick=()=>{if(s.classList.contains("filled"))return;if(!zSel){$("#z-status").textContent="Tippe zuerst ein Ereignis an.";return}
+      if(zSel._y===ev[0]){s.append(el("span","placed",zSel.textContent));s.classList.add("filled");$("#z-status").textContent="Richtig! "+zSel._i;zSel.remove();zSel=null;zLeft--;
+        if(zLeft===0){$("#z-status").textContent=`Geschafft (Fehlversuche: ${zMiss})! Von Equianos Buch bis zum weltweiten Verbot vergingen über 150 Jahre. Und heute? Auch heute setzen sich Menschen gegen Zwangsarbeit ein – zum Beispiel, indem sie auf faire Produkte wie Fairtrade-Schokolade achten.`;$("#z-status").className="status good";markDone("freiheit")}}
+      else{zMiss++;flash(s);$("#z-status").textContent="Das passt nicht zu diesem Jahr. Versuch es noch einmal.";}};L.append(s)})}
+document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({kette:initCh,dreieck:initDr,zahlen:initE,rechte:initR,freiheit:initZ})[b.dataset.reset]()));
+initCh();initDr();initE();initR();initZ();show(location.hash.slice(1));
+</script>
+</body>
+</html>
