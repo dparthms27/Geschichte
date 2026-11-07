@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Die Welt wird aufgeteilt – Übungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#EEF5F4;--surface:#FFFFFF;--ink:#18302F;--muted:#4F6766;--teal:#1F6F78;--teal-soft:#D5E8E8;--orange:#C9661A;--orange-soft:#FBE3CC;--line:#C5D9D8;--on-teal:#FFFFFF;
+--sea:#CFE6E8;--land:#E9DCC0;--coast:#8A7A55;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:1.15rem;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+header h1{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.1;margin:.2rem 0 .3rem;color:var(--teal)}
+header p{margin:0;color:var(--muted)}
+.routeline{display:block;width:100%;height:34px;margin:.8rem 0 1.2rem}
+.routeline path{fill:none;stroke:var(--orange);stroke-width:2.5;stroke-dasharray:2 8;stroke-linecap:round}
+.routeline circle{fill:var(--teal)}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+nav button{font:inherit;font-size:1rem;padding:.55rem .9rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+nav button[aria-selected="true"]{background:var(--teal);color:var(--on-teal)}
+nav button .ok{margin-left:.35rem}
+button:focus-visible,.marker:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.2rem 1.5rem}
+section[hidden]{display:none}
+h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
+.task{margin:0 0 1rem;color:var(--muted)}
+.lern{color:var(--teal);font-weight:700}
+.status{margin-top:1rem;min-height:1.5em;font-weight:700}
+.status.good{color:var(--teal)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{font:inherit;font-size:1rem;padding:.6rem 1.1rem;border-radius:10px;border:2px solid var(--teal);cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn:disabled{opacity:.4;cursor:default}
+.card{font:inherit;text-align:left;padding:.6rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.card.sel{border-color:var(--orange);background:var(--orange-soft)}
+.wrong{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.wrong{animation:none}}
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.1rem;min-height:2.8rem}
+/* Zeitleiste */
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;padding-top:2.2rem}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:1rem;height:4px;background:var(--teal);border-radius:2px}
+.slot{position:relative;font:inherit;text-align:left;border:2px dashed var(--teal);border-radius:12px;background:transparent;color:var(--ink);padding:.6rem;min-height:120px;cursor:pointer;display:flex;flex-direction:column;gap:.35rem}
+.slot::before{content:"";position:absolute;top:-1.55rem;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--orange);border:3px solid var(--surface)}
+.slot strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;color:var(--teal)}
+.slot .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.35rem .5rem}
+.slot.filled{border-style:solid;cursor:default}
+.slot.wrong{border-color:var(--orange)}
+/* Karte */
+.mapwrap{background:var(--sea);border-radius:12px;overflow:hidden}
+.mapwrap svg{display:block;width:100%;height:auto}
+.land{fill:var(--land);stroke:var(--coast);stroke-width:2}
+.route{fill:none;stroke:var(--orange);stroke-width:5;stroke-dasharray:12 9;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.marker{cursor:pointer}
+.marker circle{fill:var(--surface);stroke:var(--teal);stroke-width:4}
+.marker .n{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:26px;fill:var(--teal);text-anchor:middle;dominant-baseline:central}
+.marker.done circle{fill:var(--teal)}
+.marker.done .n{fill:var(--on-teal)}
+.marker.wrong circle{stroke:var(--orange);fill:var(--orange-soft)}
+.maplabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:28px;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:7px}
+.oldroute{fill:none;stroke:var(--teal);stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round;stroke-linejoin:round}
+.legbox{fill:var(--surface);opacity:.92}
+.legtext{font-family:Carlito,Calibri,Arial,sans-serif;fill:var(--ink)}
+.kmap{margin-bottom:1.2rem}
+.kmap .dot{fill:var(--teal);stroke:var(--surface);stroke-width:3}
+.oceanlabel{font-family:Caladea,Cambria,Georgia,serif;font-style:italic;font-size:28px;fill:var(--teal)}
+.kq{border-top:1px solid var(--line);padding:1rem 0 .4rem}
+.kq h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;font-weight:700;margin:0 0 .6rem}
+.kq .opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.card.right{border-color:var(--teal);background:var(--teal);color:var(--on-teal);cursor:default}
+.kq .fb{min-height:1.4em;margin:.5rem 0 0;font-weight:700}
+.kq .fb.good{color:var(--teal)}.kq .fb.bad{color:var(--orange)}
+.ltext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;line-height:2.2;margin:0}
+.gap{font:inherit;font-size:1.2rem;display:inline-block;min-width:7em;padding:0 .5rem;margin:0 .15rem;border:none;border-bottom:3px dashed var(--teal);border-radius:6px 6px 0 0;background:var(--teal-soft);color:var(--muted);cursor:pointer;line-height:1.6}
+.gap.filled{border-bottom-style:solid;background:transparent;color:var(--teal);font-weight:700;cursor:default;min-width:0}
+.gap:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.paper{margin-top:1rem;padding:.8rem 1rem;border-left:5px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0}
+/* Quiz */
+.quizgrid{display:grid;grid-template-columns:1fr 180px;gap:1.2rem}
+.qtext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;line-height:1.25;margin:.2rem 0 1rem}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.answers button{font:inherit;text-align:left;padding:.75rem .9rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.answers button .l{font-weight:700;color:var(--orange);margin-right:.4rem}
+.answers button.right{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.answers button.right .l{color:var(--on-teal)}
+.answers button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.answers button.gone{visibility:hidden}
+.answers button:disabled{cursor:default}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:.25rem;font-size:1rem}
+.ladder li{display:flex;justify-content:space-between;padding:.25rem .6rem;border-radius:8px;color:var(--muted)}
+.ladder li.cur{background:var(--orange-soft);color:var(--ink);font-weight:700}
+.ladder li.ok{color:var(--teal);font-weight:700}
+.ladder li.miss{text-decoration:line-through}
+.qfb{min-height:1.5em;margin:.8rem 0 0;font-weight:700}
+.qfb.good{color:var(--teal)}.qfb.bad{color:var(--orange)}
+@media (max-width:680px){.timeline{grid-template-columns:1fr 1fr;padding-top:0}.timeline::before,.slot::before{display:none}.quizgrid{grid-template-columns:1fr}.ladder{flex-direction:row-reverse;flex-wrap:wrap}.answers{grid-template-columns:1fr}}
+/* Weltkarte */
+.wmap{background:var(--sea);border-radius:12px;overflow:hidden}
+.wmap svg{display:block;width:100%;height:auto}
+.wland{fill:var(--land);stroke:var(--coast);stroke-width:1.2;stroke-linejoin:round}
+.wroute{fill:none;stroke:var(--orange);stroke-width:3.5;stroke-dasharray:8 6;stroke-linecap:round;stroke-linejoin:round}
+.wmap .marker circle{stroke-width:3}
+.wmap .marker .n{font-size:17px}
+.wmap .maplabel{font-size:17px;stroke-width:5px}
+.wmap .oceanlabel{font-size:17px}
+/* Richtig oder falsch */
+.rf{border-top:1px solid var(--line);padding:.9rem 0 .5rem}
+.rf p.s{font-family:Caladea,Cambria,Georgia,serif;font-size:1.25rem;margin:0 0 .5rem}
+.rf .opts{display:flex;gap:.5rem}
+.rf .fb{margin:.5rem 0 0;font-size:1.02rem}
+.rf .fb b.good{color:var(--teal)}.rf .fb b.bad{color:var(--orange)}
+.quote{margin:.4rem 0 1rem;padding:.8rem 1rem;border-left:5px solid var(--teal);background:var(--teal-soft);border-radius:0 10px 10px 0;font-family:Caladea,Cambria,Georgia,serif;font-style:italic}
+/* Spiel */
+.gtop{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin:.2rem 0 .8rem}
+.hearts{font-size:1.6rem;letter-spacing:.15rem}
+.hearts .lost{opacity:.22}
+.chip{display:inline-block;padding:.25rem .7rem;border-radius:999px;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:1rem}
+.gmap{margin-bottom:1rem}
+.gmap .cur{fill:var(--orange);stroke:var(--surface);stroke-width:3}
+.gmap .past{fill:var(--teal);stroke:var(--surface);stroke-width:2}
+.ring{fill:none;stroke:var(--orange);stroke-width:3;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{r:9;opacity:1}100%{r:24;opacity:0}}
+@media (prefers-reduced-motion: reduce){.ring{animation:none;opacity:.6}}
+.scene h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.45rem;margin:0 0 .2rem;color:var(--teal)}
+.scene .when{color:var(--muted);margin:0 0 .6rem;font-weight:700}
+.scene .story{margin:0 0 1rem}
+.choices{display:grid;gap:.6rem}
+.choices button{font:inherit;text-align:left;padding:.8rem 1rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.choices button:hover{background:var(--teal-soft)}
+.choices button:disabled{cursor:default;opacity:.55}
+.choices button.picked{opacity:1;background:var(--orange-soft);border-color:var(--orange)}
+.outcome{margin-top:1rem;padding:.9rem 1rem;border-radius:12px;background:var(--bg);border:2px solid var(--line)}
+.outcome .t{font-weight:700;margin:0 0 .3rem}
+.outcome .t.good{color:var(--teal)}.outcome .t.bad{color:var(--orange)}
+.outcome .wissen{margin:.6rem 0 0;padding-top:.6rem;border-top:1px dashed var(--line)}
+.outcome .wissen b{color:var(--teal)}
+.endbox{text-align:center;padding:1rem .5rem}
+.endbox .big{font-family:Caladea,Cambria,Georgia,serif;font-size:2rem;color:var(--teal);margin:.2rem 0 .6rem;line-height:1.15}
+.endbox.bad .big{color:var(--orange)}
+.endbox p{max-width:640px;margin:.4rem auto}
+.fates{text-align:left;max-width:640px;margin:1rem auto 0;padding:0;list-style:none}
+.fates li{padding:.45rem .2rem;border-top:1px solid var(--line)}
+.fates li b{color:var(--teal)}
+.rmap{background:var(--sea);border-radius:12px;overflow:hidden}
+.rmap svg{display:block;width:100%;height:auto}
+.rland{fill:var(--land);stroke:var(--coast);stroke-width:1.5;stroke-linejoin:round}
+.reich{stroke-width:2;stroke-dasharray:6 5;opacity:.85}
+.reich.az{fill:rgba(201,102,26,.22);stroke:var(--orange)}
+.reich.in{fill:rgba(31,111,120,.22);stroke:var(--teal)}
+.croute{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 7}
+.croute.c{stroke:var(--orange)}.croute.p{stroke:var(--teal)}
+.reichlabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:22px;paint-order:stroke;stroke:var(--sea);stroke-width:5px}
+.reichlabel.az{fill:var(--orange)}.reichlabel.in{fill:var(--teal)}
+.rmap .maplabel{font-size:21px}
+/* Vergleich */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.col{border:2px dashed var(--teal);border-radius:12px;padding:.7rem;min-height:180px;cursor:pointer;background:transparent;font:inherit;color:var(--ink);text-align:left;display:flex;flex-direction:column;gap:.4rem}
+.col h3{font-family:Caladea,Cambria,Georgia,serif;margin:0 0 .3rem;font-size:1.35rem;color:var(--teal)}
+.col.az h3{color:var(--orange)}.col.az{border-color:var(--orange)}
+.col .placed{background:var(--teal-soft);border-radius:8px;padding:.35rem .55rem;font-size:1.02rem}
+.col.az .placed{background:var(--orange-soft)}
+/* Detektiv */
+.case{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;line-height:1.35;background:var(--bg);border-left:5px solid var(--orange);border-radius:0 12px 12px 0;padding:1rem 1.1rem;margin:.4rem 0 1rem}
+.factors{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.factors button{font:inherit;padding:.7rem .5rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.factors button .ico{display:block;font-size:1.6rem}
+.factors button.right{background:var(--teal);color:var(--on-teal)}
+.factors button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.progress{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin:.3rem 0 .8rem}
+.progress span{display:block;height:100%;background:var(--teal);transition:width .3s}
+.dfb{min-height:3em;margin:.8rem 0 0}
+.dfb b.good{color:var(--teal)}.dfb b.bad{color:var(--orange)}
+/* Folgen */
+.people{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;margin:.8rem 0;max-width:620px}
+.people span{aspect-ratio:1/1.6;border-radius:50% 50% 25% 25%/30% 30% 20% 20%;background:var(--teal);transition:opacity 1.2s,background 1.2s}
+.people span.gone{opacity:.12;background:var(--muted)}
+@media (prefers-reduced-motion: reduce){.people span{transition:none}}
+.yr{display:flex;gap:.5rem;margin-top:.4rem}
+.yr .btn[aria-pressed="true"]{background:var(--orange);border-color:var(--orange);color:#fff}
+.fbox{border-top:1px solid var(--line);margin-top:1.2rem;padding-top:1rem}
+.fbox h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;margin:0 0 .5rem}
+.mc{display:grid;gap:.5rem}
+.mc .card.right{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;align-items:start}
+.pairs .left .card{width:100%;margin-bottom:.5rem}
+.pairs .left .card.matched{border-color:var(--teal);background:var(--teal-soft);cursor:default}
+@media (max-width:680px){.cols,.pairs{grid-template-columns:1fr}.factors{grid-template-columns:1fr 1fr}.people{grid-template-columns:repeat(10,1fr)}}
+.tline{stroke:#B3261E;stroke-width:3.5;stroke-dasharray:10 6}
+.tlabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:19px;fill:#B3261E;paint-order:stroke;stroke:var(--sea);stroke-width:5px}
+.side{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:24px;paint-order:stroke;stroke:var(--sea);stroke-width:6px}
+.side.es{fill:var(--orange)}.side.pt{fill:var(--teal)}
+.cmark circle{fill:var(--surface);stroke:var(--ink);stroke-width:3}
+.cmark text{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:16px;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.cmark.es circle{fill:var(--orange);stroke:var(--orange)}.cmark.pt circle{fill:var(--teal);stroke:var(--teal)}
+.cmark.es text,.cmark.pt text{fill:#fff}
+.clist{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1rem}
+.citem{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;border:2px solid var(--line);border-radius:12px;padding:.5rem .7rem}
+.citem .nm{flex:1;min-width:9em}.citem .nm b{display:inline-block;width:1.6em;color:var(--muted)}
+.citem button{font:inherit;font-size:.95rem;padding:.35rem .7rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+.citem.done{border-color:var(--teal);background:var(--teal-soft)}
+.citem.done.es{border-color:var(--orange);background:var(--orange-soft)}
+.citem .res{font-weight:700}
+.cfb{grid-column:1/-1}
+.sumtab{width:100%;border-collapse:collapse;margin-top:.8rem}
+.sumtab th,.sumtab td{border:1px solid var(--line);padding:.45rem .6rem;text-align:left}
+.sumtab th{background:var(--teal-soft)}
+.dish{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.6rem}
+.dish .d{border:2px solid var(--line);border-radius:14px;padding:.7rem;text-align:center;background:var(--bg)}
+.dish .d .e{font-size:2.2rem;display:block}
+.dish .d .n{font-weight:700;display:block;margin:.2rem 0 .4rem}
+.dish .d .bt{display:flex;gap:.3rem;justify-content:center}
+.dish .d .bt button{white-space:nowrap;font:inherit;font-size:.9rem;padding:.3rem .55rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+.dish .d .x{font-size:.95rem;margin:.4rem 0 0}
+.dish .d.ok{border-color:var(--teal);background:var(--teal-soft)}
+.dish .d.no{border-color:var(--orange);background:var(--orange-soft)}
+@media (max-width:680px){.clist{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p>Geschichte, 3. Klasse – Frühe Neuzeit</p>
+  <h1>Die Welt wird aufgeteilt</h1>
+  <p>Übungen zum Arbeitsblatt 01.9, Seite 1: Vertrag von Tordesillas, Kolonien und die erste Globalisierung.</p>
+  <svg class="routeline" viewBox="0 0 800 34" preserveAspectRatio="none" aria-hidden="true"><path d="M10 24 C 150 4, 260 32, 400 16 S 650 6, 790 20"/><circle cx="10" cy="24" r="5"/><circle cx="790" cy="20" r="5"/></svg>
+</header>
+<nav role="tablist" aria-label="Übungen">
+  <button role="tab" data-tab="linie">Eine Linie teilt die Welt</button>
+  <button role="tab" data-tab="kolonien">Aufgabe 1: Kolonien</button>
+  <button role="tab" data-tab="austausch">Der große Austausch</button>
+  <button role="tab" data-tab="teller">Aufgabe 2: Dein Teller</button>
+  <button role="tab" data-tab="quiz">Wer wird Millionär?</button>
+</nav>
+
+<section id="linie" role="tabpanel">
+  <h2>Eine Linie teilt die Welt</h2>
+  <p class="task">1494 zogen Spanien und Portugal im Vertrag von Tordesillas eine Linie durch den Atlantik – vom Nordpol bis zum Südpol. Schau dir die Karte an und beantworte die Fragen.</p>
+  <div class="wmap"><svg viewBox="0 0 1200 467" id="t-map" role="img" aria-label="Weltkarte mit der Linie von Tordesillas durch den Atlantik. Westlich davon steht Spanien, östlich Portugal."><g class="landlayer"></g><g class="extra"></g></svg></div>
+  <div id="t-list"></div>
+  <div class="status" id="t-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="linie">Nochmal von vorne</button></div>
+</section>
+
+<section id="kolonien" role="tabpanel" hidden>
+  <h2>Aufgabe 1: Wem gehörte was um 1600?</h2>
+  <p class="task">Auf der Karte sind acht Gebiete markiert. Entscheide bei jedem: Kolonie von Spanien oder von Portugal? Tipp: Schau, auf welcher Seite der Linie es liegt – aber Vorsicht, eine Ausnahme gibt es!</p>
+  <div class="wmap"><svg viewBox="0 0 1200 467" id="c-map" role="img" aria-label="Weltkarte mit acht nummerierten Gebieten"><g class="landlayer"></g><g class="extra"></g><g id="c-marks"></g></svg></div>
+  <div class="clist" id="c-list"></div>
+  <div id="c-sum"></div>
+  <div class="status" id="c-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="kolonien">Nochmal von vorne</button></div>
+</section>
+
+<section id="austausch" role="tabpanel" hidden>
+  <h2>Der große Austausch</h2>
+  <p class="task">Nach 1492 reisten Pflanzen, Tiere – und leider auch Krankheiten – über den Atlantik. Tippe eine Karte an und dann die richtige Richtung.</p>
+  <div class="pool" id="a-pool"></div>
+  <div class="cols"><button class="col az" id="a-ae"><h3>Von Amerika nach Europa ➜</h3></button><button class="col in" id="a-ea"><h3>➜ Mit den Europäern nach Amerika</h3></button></div>
+  <div class="status" id="a-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="austausch">Nochmal von vorne</button></div>
+</section>
+
+<section id="teller" role="tabpanel" hidden>
+  <h2>Aufgabe 2: Was wäre dein Teller ohne Amerika?</h2>
+  <p class="task">Stell dir vor, es hätte den Austausch mit Amerika nie gegeben. Welche Speisen könnte es bei uns dann geben – und welche nicht?</p>
+  <div class="dish" id="d-grid"></div>
+  <div class="status" id="d-status" aria-live="polite"></div>
+  <div class="tools"><button class="btn ghost" data-reset="teller">Nochmal von vorne</button></div>
+</section>
+
+<section id="quiz" role="tabpanel" hidden>
+  <h2>Wer wird Millionär?</h2>
+  <p class="task">Neun Fragen zu Kolonien und Welthandel. Einmal darfst du den 50:50-Joker verwenden.</p>
+  <div class="quizgrid">
+    <div>
+      <p class="qtext" id="q-text"></p>
+      <div class="answers" id="q-answers"></div>
+      <p class="qfb" id="q-fb" aria-live="polite"></p>
+      <div class="tools">
+        <button class="btn ghost" id="q-joker">50:50-Joker</button>
+        <button class="btn" id="q-next" hidden>Nächste Frage</button>
+        <button class="btn ghost" data-reset="quiz">Nochmal von vorne</button>
+      </div>
+    </div>
+    <ol class="ladder" id="q-ladder" aria-label="Gewinnstufen"></ol>
+  </div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function flash(e){e.classList.remove("wrong");void e.getBoundingClientRect();e.classList.add("wrong");setTimeout(()=>e.classList.remove("wrong"),450)}
+const TABS=["linie","kolonien","austausch","teller","quiz"];
+const done={};TABS.forEach(t=>done[t]=false);
+function updateTabs(){document.querySelectorAll("nav button").forEach(b=>{let ok=b.querySelector(".ok");const d=done[b.dataset.tab];
+  if(d&&!ok){ok=el("span","ok","✓");ok.setAttribute("aria-label","geschafft");b.append(ok)}if(!d&&ok)ok.remove()})}
+function markDone(k,v=true){done[k]=v;updateTabs()}
+function show(k){if(!TABS.includes(k))k="linie";TABS.forEach(t=>$("#"+t).hidden=t!==k);
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* ---------- Weltkarte ---------- */
+const NS="http://www.w3.org/2000/svg";
+function svgEl(t,attrs){const e=document.createElementNS(NS,t);for(const k in attrs)e.setAttribute(k,attrs[k]);return e}
+const SC=1200/360;
+function P(lon,lat){return [(lon+180)*SC,(80-lat)*SC]}
+const LANDS=[
+ [[-168,66],[-156,71],[-130,70],[-110,73],[-90,72],[-80,64],[-64,60],[-56,52],[-66,45],[-70,42],[-76,37],[-80,32],[-80,26],[-82,29],[-90,30],[-97,27],[-97,20],[-92,18],[-87,21],[-88,15],[-83,10],[-78,8],[-80,8],[-86,12],[-92,15],[-105,20],[-110,24],[-114,30],[-118,34],[-124,40],[-124,48],[-130,55],[-140,60],[-152,60],[-160,58],[-165,62]],
+ [[-55,60],[-45,60],[-20,70],[-20,80],[-60,80],[-72,77],[-55,68]],
+ [[-78,8],[-72,12],[-62,11],[-52,5],[-50,0],[-35,-5],[-37,-12],[-40,-22],[-48,-26],[-53,-34],[-58,-38],[-62,-40],[-65,-46],[-68,-51],[-70,-55],[-74,-52],[-74,-45],[-72,-36],[-71,-28],[-70,-18],[-76,-14],[-81,-5],[-80,0],[-77,4]],
+ [[-10,36],[-9,43],[-2,44],[-5,48],[2,51],[8,54],[10,57],[5,62],[15,69],[28,71],[40,67],[60,70],[80,73],[100,77],[140,72],[170,70],[180,66],[180,62],[160,60],[156,51],[142,52],[140,46],[132,43],[129,35],[122,40],[122,30],[120,23],[110,20],[108,12],[106,9],[100,13],[103,1],[98,8],[98,16],[92,21],[88,22],[80,15],[77,8],[72,20],[67,25],[57,25],[56,27],[50,30],[48,29],[52,24],[56,26],[58,22],[52,16],[44,12],[43,15],[39,22],[35,28],[32,30],[35,36],[28,37],[24,38],[20,40],[13,45],[8,44],[3,43],[-5,36]],
+ [[-17,21],[-17,14],[-12,7],[-8,4],[5,5],[9,4],[10,-2],[13,-12],[12,-18],[15,-27],[18,-34],[26,-34],[33,-26],[35,-20],[40,-15],[40,-5],[44,1],[51,11],[43,12],[37,18],[34,27],[32,31],[20,32],[10,37],[0,36],[-6,35],[-10,30],[-16,25]],
+ [[44,-25],[47,-25],[50,-15],[49,-12],[44,-17]],
+ [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-25],[151,-34],[146,-39],[138,-35],[131,-31],[117,-35],[115,-30]],
+ [[95,5],[106,-6],[102,-4],[98,2]],[[109,1],[117,7],[119,1],[116,-4],[110,-3]],[[120,18],[122,18],[124,12],[126,7],[122,7],[121,12]],
+ [[131,-1],[141,-3],[150,-10],[142,-9],[135,-4]],[[130,31],[141,36],[142,43],[140,41],[133,34]],[[-5,50],[1,51],[-2,56],[-4,58],[-6,56],[-3,53]]
+];
+function drawLand(svg){const g=svg.querySelector(".landlayer");g.innerHTML="";LANDS.forEach(l=>g.append(svgEl("polygon",{class:"wland",points:l.map(p=>P(...p).map(v=>v.toFixed(1)).join(",")).join(" ")})))}
+const TLON=-46.6;
+function drawLine(svg){const EX=svg.querySelector(".extra");EX.innerHTML="";const [x]=P(TLON,0);
+  EX.append(svgEl("line",{class:"tline",x1:x,y1:0,x2:x,y2:467}));
+  const t=svgEl("text",{class:"tlabel",x:x+8,y:22});t.textContent="Linie von Tordesillas (1494)";EX.append(t);
+  const a=svgEl("text",{class:"side es",x:x-18,y:440,"text-anchor":"end"});a.textContent="◀ SPANIEN";const b=svgEl("text",{class:"side pt",x:x+18,y:440});b.textContent="PORTUGAL ▶";EX.append(a,b)}
+
+/* ---------- Linie ---------- */
+const TQ=[
+ {q:"a) Welches Land bekam die Gebiete westlich der Linie?",ok:"Spanien",o:["Spanien","Portugal","England"],fb:"Richtig! Fast ganz Amerika lag westlich der Linie – deshalb wurde dort später Spanisch gesprochen."},
+ {q:"b) Ein Teil Südamerikas ragt über die Linie hinaus nach Osten. Wem gehörte er?",ok:"Portugal",o:["Spanien","Portugal","niemandem"],fb:"Genau! Dieses Gebiet ist das heutige Brasilien. Deshalb spricht man dort bis heute Portugiesisch."},
+ {q:"c) Wo lag Afrika – und damit der Seeweg nach Indien?",ok:"auf der portugiesischen Seite",o:["auf der spanischen Seite","auf der portugiesischen Seite","genau auf der Linie"],fb:"Richtig! Portugal sicherte sich so den Seeweg um Afrika, den Vasco da Gama gefunden hatte."},
+ {q:"d) Wer wurde gefragt, ob er mit der Aufteilung einverstanden ist?",ok:"niemand von den Menschen, die dort lebten",o:["die Menschen in Amerika und Afrika","niemand von den Menschen, die dort lebten","alle Könige Europas"],fb:"Leider wahr. Die Menschen in Amerika, Afrika und Asien wussten nicht einmal, dass ihr Land „verteilt“ wurde. Der Papst unterstützte die Aufteilung."}
+];
+let tLeft=0;
+function initT(){const svg=$("#t-map");drawLand(svg);drawLine(svg);const L=$("#t-list");L.innerHTML="";tLeft=TQ.length;$("#t-status").textContent="";$("#t-status").className="status";markDone("linie",false);
+  TQ.forEach(k=>{const box=el("div","kq");box.append(el("h3",null,k.q));const o=el("div","opts"),fb=el("p","fb");fb.setAttribute("aria-live","polite");let solved=false;
+    k.o.forEach(w=>{const b=el("button","card",w);b.onclick=()=>{if(solved)return;
+      if(w===k.ok){solved=true;b.classList.add("right");fb.textContent=k.fb;fb.className="fb good";tLeft--;
+        if(tLeft===0){$("#t-status").textContent="Geschafft! Merke: Kolonien sind Gebiete außerhalb Europas, die von einem europäischen Land beherrscht und ausgebeutet wurden.";$("#t-status").className="status good";markDone("linie")}}
+      else{flash(b);fb.textContent="Nicht ganz. Schau dir die Karte noch einmal genau an.";fb.className="fb bad"}};o.append(b)});
+    box.append(o,fb);L.append(box)})}
+
+/* ---------- Kolonien ---------- */
+const COL=[
+ {n:"Mexiko",p:[-101,22],c:"es",i:"Das Aztekenreich wurde zu „Neuspanien“."},
+ {n:"Peru",p:[-75,-10],c:"es",i:"Das ehemalige Inkareich – Silber aus Peru machte Spanien reich."},
+ {n:"Kuba und die Karibik",p:[-78,21.5],c:"es",i:"Hier landete Kolumbus – die ersten spanischen Kolonien."},
+ {n:"Brasilien",p:[-41,-10],c:"pt",i:"Brasilien lag östlich der Linie. Hier entstanden riesige Zuckerrohr-Plantagen."},
+ {n:"Angola (Afrika)",p:[17,-12],c:"pt",i:"Von hier verschleppten portugiesische Händler viele Menschen als Sklaven nach Brasilien."},
+ {n:"Goa (Indien)",p:[74,15.5],c:"pt",i:"Goa war das Zentrum des portugiesischen Gewürzhandels in Asien."},
+ {n:"Macau (China)",p:[113.5,22.2],c:"pt",i:"Ein kleiner Handelshafen an der Küste Chinas – portugiesisch bis 1999!"},
+ {n:"Philippinen",p:[122,12],c:"es",i:"Die Ausnahme! Die Philippinen liegen auf der „portugiesischen“ Seite der Erde, wurden aber spanisch. Sie wurden von Amerika aus über den Pazifik erreicht – denk an Magellan! Benannt sind sie nach dem spanischen König Philipp II."}
+];
+let cLeft=0,cMiss=0;
+function initC(){const svg=$("#c-map");drawLand(svg);drawLine(svg);const M=$("#c-marks"),L=$("#c-list");M.innerHTML="";L.innerHTML="";$("#c-sum").innerHTML="";cLeft=COL.length;cMiss=0;$("#c-status").textContent="";$("#c-status").className="status";markDone("kolonien",false);
+  COL.forEach((c,i)=>{const [x,y]=P(...c.p);const g=svgEl("g",{class:"cmark"});g.append(svgEl("circle",{cx:x,cy:y,r:13}));const t=svgEl("text",{x:x,y:y});t.textContent=i+1;g.append(t);M.append(g);c._g=g;
+    const it=el("div","citem");const nm=el("span","nm");nm.append(el("b",null,(i+1)+"."),document.createTextNode(c.n));it.append(nm);const fb=el("p","x");
+    [["es","Spanien"],["pt","Portugal"]].forEach(([k,lab])=>{const b=el("button",null,lab);b.onclick=()=>{if(it.classList.contains("done"))return;
+      if(k===c.c){it.classList.add("done",k);it.querySelectorAll("button").forEach(x=>x.remove());it.append(el("span","res",lab));g.classList.add(k);
+        const info=el("p","cfb");info.style.margin=".3rem 0 0";info.style.fontSize="1rem";info.textContent=c.i;it.append(info);cLeft--;
+        if(cLeft===0)finishC();else $("#c-status").textContent=`Richtig! Noch ${cLeft} Gebiete.`}
+      else{cMiss++;flash(it);$("#c-status").textContent=i===7?"Achtung, das ist die Ausnahme! Denk an Magellan: Von welchem Land kam seine Flotte?":"Nicht ganz – auf welcher Seite der Linie liegt das Gebiet?"}};it.append(b)});
+    L.append(it)})}
+function finishC(){$("#c-status").textContent=`Geschafft (Fehlversuche: ${cMiss})! Übertrage jetzt je zwei Beispiele in die Tabelle von Aufgabe 1.`;$("#c-status").className="status good";
+  const t=el("table","sumtab");const tr=el("tr");tr.append(el("th",null,"Spanien"),el("th",null,"Portugal"));t.append(tr);
+  const es=COL.filter(c=>c.c==="es").map(c=>c.n),pt=COL.filter(c=>c.c==="pt").map(c=>c.n);
+  for(let i=0;i<4;i++){const r=el("tr");r.append(el("td",null,es[i]||""),el("td",null,pt[i]||""));t.append(r)}$("#c-sum").append(t);markDone("kolonien")}
+
+/* ---------- Austausch ---------- */
+const AX=[["🥔 Kartoffel","ae"],["🍅 Tomate","ae"],["🌽 Mais","ae"],["🍫 Kakao","ae"],["🫑 Paprika","ae"],["🦃 Truthahn","ae"],["🥜 Erdnuss","ae"],["🍍 Ananas","ae"],["🍂 Tabak","ae"],
+ ["🐎 Pferd","ea"],["🐄 Rind","ea"],["🐖 Schwein","ea"],["🌾 Weizen","ea"],["🎋 Zuckerrohr","ea"],["☕ Kaffee","ea"],["🦠 Pocken","ea"]];
+const AXI={"🎋 Zuckerrohr":"Zuckerrohr stammt eigentlich aus Asien – die Europäer pflanzten es in Amerika auf riesigen Plantagen an.","☕ Kaffee":"Kaffee stammt aus Afrika. Die Europäer brachten ihn nach Amerika – heute kommt der meiste Kaffee aus Brasilien!","🦠 Pocken":"Leider kamen auch Krankheiten mit. Sie töteten Millionen Menschen in Amerika.","🦃 Truthahn":"Der Truthahn heißt in Österreich auch Indian – weil man dachte, er käme aus Indien!","🐎 Pferd":"Pferde gab es in Amerika vorher nicht – später wurden sie für viele indigene Völker sehr wichtig."};
+let aSel=null,aLeft=0,aMiss=0;
+function initA(){const Pl=$("#a-pool");Pl.innerHTML="";["ae","ea"].forEach(k=>$("#a-"+k).querySelectorAll(".placed").forEach(x=>x.remove()));aSel=null;aLeft=AX.length;aMiss=0;$("#a-status").textContent="";$("#a-status").className="status";markDone("austausch",false);
+  shuffle(AX).forEach(v=>{const b=el("button","card",v[0]);b._k=v[1];b.onclick=()=>{Pl.querySelectorAll(".card").forEach(c=>c.classList.remove("sel"));b.classList.add("sel");aSel=b};Pl.append(b)})}
+["ae","ea"].forEach(k=>{$("#a-"+k).addEventListener("click",()=>{const c=$("#a-"+k);if(!aSel){$("#a-status").textContent="Tippe zuerst eine Karte an.";return}
+  if(aSel._k===k){const nm=aSel.textContent;c.append(el("span","placed",nm));aSel.remove();aSel=null;aLeft--;
+    if(aLeft===0){$("#a-status").textContent=`Geschafft (Fehlversuche: ${aMiss})! Diesen weltweiten Austausch nennt man die erste Globalisierung.`;$("#a-status").className="status good";markDone("austausch")}
+    else $("#a-status").textContent=(AXI[nm]?"Richtig! "+AXI[nm]:"Richtig!")+` Noch ${aLeft}.`}
+  else{aMiss++;flash(c);$("#a-status").textContent="Andersherum! Überlege: Gab es das vor 1492 schon in Europa?"}})});
+
+/* ---------- Teller ---------- */
+const DISH=[["🍟","Pommes frites",false,"Ohne Kartoffel keine Pommes!"],["🍕","Pizza mit Tomatensauce",false,"Die Tomate kommt aus Amerika."],["🍫","Schokolade",false,"Schokolade wird aus Kakao gemacht – aus Amerika."],["🍿","Popcorn",false,"Popcorn ist aufgepoppter Mais aus Amerika."],
+ ["🍲","Gulasch",false,"Das typische Gulasch-Gewürz ist Paprika – aus Amerika."],["🥗","Erdäpfelsalat",false,"Erdäpfel = Kartoffeln, aus Amerika."],["🥧","Apfelstrudel",true,"Äpfel, Mehl, Butter, Zimt – alles schon vorher in Europa bekannt."],["🥨","Brezel",true,"Brezeln aus Weizenmehl gab es in Europa schon im Mittelalter."],
+ ["🧀","Kaspressknödel",true,"Brot, Käse, Eier – ganz ohne Amerika!"],["🍅","Ketchup",false,"Ketchup ist aus Tomaten gemacht."],["🍳","Kaiserschmarrn",true,"Mehl, Eier, Milch – geht auch ohne Amerika."],["🥜","Erdnussflips",false,"Die Erdnuss kommt aus Südamerika."]];
+let dLeft=0,dRight=0;
+function initDish(){const G=$("#d-grid");G.innerHTML="";dLeft=DISH.length;dRight=0;$("#d-status").textContent="";$("#d-status").className="status";markDone("teller",false);
+  shuffle(DISH).forEach(d=>{const c=el("div","d");c.append(el("span","e",d[0]),el("span","n",d[1]));const bt=el("div","bt");
+    [["geht",true],["geht nicht",false]].forEach(([lab,v])=>{const b=el("button",null,lab);b.onclick=()=>{bt.remove();const ok=v===d[2];if(ok)dRight++;
+      c.classList.add(d[2]?"ok":"no");c.append(el("p","x",(ok?"✔ Richtig! ":"✘ Leider falsch. ")+(d[2]?"Geht auch ohne Amerika. ":"Gäbe es nicht! ")+d[3]));dLeft--;
+      if(dLeft===0){$("#d-status").textContent=`Du hattest ${dRight} von ${DISH.length} richtig. Jetzt du: Schreib bei Aufgabe 2 drei Lebensmittel auf, die du gerne isst und die es ohne Amerika nicht gäbe.`;$("#d-status").className="status good";markDone("teller")}};bt.append(b)});
+    c.append(bt);G.append(c)})}
+/* ---------- Quiz ---------- */
+const QS=[
+ ["In welchem Jahr wurde der Vertrag von Tordesillas geschlossen?","1494",["1453","1492","1522"]],
+ ["Welche beiden Länder teilten die Welt untereinander auf?","Spanien und Portugal",["England und Frankreich","Spanien und England","Portugal und Italien"]],
+ ["Wer wurde bei dieser Aufteilung gefragt?","niemand von den Menschen, die dort lebten",["die Azteken und Inka","alle Länder Europas","die Menschen in Afrika"]],
+ ["Was ist eine Kolonie?","ein Gebiet außerhalb Europas, das ein europäisches Land beherrscht",["eine Stadt in Spanien","ein Handelsschiff","ein Vertrag zwischen zwei Königen"]],
+ ["Warum spricht man in Brasilien heute Portugiesisch?","Brasilien lag östlich der Linie und wurde portugiesische Kolonie.",["Kolumbus war Portugiese.","Die Inka sprachen Portugiesisch.","Portugal kaufte Brasilien von Spanien."]],
+ ["Welche Länder bauten später auch Kolonien auf?","England, Frankreich und die Niederlande",["Österreich, Ungarn und Böhmen","Russland, China und Japan","Italien, Griechenland und die Schweiz"]],
+ ["Was bedeutet „Globalisierung“?","weltweiter Austausch von Waren und Informationen",["eine Reise um den Globus","die Herstellung von Globen","Krieg zwischen allen Ländern"]],
+ ["Welches Lebensmittel kam aus Amerika nach Europa?","die Kartoffel",["der Weizen","der Apfel","die Karotte"]],
+ ["Welches Tier brachten die Europäer nach Amerika?","das Pferd",["der Truthahn","das Lama","das Meerschweinchen"]]
+];
+const PRIZES=["100 €","200 €","300 €","500 €","1.000 €","2.000 €","4.000 €","8.000 €","16.000 €"];
+let qi=0,qRight=0,jokerUsed=false,results=[];
+function initQ(){qi=0;qRight=0;jokerUsed=false;results=[];$("#q-joker").disabled=false;markDone("quiz",false);
+  const L=$("#q-ladder");L.innerHTML="";PRIZES.forEach((p,i)=>{const li=el("li");li.append(el("span",null,i+1),el("span",null,p));L.append(li)});renderQ()}
+function renderQ(){const L=$("#q-ladder").children;[...L].forEach((li,i)=>{li.className=results[i]===true?"ok":results[i]===false?"miss":i===qi?"cur":""});
+  $("#q-next").hidden=true;$("#q-fb").textContent="";$("#q-fb").className="qfb";
+  const A=$("#q-answers");A.innerHTML="";
+  if(qi>=QS.length){$("#q-text").textContent=`Fertig! Du hast ${qRight} von ${QS.length} Fragen richtig beantwortet.`;
+    $("#q-fb").textContent=qRight===QS.length?"Alle richtig – Millionär der Herzen!":qRight>=6?"Sehr gut! Schau dir die durchgestrichenen Fragen noch einmal auf dem Arbeitsblatt an.":"Lies M1 noch einmal und versuch es dann erneut.";
+    $("#q-fb").className="qfb good";$("#q-joker").disabled=true;markDone("quiz");return}
+  const q=QS[qi];$("#q-text").textContent=`${qi+1}. ${q[0]}`;
+  shuffle([q[1],...q[2]]).forEach((a,i)=>{const b=el("button");b.append(el("span","l","ABCD"[i]+":"),document.createTextNode(a));b._ok=a===q[1];
+    b.onclick=()=>{[...A.children].forEach(x=>{x.disabled=true;if(x._ok)x.classList.add("right")});
+      if(b._ok){qRight++;results[qi]=true;$("#q-fb").textContent="Richtig!";$("#q-fb").className="qfb good"}
+      else{b.classList.add("bad");results[qi]=false;$("#q-fb").textContent=`Leider falsch. Richtig ist: ${q[1]}`;$("#q-fb").className="qfb bad"}
+      $("#q-joker").disabled=true;const n=$("#q-next");n.hidden=false;n.textContent=qi===QS.length-1?"Ergebnis anzeigen":"Nächste Frage";n.focus()};A.append(b)});
+  $("#q-joker").disabled=jokerUsed}
+$("#q-next").onclick=()=>{qi++;renderQ()};
+$("#q-joker").onclick=()=>{if(jokerUsed)return;jokerUsed=true;$("#q-joker").disabled=true;shuffle([...$("#q-answers").children].filter(b=>!b._ok)).slice(0,2).forEach(b=>{b.classList.add("gone");b.disabled=true})};
+
+document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>({linie:initT,kolonien:initC,austausch:initA,teller:initDish,quiz:initQ})[b.dataset.reset]()));
+initT();initC();initA();initDish();initQ();show(location.hash.slice(1));
+</script>
+</body>
+</html>
