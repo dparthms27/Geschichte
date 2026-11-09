@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Potenzen-Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caladea:wght@400;700&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#EEF5F4;--surface:#FFFFFF;--ink:#18302F;--muted:#4F6766;--teal:#1F6F78;--teal-soft:#D5E8E8;--orange:#C9661A;--orange-soft:#FBE3CC;--line:#C5D9D8;--on-teal:#FFFFFF;
+--sea:#CFE6E8;--land:#E9DCC0;--coast:#8A7A55;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C1D;--surface:#172A2B;--ink:#E6F0EF;--muted:#A3BAB8;--teal:#5FB7BF;--teal-soft:#1E3F42;--orange:#F0A25A;--orange-soft:#3E2A17;--line:#2C4547;--on-teal:#0F1C1D;--sea:#16373B;--land:#4A4232;--coast:#8F8264;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:1.15rem;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+header h1{font-family:Caladea,Cambria,Georgia,serif;font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.1;margin:.2rem 0 .3rem;color:var(--teal)}
+header p{margin:0;color:var(--muted)}
+.routeline{display:block;width:100%;height:34px;margin:.8rem 0 1.2rem}
+.routeline path{fill:none;stroke:var(--orange);stroke-width:2.5;stroke-dasharray:2 8;stroke-linecap:round}
+.routeline circle{fill:var(--teal)}
+nav{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem}
+nav button{font:inherit;font-size:1rem;padding:.55rem .9rem;border-radius:999px;border:2px solid var(--teal);background:var(--surface);color:var(--teal);cursor:pointer}
+nav button[aria-selected="true"]{background:var(--teal);color:var(--on-teal)}
+nav button .ok{margin-left:.35rem}
+button:focus-visible,.marker:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.2rem 1.5rem}
+section[hidden]{display:none}
+h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
+.task{margin:0 0 1rem;color:var(--muted)}
+.lern{color:var(--teal);font-weight:700}
+.status{margin-top:1rem;min-height:1.5em;font-weight:700}
+.status.good{color:var(--teal)}
+.tools{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{font:inherit;font-size:1rem;padding:.6rem 1.1rem;border-radius:10px;border:2px solid var(--teal);cursor:pointer;background:var(--teal);color:var(--on-teal)}
+.btn.ghost{background:transparent;color:var(--teal)}
+.btn:disabled{opacity:.4;cursor:default}
+.card{font:inherit;text-align:left;padding:.6rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.card.sel{border-color:var(--orange);background:var(--orange-soft)}
+.wrong{animation:shake .35s}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion: reduce){.wrong{animation:none}}
+.pool{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.1rem;min-height:2.8rem}
+/* Zeitleiste */
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;padding-top:2.2rem}
+.timeline::before{content:"";position:absolute;left:0;right:0;top:1rem;height:4px;background:var(--teal);border-radius:2px}
+.slot{position:relative;font:inherit;text-align:left;border:2px dashed var(--teal);border-radius:12px;background:transparent;color:var(--ink);padding:.6rem;min-height:120px;cursor:pointer;display:flex;flex-direction:column;gap:.35rem}
+.slot::before{content:"";position:absolute;top:-1.55rem;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--orange);border:3px solid var(--surface)}
+.slot strong{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;color:var(--teal)}
+.slot .placed{font-size:1rem;background:var(--teal-soft);border-radius:8px;padding:.35rem .5rem}
+.slot.filled{border-style:solid;cursor:default}
+.slot.wrong{border-color:var(--orange)}
+/* Karte */
+.mapwrap{background:var(--sea);border-radius:12px;overflow:hidden}
+.mapwrap svg{display:block;width:100%;height:auto}
+.land{fill:var(--land);stroke:var(--coast);stroke-width:2}
+.route{fill:none;stroke:var(--orange);stroke-width:5;stroke-dasharray:12 9;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.marker{cursor:pointer}
+.marker circle{fill:var(--surface);stroke:var(--teal);stroke-width:4}
+.marker .n{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:26px;fill:var(--teal);text-anchor:middle;dominant-baseline:central}
+.marker.done circle{fill:var(--teal)}
+.marker.done .n{fill:var(--on-teal)}
+.marker.wrong circle{stroke:var(--orange);fill:var(--orange-soft)}
+.maplabel{font-family:Caladea,Cambria,Georgia,serif;font-weight:700;font-size:28px;fill:var(--ink);paint-order:stroke;stroke:var(--sea);stroke-width:7px}
+.oldroute{fill:none;stroke:var(--teal);stroke-width:5;stroke-dasharray:2 11;stroke-linecap:round;stroke-linejoin:round}
+.legbox{fill:var(--surface);opacity:.92}
+.legtext{font-family:Carlito,Calibri,Arial,sans-serif;fill:var(--ink)}
+.kmap{margin-bottom:1.2rem}
+.kmap .dot{fill:var(--teal);stroke:var(--surface);stroke-width:3}
+.oceanlabel{font-family:Caladea,Cambria,Georgia,serif;font-style:italic;font-size:28px;fill:var(--teal)}
+.kq{border-top:1px solid var(--line);padding:1rem 0 .4rem}
+.kq h3{font-family:Caladea,Cambria,Georgia,serif;font-size:1.3rem;font-weight:700;margin:0 0 .6rem}
+.kq .opts{display:flex;flex-wrap:wrap;gap:.5rem}
+.card.right{border-color:var(--teal);background:var(--teal);color:var(--on-teal);cursor:default}
+.kq .fb{min-height:1.4em;margin:.5rem 0 0;font-weight:700}
+.kq .fb.good{color:var(--teal)}.kq .fb.bad{color:var(--orange)}
+.ltext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;line-height:2.2;margin:0}
+.gap{font:inherit;font-size:1.2rem;display:inline-block;min-width:7em;padding:0 .5rem;margin:0 .15rem;border:none;border-bottom:3px dashed var(--teal);border-radius:6px 6px 0 0;background:var(--teal-soft);color:var(--muted);cursor:pointer;line-height:1.6}
+.gap.filled{border-bottom-style:solid;background:transparent;color:var(--teal);font-weight:700;cursor:default;min-width:0}
+.gap:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.paper{margin-top:1rem;padding:.8rem 1rem;border-left:5px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0}
+/* Quiz */
+.quizgrid{display:grid;grid-template-columns:1fr 180px;gap:1.2rem}
+.qtext{font-family:Caladea,Cambria,Georgia,serif;font-size:1.5rem;line-height:1.25;margin:.2rem 0 1rem}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.answers button{font:inherit;text-align:left;padding:.75rem .9rem;border-radius:12px;border:2px solid var(--teal);background:var(--surface);color:var(--ink);cursor:pointer}
+.answers button .l{font-weight:700;color:var(--orange);margin-right:.4rem}
+.answers button.right{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.answers button.right .l{color:var(--on-teal)}
+.answers button.bad{background:var(--orange-soft);border-color:var(--orange)}
+.answers button.gone{visibility:hidden}
+.answers button:disabled{cursor:default}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:.25rem;font-size:1rem}
+.ladder li{display:flex;justify-content:space-between;padding:.25rem .6rem;border-radius:8px;color:var(--muted)}
+.ladder li.cur{background:var(--orange-soft);color:var(--ink);font-weight:700}
+.ladder li.ok{color:var(--teal);font-weight:700}
+.ladder li.miss{text-decoration:line-through}
+.qfb{min-height:1.5em;margin:.8rem 0 0;font-weight:700}
+.qfb.good{color:var(--teal)}.qfb.bad{color:var(--orange)}
+@media (max-width:680px){.timeline{grid-template-columns:1fr 1fr;padding-top:0}.timeline::before,.slot::before{display:none}.quizgrid{grid-template-columns:1fr}.ladder{flex-direction:row-reverse;flex-wrap:wrap}.answers{grid-template-columns:1fr}}
+.stats{display:flex;gap:.5rem;flex-wrap:wrap;margin:.2rem 0 1rem}
+.stats .chip{font-size:1rem}
+.chip.fire{background:var(--orange-soft);color:var(--orange)}
+.ex{background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;margin-bottom:.8rem}
+.ex .lead{margin:0 0 .6rem;color:var(--muted);font-weight:700}
+.ex .fact{font-size:1.05rem;color:var(--ink);margin:0 0 .6rem}
+.mx{font-family:Caladea,Cambria,Georgia,serif;font-size:1.9rem;line-height:2.4;word-spacing:.08em}
+.mx sup{font-size:.62em;position:relative;top:-.15em}
+.mx input{font:inherit;font-family:Carlito,Calibri,Arial,sans-serif;font-size:1.4rem;width:4.2em;padding:.15rem .35rem;border:2px solid var(--teal);border-radius:8px;background:var(--surface);color:var(--ink);text-align:center}
+.mx input.w{width:9em}.mx input.s{width:2.6em}
+.mx input.sup{width:2.4em;font-size:1.05rem;padding:.05rem .2rem;vertical-align:super;position:relative;top:-.45em}
+.mx input.ok{border-color:var(--teal);background:var(--teal-soft)}
+.mx input.bad{border-color:var(--orange);background:var(--orange-soft)}
+.choice{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem}
+.choice .card.on{background:var(--teal);color:var(--on-teal);border-color:var(--teal)}
+.expl{margin:.7rem 0 0;padding:.7rem .9rem;border-radius:10px;font-size:1.08rem}
+.expl.good{background:var(--teal-soft)}.expl.bad{background:var(--orange-soft)}
+.expl b.good{color:var(--teal)}.expl b.bad{color:var(--orange)}
+.expl .mxs{font-family:Caladea,Cambria,Georgia,serif;font-size:1.25rem}
+.badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem;min-height:2rem}
+.badge{background:var(--teal);color:var(--on-teal);border-radius:999px;padding:.25rem .7rem;font-weight:700;font-size:.95rem;animation:pop .4s}
+@keyframes pop{0%{transform:scale(.3)}80%{transform:scale(1.15)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.badge{animation:none}}
+.modes{display:flex;gap:.4rem;flex-wrap:wrap;margin:-.2rem 0 .9rem}
+.modes button{font:inherit;font-size:.95rem;padding:.35rem .8rem;border-radius:999px;border:2px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.modes button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--teal);font-weight:700}
+.blitz-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:.8rem}
+.timer{font-family:Caladea,Cambria,Georgia,serif;font-size:2.4rem;font-weight:700;color:var(--teal)}
+.timer.low{color:var(--orange)}
+.big{font-family:Caladea,Cambria,Georgia,serif;font-size:2rem;color:var(--teal);margin:.3rem 0}
+.rule{margin:0 0 .9rem;padding:.7rem .9rem;border-left:5px solid var(--teal);background:var(--teal-soft);border-radius:0 10px 10px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p>Mathematik, 3. Klasse</p>
+  <h1>Potenzen-Training</h1>
+  <p>Jede Aufgabe wird neu gewürfelt – du kannst also unendlich lange üben. Sammle Serien und Abzeichen!</p>
+  <svg class="routeline" viewBox="0 0 800 34" preserveAspectRatio="none" aria-hidden="true"><path d="M10 24 C 150 4, 260 32, 400 16 S 650 6, 790 20"/><circle cx="10" cy="24" r="5"/><circle cx="790" cy="20" r="5"/></svg>
+</header>
+<nav role="tablist" aria-label="Übungen">
+  <button role="tab" data-tab="anschreiben">Potenzen anschreiben</button>
+  <button role="tab" data-tab="zehner">Zehnerpotenzen</button>
+  <button role="tab" data-tab="gleitkomma">Gleitkommadarstellung</button>
+  <button role="tab" data-tab="regeln">Rechenregeln</button>
+  <button role="tab" data-tab="blitz">⚡ Blitzrunde</button>
+</nav>
+<section id="anschreiben" role="tabpanel"></section>
+<section id="zehner" role="tabpanel" hidden></section>
+<section id="gleitkomma" role="tabpanel" hidden></section>
+<section id="regeln" role="tabpanel" hidden></section>
+<section id="blitz" role="tabpanel" hidden>
+  <h2>⚡ Blitzrunde</h2>
+  <p class="task">60 Sekunden, gemischte Aufgaben aus allen Bereichen. Jede richtige Antwort bringt Punkte – je länger deine Serie, desto mehr! Mit der Eingabetaste geht's am schnellsten.</p>
+  <div id="bz"></div>
+</section>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
+const TABS=["anschreiben","zehner","gleitkomma","regeln","blitz"];
+function show(k){if(!TABS.includes(k))k="anschreiben";TABS.forEach(t=>$("#"+t).hidden=t!==k);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k));if(k!=="blitz")stopBlitz()}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+
+/* ---------- Hilfen ---------- */
+function fmt(n){return BigInt(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")}
+function dec(x){return String(+x.toFixed(6)).replace(".",",")}
+const P=(b,e)=>e===1?`${b}`:`${b}<sup>${e}</sup>`;
+const VARS=["x","a","y","b","n","z"];
+function base(){return Math.random()<.3?pick(VARS):R(2,9)}
+function normInt(s){return s.replace(/[\s.\u00a0\u202f']/g,"")}
+function okField(f,v){v=v.trim();if(!v)return false;
+  if(f.kind==="int")return normInt(v)===String(f.ans);
+  if(f.kind==="dec"){const x=parseFloat(v.replace(/\s/g,"").replace(",","."));return isFinite(x)&&Math.abs(x-f.ans)<1e-9}
+  return v.toLowerCase()===String(f.ans).toLowerCase()}
+function bf(b){return {ans:b,kind:typeof b==="number"?"int":"var"}}
+
+/* ---------- Generatoren ---------- */
+const GEN={
+anschreiben:[
+ ()=>{const b=base(),e=R(2,6);return {lead:"Schreib als Potenz.",html:`${Array(e).fill(b).join(" · ")} = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"sup"}],expl:`${e} gleiche Faktoren ${b} ergeben ${P(b,e)}. Die <b>Basis</b> ist ${b}, der <b>Exponent</b> ${e} sagt, wie oft multipliziert wird.`}},
+ ()=>{const c=pick([[2,R(2,10)],[3,R(2,6)],[4,R(2,5)],[5,R(2,4)],[6,R(2,3)],[7,R(2,3)],[8,R(2,3)],[9,R(2,3)],[10,R(2,4)],[11,2],[12,2],[15,2],[20,R(2,3)]]);const [b,e]=c,v=b**e;
+   return {lead:"Berechne den Wert der Potenz.",html:`${P(b,e)} = {0}`,fields:[{ans:v,kind:"int",cls:"w"}],expl:`${P(b,e)} = ${Array(e).fill(b).join(" · ")} = ${fmt(v)}`}},
+ ()=>{const b=base(),e=R(2,9);return {lead:"Basis und Exponent",html:`${P(b,e)}: Basis = {0}, Exponent = {1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"s"}],expl:`Die Basis ist die untere, große Zahl (${b}). Der Exponent ist die kleine, hochgestellte Zahl (${e}).`}},
+ ()=>{const c=pick([[2,R(3,10)],[3,R(2,6)],[5,R(2,5)],[4,R(2,5)],[10,R(2,7)],[6,3],[7,3],[9,3]]);const [b,e]=c;
+   return {lead:"Welcher Exponent fehlt?",html:`${fmt(b**e)} = ${b}{0}`,fields:[{ans:e,kind:"int",cls:"sup"}],expl:`${fmt(b**e)} = ${Array(e).fill(b).join(" · ")} → ${P(b,e)}`}},
+ ()=>{if(Math.random()<.5){const b=R(2,99);return {lead:"Steht kein Exponent da …",html:`${b} = ${b}{0}`,fields:[{ans:1,kind:"int",cls:"sup"}],expl:`Steht bei einer Zahl kein Exponent, dann hat sie <b>immer den Exponenten 1</b>: ${b} = ${b}<sup>1</sup>.`}}
+   const e=R(3,50);return {lead:"Berechne.",html:`1<sup>${e}</sup> = {0}`,fields:[{ans:1,kind:"int",cls:"s"}],expl:`1 · 1 · 1 · … bleibt immer 1 – egal wie groß der Exponent ist.`}}
+],
+zehner:[
+ ()=>{const n=R(1,9);return {lead:"Schreib als Zahl.",html:`10<sup>${n}</sup> = {0}`,fields:[{ans:String(10n**BigInt(n)),kind:"int",cls:"w"}],expl:`10<sup>${n}</sup> ist eine 1 mit <b>${n} Nullen</b>: ${fmt(10n**BigInt(n))}`}},
+ ()=>{const n=R(2,10);return {lead:"Schreib als Zehnerpotenz.",html:`${fmt(10n**BigInt(n))} = 10{0}`,fields:[{ans:n,kind:"int",cls:"sup"}],expl:`Zähl die Nullen: ${n} Nullen → 10<sup>${n}</sup>`}},
+ ()=>{const w=pick([["Tausend",3],["Zehntausend",4],["Hunderttausend",5],["Eine Million",6],["Zehn Millionen",7],["Hundert Millionen",8],["Eine Milliarde",9],["Eine Billion",12]]);
+   return {lead:"Zahlwort als Zehnerpotenz",html:`${w[0]} = 10{0}`,fields:[{ans:w[1],kind:"int",cls:"sup"}],expl:`${w[0]} = ${fmt(10n**BigInt(w[1]))} – das sind ${w[1]} Nullen, also 10<sup>${w[1]}</sup>.`+(w[1]===12?" Achtung: Eine Billion hat 12 Nullen (im Englischen heißt „billion“ nur Milliarde)!":"")}},
+ ()=>{const a=R(2,9),n=R(2,7),v=BigInt(a)*10n**BigInt(n);return {lead:"Schreib als Zahl.",html:`${a} · 10<sup>${n}</sup> = {0}`,fields:[{ans:String(v),kind:"int",cls:"w"}],expl:`${a} mit ${n} Nullen: ${fmt(v)}`}},
+ ()=>{const a=R(2,9),n=R(2,8),v=BigInt(a)*10n**BigInt(n);return {lead:"Zerlege in Zahl mal Zehnerpotenz.",html:`${fmt(v)} = {0} · 10{1}`,fields:[{ans:a,kind:"int",cls:"s"},{ans:n,kind:"int",cls:"sup"}],expl:`${fmt(v)} = ${a} · ${fmt(10n**BigInt(n))} = ${a} · 10<sup>${n}</sup>`}}
+],
+gleitkomma:[
+ ()=>{const g=mant();return {lead:"Schreib in Gleitkommadarstellung.",html:`${fmt(g.v)} = {0} · 10{1}`,fields:[{ans:g.a,kind:"dec",cls:"s"},{ans:g.n,kind:"int",cls:"sup"}],expl:gExpl(g)}},
+ ()=>{const g=mant();return {lead:"Schreib als ganze Zahl.",html:`${dec(g.a)} · 10<sup>${g.n}</sup> = {0}`,fields:[{ans:String(g.v),kind:"int",cls:"w"}],expl:`Das Komma wandert ${g.n} Stellen nach rechts (fehlende Stellen mit Nullen auffüllen): ${fmt(g.v)}`}},
+ ()=>{const f=pick(FACTS),g=fromVal(f[1]);return {lead:"Wissen in Zahlen",fact:f[0],html:`${fmt(f[1])} ${f[2]} = {0} · 10{1} ${f[2]}`,fields:[{ans:g.a,kind:"dec",cls:"s"},{ans:g.n,kind:"int",cls:"sup"}],expl:gExpl(g)}},
+ ()=>{const g=mant();const ok=Math.random()<.45;let shown=dec(g.a)+" · 10<sup>"+g.n+"</sup>",why;
+   if(!ok){if(Math.random()<.5){const a2=g.a*10,n2=g.n-1;shown=`${dec(a2)} · 10<sup>${n2}</sup>`;why=`Vor dem Komma müssen <b>genau eine</b> Ziffer stehen – ${dec(a2)} hat zwei. Richtig: ${dec(g.a)} · 10<sup>${g.n}</sup>`}
+     else{shown=`${dec(g.a/10)} · 10<sup>${g.n+1}</sup>`;why=`Vor dem Komma darf <b>keine 0</b> stehen. Richtig: ${dec(g.a)} · 10<sup>${g.n}</sup>`}}
+   else why=`Vor dem Komma steht genau eine Ziffer, die nicht 0 ist – passt!`;
+   return {lead:"Ist das eine richtige Gleitkommadarstellung?",html:shown,fields:[],choice:{opts:["richtig","nicht richtig"],ans:ok?"richtig":"nicht richtig"},expl:why}}
+],
+regeln:{
+ mul:()=>{const b=base();let m=R(1,9),n=R(1,9);const three=Math.random()<.2,k=R(2,5);if(Math.random()<.25)m=1;
+   const ex=three?m+n+k:m+n;return {lead:"Multiplikation: gleiche Basis",html:`${P(b,m)} · ${P(b,n)}${three?" · "+P(b,k):""} = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:ex,kind:"int",cls:"sup"}],
+   expl:`Gleiche Basis → Exponenten <b>addieren</b>: ${three?`${m} + ${n} + ${k}`:`${m} + ${n}`} = ${ex}.${m===1?" (Denk dran: "+b+" = "+b+"<sup>1</sup>!)":""} Ergebnis: ${P(b,ex)}`}},
+ div:()=>{const b=base();const n=R(1,7),m=n+R(1,8);return {lead:"Division: gleiche Basis",html:`${P(b,m)} : ${P(b,n)} = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:m-n,kind:"int",cls:"sup"}],
+   expl:`Gleiche Basis → Exponenten <b>subtrahieren</b>: ${m} − ${n} = ${m-n}. Ergebnis: ${P(b,m-n)}`}},
+ pow:()=>{const b=base(),m=R(2,6),n=R(2,5);return {lead:"Potenzieren einer Potenz",html:`(${P(b,m)})<sup>${n}</sup> = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:m*n,kind:"int",cls:"sup"}],
+   expl:`Potenz hoch Exponent → Exponenten <b>multiplizieren</b>: ${m} · ${n} = ${m*n}. Ergebnis: ${P(b,m*n)}`}}
+}};
+const FACTS=[["Die Sonne ist etwa 150 000 000 km von der Erde entfernt.",150000000,"km"],["Auf der Erde leben etwa 8 200 000 000 Menschen.",8200000000,""],["In Österreich leben etwa 9 200 000 Menschen.",9200000,""],["Licht legt in einer Sekunde etwa 300 000 km zurück – in einer Sekunde 7,5-mal um die Erde!",300000,"km"],["Der Mond ist etwa 384 000 km von der Erde entfernt.",384000,"km"],["Der Erdumfang beträgt etwa 40 000 km.",40000,"km"],["Ein menschliches Gehirn hat etwa 86 000 000 000 Nervenzellen.",86000000000,""],["Auf deinem Kopf wachsen etwa 100 000 Haare.",100000,""],["Ein Herz schlägt in 80 Jahren etwa 3 000 000 000-mal.",3000000000,""],["Der Mount Everest ist 8 849 m hoch.",8849,"m"],["Der Großglockner ist 3 798 m hoch.",3798,"m"],["Die Donau ist etwa 2 850 km lang.",2850,"km"],["In Linz leben etwa 210 000 Menschen.",210000,""],["Die Erde ist etwa 4 600 000 000 Jahre alt.",4600000000,"Jahre"],["Ein Blauwal kann etwa 150 000 kg schwer werden.",150000,"kg"],["Der Jupiter ist etwa 778 000 000 km von der Sonne entfernt.",778000000,"km"]];
+function mant(){const k=R(0,2);let digs=String(R(1,9));for(let i=0;i<k;i++)digs+=String(i===k-1?R(1,9):R(0,9));const n=R(Math.max(3,k),9);
+  const a=parseFloat(digs[0]+(k?"."+digs.slice(1):""));const v=BigInt(digs)*10n**BigInt(n-k);return {a,n,v}}
+function fromVal(v){const s=String(v).replace(/0+$/,"");const n=String(v).length-1;const a=parseFloat(s[0]+(s.length>1?"."+s.slice(1):""));return {a,n,v:BigInt(v)}}
+function gExpl(g){return `Setz das Komma so, dass <b>genau eine Ziffer (nicht 0)</b> davor steht: ${dec(g.a)}. Das Komma ist dabei ${g.n} Stellen nach links gewandert → ${dec(g.a)} · 10<sup>${g.n}</sup>`}
+
+/* ---------- Aufgabe anzeigen ---------- */
+function render(box,t,done){box.innerHTML="";const ex=el("div","ex");ex.append(el("p","lead",t.lead));if(t.fact)ex.append(el("p","fact",t.fact));
+  const mx=el("div","mx");let h=t.html;t.fields.forEach((f,i)=>{h=h.replace(`{${i}}`,`<input data-i="${i}" class="${f.cls||""}" autocomplete="off" inputmode="${f.kind==="var"?"text":"decimal"}" aria-label="Antwortfeld ${i+1}">`)});mx.innerHTML=h;ex.append(mx);
+  let chosen=null;if(t.choice){const c=el("div","choice");t.choice.opts.forEach(o=>{const b=el("button","card",o);b.onclick=()=>{if(state.checked)return;chosen=o;c.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));check()};c.append(b)});ex.append(c)}
+  const fb=el("div");ex.append(fb);box.append(ex);const inputs=[...mx.querySelectorAll("input")];const state={checked:false};
+  function check(){if(state.checked)return;if(t.choice&&!chosen)return;if(inputs.some(i=>!i.value.trim())){(inputs.find(i=>!i.value.trim())).focus();return}
+    state.checked=true;let ok=true;inputs.forEach(i=>{const g=okField(t.fields[+i.dataset.i],i.value);i.classList.add(g?"ok":"bad");i.readOnly=true;if(!g)ok=false});if(t.choice&&chosen!==t.choice.ans)ok=false;
+    const d=el("div","expl "+(ok?"good":"bad"));d.innerHTML=`<b class="${ok?"good":"bad"}">${ok?pick(["Richtig!","Super!","Stark!","Genau!","Perfekt!"]):"Leider nicht."}</b> `+t.expl;fb.append(d);done(ok)}
+  inputs.forEach((inp,i)=>inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();if(i<inputs.length-1&&!inputs[i+1].value)inputs[i+1].focus();else check()}}));
+  if(inputs[0])setTimeout(()=>inputs[0].focus({preventScroll:true}),50);return {check,state}}
+
+/* ---------- Übungsbereiche ---------- */
+const INFO={anschreiben:["Potenzen anschreiben",""],zehner:["Zehnerpotenzen","<b>Merke:</b> 10<sup>n</sup> ist eine 1 mit n Nullen. 10<sup>3</sup> = 1 000 (Tausend), 10<sup>6</sup> = 1 000 000 (Million), 10<sup>9</sup> = Milliarde."],
+ gleitkomma:["Gleitkommadarstellung","<b>Merke:</b> Große Zahlen schreibt man kurz als <i>Zahl · Zehnerpotenz</i>. Vor dem Komma steht genau <b>eine Ziffer, die nicht 0 ist</b>. Beispiel: 4 500 000 = 4,5 · 10<sup>6</sup>. Dezimalzahlen mit Komma eingeben, z. B. 4,5."],
+ regeln:["Rechenregeln","<b>Multiplikation:</b> Potenzen mit gleicher Basis werden multipliziert, indem du ihre Exponenten addierst.<br><b>Division:</b> Potenzen mit gleicher Basis werden dividiert, indem du ihre Exponenten subtrahierst.<br><b>Potenzieren:</b> Potenzen werden potenziert, indem du die Exponenten multiplizierst."]};
+const BADGES=[[5,"🥉 5 richtig"],[10,"🥈 10 richtig"],[25,"🥇 25 richtig"],[50,"🏆 50 richtig"],[100,"👑 100 richtig"]];
+const SBADGES=[[5,"🔥 5er-Serie"],[10,"🔥🔥 10er-Serie"],[20,"🚀 20er-Serie"]];
+function practice(key){const sec=$("#"+key);sec.append(el("h2",null,INFO[key][0]));
+  sec.append(el("p","task","Gib deine Antwort ein und drück Enter oder „Prüfen“. Die Zahlen werden jedes Mal neu gewürfelt."));
+  let mode="mix";if(key==="regeln"){const m=el("div","modes");[["mix","Gemischt"],["mul","Multiplizieren"],["div","Dividieren"],["pow","Potenzieren"]].forEach(([k,l])=>{const b=el("button",null,l);b.setAttribute("aria-pressed",k===mode);b.onclick=()=>{mode=k;m.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));next()};m.append(b)});sec.append(m)}
+  if(INFO[key][1]){const r=el("div","rule");r.innerHTML=INFO[key][1];sec.append(r)}
+  const st=el("div","stats");const c1=el("span","chip"),c2=el("span","chip fire"),c3=el("span","chip");st.append(c1,c2,c3);sec.append(st);
+  const box=el("div");sec.append(box);const tl=el("div","tools");const bc=el("button","btn","Prüfen"),bn=el("button","btn ghost","Neue Aufgabe");tl.append(bc,bn);sec.append(tl);
+  const bd=el("div","badges");bd.setAttribute("aria-live","polite");sec.append(bd);
+  let right=0,total=0,streak=0,best=0,cur=null;const got=new Set();
+  function upd(){c1.textContent=`✔ ${right} von ${total} richtig`;c2.textContent=`🔥 Serie: ${streak}`;c3.textContent=`Beste Serie: ${best}`}
+  function award(){BADGES.forEach(([n,t])=>{if(right>=n&&!got.has(t)){got.add(t);bd.append(el("span","badge",t))}});SBADGES.forEach(([n,t])=>{if(streak>=n&&!got.has(t)){got.add(t);bd.append(el("span","badge",t))}})}
+  function gen(){if(key==="regeln"){const g=GEN.regeln;return (mode==="mix"?g[pick(["mul","div","pow"])]:g[mode])()}return pick(GEN[key])()}
+  function next(){bc.hidden=false;bn.textContent="Neue Aufgabe";bn.className="btn ghost";cur=render(box,gen(),ok=>{total++;if(ok){right++;streak++;best=Math.max(best,streak)}else streak=0;upd();award();bc.hidden=true;bn.textContent="Nächste Aufgabe";bn.className="btn";bn.focus()})}
+  bc.onclick=()=>cur.check();bn.onclick=next;
+  sec.addEventListener("keydown",e=>{if(e.key==="Enter"&&cur&&cur.state.checked&&e.target.tagName!=="BUTTON"){e.preventDefault();next()}});
+  upd();next()}
+["anschreiben","zehner","gleitkomma","regeln"].forEach(practice);
+
+/* ---------- Blitzrunde ---------- */
+let bzTimer=null;
+function hs(){try{return +localStorage.getItem("potenzen-blitz")||0}catch(e){return 0}}
+function setHs(v){try{localStorage.setItem("potenzen-blitz",v)}catch(e){}}
+function stopBlitz(){if(bzTimer){clearInterval(bzTimer);bzTimer=null;blitzStart()}}
+function blitzStart(){const B=$("#bz");B.innerHTML="";const p=el("p",null,`Dein Rekord auf diesem Gerät: ${hs()} Punkte`);const b=el("button","btn","Los geht's!");b.style.fontSize="1.2rem";b.onclick=blitzRun;B.append(p,b)}
+function blitzRun(){const B=$("#bz");B.innerHTML="";let left=60,score=0,streak=0,right=0;
+  const top=el("div","blitz-top");const tm=el("span","timer","60");const sc=el("span","chip","Punkte: 0");const sk=el("span","chip fire","🔥 0");top.append(tm,sc,sk);B.append(top);const box=el("div");B.append(box);
+  const pool=[...GEN.anschreiben.slice(0,4),...GEN.zehner,GEN.gleitkomma[0],GEN.gleitkomma[1],GEN.regeln.mul,GEN.regeln.div,GEN.regeln.pow,GEN.regeln.mul,GEN.regeln.div,GEN.regeln.pow];
+  function nxt(){if(left<=0)return;render(box,pick(pool)(),ok=>{if(ok){streak++;right++;score+=10*(1+Math.floor(streak/3))}else streak=0;sc.textContent=`Punkte: ${score}`;sk.textContent=`🔥 ${streak}`;setTimeout(nxt,ok?500:1800)})}
+  nxt();bzTimer=setInterval(()=>{left--;tm.textContent=left;tm.classList.toggle("low",left<=10);if(left<=0){clearInterval(bzTimer);bzTimer=null;end()}},1000);
+  function end(){const old=hs();if(score>old)setHs(score);B.innerHTML="";const d=el("div","endbox");d.style.textAlign="center";
+    d.append(el("p","big",`${score} Punkte`),el("p",null,`${right} Aufgaben richtig in 60 Sekunden.`),el("p",null,score>old?"🎉 Neuer Rekord!":`Dein Rekord: ${old} Punkte – versuch ihn zu knacken!`));
+    const b=el("button","btn","Nochmal!");b.onclick=blitzRun;const t=el("div","tools");t.style.justifyContent="center";t.append(b);d.append(t);B.append(d)}}
+blitzStart();show(location.hash.slice(1));
+</script>
+</body>
+</html>
