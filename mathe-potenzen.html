@@ -110,7 +110,7 @@ h2{font-family:Caladea,Cambria,Georgia,serif;font-size:1.6rem;margin:0 0 .3rem}
 .mx{font-family:Caladea,Cambria,Georgia,serif;font-size:1.9rem;line-height:2.4;word-spacing:.08em}
 .mx sup{font-size:.62em;position:relative;top:-.15em}
 .mx input{font:inherit;font-family:Carlito,Calibri,Arial,sans-serif;font-size:1.4rem;width:4.2em;padding:.15rem .35rem;border:2px solid var(--teal);border-radius:8px;background:var(--surface);color:var(--ink);text-align:center}
-.mx input.w{width:9em}.mx input.s{width:2.6em}
+.mx input.w{width:9em}.mx input.w2{width:12em}.mx input.s{width:2.6em}
 .mx input.sup{width:2.4em;font-size:1.05rem;padding:.05rem .2rem;vertical-align:super;position:relative;top:-.45em}
 .mx input.ok{border-color:var(--teal);background:var(--teal-soft)}
 .mx input.bad{border-color:var(--orange);background:var(--orange-soft)}
@@ -178,20 +178,20 @@ function normInt(s){return s.replace(/[\s.\u00a0\u202f']/g,"")}
 function okField(f,v){v=v.trim();if(!v)return false;
   if(f.kind==="int")return normInt(v)===String(f.ans);
   if(f.kind==="dec"){const x=parseFloat(v.replace(/\s/g,"").replace(",","."));return isFinite(x)&&Math.abs(x-f.ans)<1e-9}
+  if(f.kind==="prod"){const sep=typeof f.ans==="number"?/[·*×xX.\s]+/:/[·*×.\s]+/;const t=v.split(sep).filter(Boolean);return t.length===f.e&&t.every(x=>x.toLowerCase()===String(f.ans).toLowerCase())}
   return v.toLowerCase()===String(f.ans).toLowerCase()}
 function bf(b){return {ans:b,kind:typeof b==="number"?"int":"var"}}
 
 /* ---------- Generatoren ---------- */
 const GEN={
 anschreiben:[
- ()=>{const b=base(),e=R(2,6);return {lead:"Schreib als Potenz.",html:`${Array(e).fill(b).join(" · ")} = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"sup"}],expl:`${e} gleiche Faktoren ${b} ergeben ${P(b,e)}. Die <b>Basis</b> ist ${b}, der <b>Exponent</b> ${e} sagt, wie oft multipliziert wird.`}},
- ()=>{const c=pick([[R(2,10),2],[R(2,10),2],[R(2,5),3],[2,R(4,5)],[3,4],[10,R(2,4)],[1,R(2,9)]]);const [b,e]=c,v=b**e;
-   return {lead:"Berechne den Wert der Potenz.",html:`${P(b,e)} = {0}`,fields:[{ans:v,kind:"int",cls:"w"}],expl:`${P(b,e)} = ${Array(e).fill(b).join(" · ")} = ${fmt(v)}`}},
- ()=>{const b=base(),e=R(2,9);return {lead:"Basis und Exponent",html:`${P(b,e)}: Basis = {0}, Exponent = {1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"s"}],expl:`Die Basis ist die untere, große Zahl (${b}). Der Exponent ist die kleine, hochgestellte Zahl (${e}).`}},
- ()=>{const c=pick([[2,R(2,5)],[3,R(2,3)],[4,2],[5,R(2,3)],[R(6,9),2],[10,R(2,4)]]);const [b,e]=c;
-   return {lead:"Welcher Exponent fehlt?",html:`${fmt(b**e)} = ${b}{0}`,fields:[{ans:e,kind:"int",cls:"sup"}],expl:`${fmt(b**e)} = ${Array(e).fill(b).join(" · ")} → ${P(b,e)}`}},
- ()=>{if(Math.random()<.5){const b=R(2,99);return {lead:"Steht kein Exponent da …",html:`${b} = ${b}{0}`,fields:[{ans:1,kind:"int",cls:"sup"}],expl:`Steht bei einer Zahl kein Exponent, dann hat sie <b>immer den Exponenten 1</b>: ${b} = ${b}<sup>1</sup>.`}}
-   const e=R(3,50);return {lead:"Berechne.",html:`1<sup>${e}</sup> = {0}`,fields:[{ans:1,kind:"int",cls:"s"}],expl:`1 · 1 · 1 · … bleibt immer 1 – egal wie groß der Exponent ist.`}}
+ ()=>{const b=base(),e=R(2,7);return {lead:"Schreib das Produkt als Potenz.",html:`${Array(e).fill(b).join(" · ")} = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"sup"}],expl:`${e} gleiche Faktoren ${b} → ${P(b,e)}. Die <b>Basis</b> ist der Faktor (${b}), der <b>Exponent</b> zählt, wie oft er vorkommt (${e}).`}},
+ ()=>{const b=base(),e=R(2,7);return {lead:"Schreib die Potenz als Produkt. Trenne die Faktoren mit · oder * (z. B. 3*3*3).",html:`${P(b,e)} = {0}`,fields:[{ans:b,e,kind:"prod",cls:"w2"}],expl:`Der Exponent ${e} sagt: Schreib die Basis ${b} genau ${e}-mal als Faktor an: ${P(b,e)} = ${Array(e).fill(b).join(" · ")}`}},
+ ()=>{const b=base(),e=R(2,9);return {lead:"Basis und Exponent",html:`${P(b,e)}: Basis = {0}, Exponent = {1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"s"}],expl:`Die Basis ist die große, untere Zahl (${b}). Der Exponent ist die kleine, hochgestellte Zahl (${e}).`}},
+ ()=>{let b1,b2;if(Math.random()<.5){b1=R(2,9);do{b2=R(2,9)}while(b2===b1)}else{b1=pick(VARS);do{b2=pick(VARS)}while(b2===b1)}if(b1>b2&&typeof b1==="number")[b1,b2]=[b2,b1];const e1=R(2,5),e2=R(2,5);
+   return {lead:"Zwei verschiedene Faktoren: Schreib als Potenzen.",html:`${Array(e1).fill(b1).join(" · ")} · ${Array(e2).fill(b2).join(" · ")} = ${b1}{0} · ${b2}{1}`,fields:[{ans:e1,kind:"int",cls:"sup"},{ans:e2,kind:"int",cls:"sup"}],expl:`Zähle jeden Faktor einzeln: ${b1} kommt ${e1}-mal vor, ${b2} kommt ${e2}-mal vor → ${P(b1,e1)} · ${P(b2,e2)}`}},
+ ()=>{const b=base(),e=R(2,6),k=R(1,e-1);return {lead:"Wie oft steht die Basis im Produkt?",html:`${P(b,e)} = ${Array(k).fill(b).join(" · ")} · … ${b}  →  insgesamt {0}-mal`,fields:[{ans:e,kind:"int",cls:"s"}],expl:`Der Exponent ${e} sagt, wie oft ${b} als Faktor vorkommt: ${Array(e).fill(b).join(" · ")}`}},
+ ()=>{const b=Math.random()<.4?pick(VARS):R(2,99);return {lead:"Steht kein Exponent da …",html:`${b} = ${b}{0}`,fields:[{ans:1,kind:"int",cls:"sup"}],expl:`Steht kein Exponent da, dann ist der Exponent <b>immer 1</b>: ${b} = ${b}<sup>1</sup>.`}}
 ],
 zehner:[
  ()=>{const n=R(1,9);return {lead:"Schreib als Zahl.",html:`10<sup>${n}</sup> = {0}`,fields:[{ans:String(10n**BigInt(n)),kind:"int",cls:"w"}],expl:`10<sup>${n}</sup> ist eine 1 mit <b>${n} Nullen</b>: ${fmt(10n**BigInt(n))}`}},
@@ -228,7 +228,7 @@ function gExpl(g){return `Setz das Komma so, dass <b>genau eine Ziffer (nicht 0)
 
 /* ---------- Aufgabe anzeigen ---------- */
 function render(box,t,done){box.innerHTML="";const ex=el("div","ex");ex.append(el("p","lead",t.lead));if(t.fact)ex.append(el("p","fact",t.fact));
-  const mx=el("div","mx");let h=t.html;t.fields.forEach((f,i)=>{h=h.replace(`{${i}}`,`<input data-i="${i}" class="${f.cls||""}" autocomplete="off" inputmode="${f.kind==="var"?"text":"decimal"}" aria-label="Antwortfeld ${i+1}">`)});mx.innerHTML=h;ex.append(mx);
+  const mx=el("div","mx");let h=t.html;t.fields.forEach((f,i)=>{h=h.replace(`{${i}}`,`<input data-i="${i}" class="${f.cls||""}" autocomplete="off" inputmode="${f.kind==="var"||(f.kind==="prod"&&typeof f.ans!=="number")?"text":"decimal"}" aria-label="Antwortfeld ${i+1}">`)});mx.innerHTML=h;ex.append(mx);
   let chosen=null;if(t.choice){const c=el("div","choice");t.choice.opts.forEach(o=>{const b=el("button","card",o);b.onclick=()=>{if(state.checked)return;chosen=o;c.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));check()};c.append(b)});ex.append(c)}
   const fb=el("div");ex.append(fb);box.append(ex);const inputs=[...mx.querySelectorAll("input")];const state={checked:false};
   function check(){if(state.checked)return;if(t.choice&&!chosen)return;if(inputs.some(i=>!i.value.trim())){(inputs.find(i=>!i.value.trim())).focus();return}
@@ -268,7 +268,7 @@ function stopBlitz(){if(bzTimer){clearInterval(bzTimer);bzTimer=null;blitzStart(
 function blitzStart(){const B=$("#bz");B.innerHTML="";const p=el("p",null,`Dein Rekord auf diesem Gerät: ${hs()} Punkte`);const b=el("button","btn","Los geht's!");b.style.fontSize="1.2rem";b.onclick=blitzRun;B.append(p,b)}
 function blitzRun(){const B=$("#bz");B.innerHTML="";let left=60,score=0,streak=0,right=0;
   const top=el("div","blitz-top");const tm=el("span","timer","60");const sc=el("span","chip","Punkte: 0");const sk=el("span","chip fire","🔥 0");top.append(tm,sc,sk);B.append(top);const box=el("div");B.append(box);
-  const pool=[...GEN.anschreiben.slice(0,4),...GEN.zehner,GEN.gleitkomma[0],GEN.gleitkomma[1],GEN.regeln.mul,GEN.regeln.div,GEN.regeln.pow,GEN.regeln.mul,GEN.regeln.div,GEN.regeln.pow];
+  const pool=[GEN.anschreiben[0],GEN.anschreiben[2],GEN.anschreiben[3],...GEN.zehner,GEN.gleitkomma[0],GEN.gleitkomma[1],GEN.regeln.mul,GEN.regeln.div,GEN.regeln.pow,GEN.regeln.mul,GEN.regeln.div,GEN.regeln.pow];
   function nxt(){if(left<=0)return;render(box,pick(pool)(),ok=>{if(ok){streak++;right++;score+=10*(1+Math.floor(streak/3))}else streak=0;sc.textContent=`Punkte: ${score}`;sk.textContent=`🔥 ${streak}`;setTimeout(nxt,ok?500:1800)})}
   nxt();bzTimer=setInterval(()=>{left--;tm.textContent=left;tm.classList.toggle("low",left<=10);if(left<=0){clearInterval(bzTimer);bzTimer=null;end()}},1000);
   function end(){const old=hs();if(score>old)setHs(score);B.innerHTML="";const d=el("div","endbox");d.style.textAlign="center";
