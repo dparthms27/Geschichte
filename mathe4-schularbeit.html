@@ -175,6 +175,7 @@ h3.area{font-family:Caladea,Cambria,Georgia,serif;font-size:1.35rem;color:var(--
 <section id="probe" role="tabpanel" hidden>
   <h2>📝 Probe-Schularbeit</h2>
   <p class="task">12 zufällige Aufgaben aus allen vier Bereichen – wie bei der echten Schularbeit. Prüfe jede Aufgabe einzeln und lass dir am Ende anzeigen, wo du schon sicher bist und was du noch üben solltest. Taschenrechner nur beim Pythagoras!</p>
+  <div class="tools" style="margin:.2rem 0 .6rem"><button class="btn ghost" id="pr-new">🎲 Neue Probe-Schularbeit</button></div>
   <div class="sticky"><div class="progress" aria-hidden="true"><span id="pr-bar" style="width:0"></span></div><span id="pr-prog" aria-live="polite"></span></div>
   <div id="pr"></div>
 </section>
@@ -185,7 +186,7 @@ function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1)),pick=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const TABS=["quadrat","prozent","zinsen","pythagoras","probe"];
-function show(k){if(!TABS.includes(k))k="quadrat";TABS.forEach(t=>$("#"+t).hidden=t!==k);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
+function show(k){if(!TABS.includes(k))k="quadrat";if(k==="probe"&&typeof probeDone!=="undefined"&&probeDone)probe();TABS.forEach(t=>$("#"+t).hidden=t!==k);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===k))}
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{show(b.dataset.tab);try{history.replaceState(null,"","#"+b.dataset.tab)}catch(e){}}));
 window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
 
@@ -324,18 +325,19 @@ function practice(key){const sec=$("#"+key);sec.append(el("h2",null,INFO[key][0]
 
 /* ---------- Probe-Schularbeit ---------- */
 const AREAS=[["quadrat","Quadrieren und Wurzelziehen",3],["prozent","Prozentrechnung",3],["zinsen","Zinsrechnung",3],["pythagoras","Satz des Pythagoras",3]];
-function probe(){const P=$("#pr");P.innerHTML="";const items=[];
+let probeDone=false;
+function probe(){probeDone=false;const P=$("#pr");P.innerHTML="";const items=[];
   AREAS.forEach(([k,name,n])=>{const h=el("h3","area",name);P.append(h);shuffle(GEN[k].map((g,i)=>i)).slice(0,n).forEach(i=>{const b=el("div");P.append(b);const it={k,res:null};it.r=render(b,GEN[k][i](),ok=>{it.res=ok;upd()});items.push(it)})});
   const tl=el("div","tools");tl.style.justifyContent="center";const go=el("button","btn","Probe-Schularbeit auswerten");tl.append(go);P.append(tl);const out=el("div");P.append(out);
   function upd(){const d=items.filter(i=>i.res!==null).length;$("#pr-prog").textContent=`${d} von ${items.length} Aufgaben geprüft`;$("#pr-bar").style.width=(d/items.length*100)+"%"}
   go.onclick=()=>{items.forEach(i=>{if(i.res===null){i.r.state.checked=false}});const open=items.filter(i=>i.res===null).length;if(open&&!confirm(`${open} Aufgabe(n) sind noch nicht geprüft. Trotzdem auswerten? Sie zählen dann als falsch.`))return;
-    out.innerHTML="";const box=el("div","result");box.append(el("p","big",`${items.filter(i=>i.res).length} von ${items.length} richtig`));const t=el("div","bars2");
+    probeDone=true;out.innerHTML="";const box=el("div","result");box.append(el("p","big",`${items.filter(i=>i.res).length} von ${items.length} richtig`));const t=el("div","bars2");
     AREAS.forEach(([k,name])=>{const its=items.filter(i=>i.k===k),ok=its.filter(i=>i.res).length,pc=ok/its.length;const row=el("div","brow");row.append(el("span",null,name));const bar=el("span","bar");const fill=el("i");fill.style.width=(pc*100)+"%";fill.className=pc>=.67?"g":pc>=.34?"m":"b";bar.append(fill);row.append(bar,el("b",null,`${ok}/${its.length}`));t.append(row)});
     box.append(t);const weak=AREAS.filter(([k])=>{const its=items.filter(i=>i.k===k);return its.filter(i=>i.res).length/its.length<.67});
     if(weak.length){const tp=el("div","tips");tp.append(el("b",null,"Das solltest du noch üben:"));const ul=el("ul");weak.forEach(([k,n])=>{const li=el("li"),a=el("a",null,n);a.href="#"+k;li.append(a);ul.append(li)});tp.append(ul);box.append(tp)}
     else box.append(el("p",null,"🎉 Stark – du bist in allen Bereichen gut vorbereitet!"));
     const again=el("button","btn ghost","Neue Probe-Schularbeit");again.onclick=probe;const t2=el("div","tools");t2.style.justifyContent="center";t2.append(again);box.append(t2);out.append(box);out.scrollIntoView({behavior:"smooth"})};upd()}
-probe();show(location.hash.slice(1));
+probe();$("#pr-new").onclick=()=>{probe();window.scrollTo({top:$("#probe").offsetTop-10,behavior:"smooth"})};show(location.hash.slice(1));
 </script>
 </body>
 </html>
