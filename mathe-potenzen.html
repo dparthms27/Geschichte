@@ -185,10 +185,10 @@ function bf(b){return {ans:b,kind:typeof b==="number"?"int":"var"}}
 const GEN={
 anschreiben:[
  ()=>{const b=base(),e=R(2,6);return {lead:"Schreib als Potenz.",html:`${Array(e).fill(b).join(" · ")} = {0}{1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"sup"}],expl:`${e} gleiche Faktoren ${b} ergeben ${P(b,e)}. Die <b>Basis</b> ist ${b}, der <b>Exponent</b> ${e} sagt, wie oft multipliziert wird.`}},
- ()=>{const c=pick([[2,R(2,10)],[3,R(2,6)],[4,R(2,5)],[5,R(2,4)],[6,R(2,3)],[7,R(2,3)],[8,R(2,3)],[9,R(2,3)],[10,R(2,4)],[11,2],[12,2],[15,2],[20,R(2,3)]]);const [b,e]=c,v=b**e;
+ ()=>{const c=pick([[R(2,10),2],[R(2,10),2],[R(2,5),3],[2,R(4,5)],[3,4],[10,R(2,4)],[1,R(2,9)]]);const [b,e]=c,v=b**e;
    return {lead:"Berechne den Wert der Potenz.",html:`${P(b,e)} = {0}`,fields:[{ans:v,kind:"int",cls:"w"}],expl:`${P(b,e)} = ${Array(e).fill(b).join(" · ")} = ${fmt(v)}`}},
  ()=>{const b=base(),e=R(2,9);return {lead:"Basis und Exponent",html:`${P(b,e)}: Basis = {0}, Exponent = {1}`,fields:[{...bf(b),cls:"s"},{ans:e,kind:"int",cls:"s"}],expl:`Die Basis ist die untere, große Zahl (${b}). Der Exponent ist die kleine, hochgestellte Zahl (${e}).`}},
- ()=>{const c=pick([[2,R(3,10)],[3,R(2,6)],[5,R(2,5)],[4,R(2,5)],[10,R(2,7)],[6,3],[7,3],[9,3]]);const [b,e]=c;
+ ()=>{const c=pick([[2,R(2,5)],[3,R(2,3)],[4,2],[5,R(2,3)],[R(6,9),2],[10,R(2,4)]]);const [b,e]=c;
    return {lead:"Welcher Exponent fehlt?",html:`${fmt(b**e)} = ${b}{0}`,fields:[{ans:e,kind:"int",cls:"sup"}],expl:`${fmt(b**e)} = ${Array(e).fill(b).join(" · ")} → ${P(b,e)}`}},
  ()=>{if(Math.random()<.5){const b=R(2,99);return {lead:"Steht kein Exponent da …",html:`${b} = ${b}{0}`,fields:[{ans:1,kind:"int",cls:"sup"}],expl:`Steht bei einer Zahl kein Exponent, dann hat sie <b>immer den Exponenten 1</b>: ${b} = ${b}<sup>1</sup>.`}}
    const e=R(3,50);return {lead:"Berechne.",html:`1<sup>${e}</sup> = {0}`,fields:[{ans:1,kind:"int",cls:"s"}],expl:`1 · 1 · 1 · … bleibt immer 1 – egal wie groß der Exponent ist.`}}
